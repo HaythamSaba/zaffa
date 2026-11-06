@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zaffa — Wedding invitations in every language your families speak</title>
+<!--
+  VISUAL REFERENCE ONLY. Exported from the Zaffa landing page design (Direction A).
+  Rebuild it as Next.js + Tailwind components using the tokens in docs/brand.md.
+  Placeholders in [BRACKETS] still need real values. The contact form is static here.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..700,0..100,0..1;1,9..144,400..700,0..100,0..1&amp;family=Manrope:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0;background:#FCF8F3;color:#1F2340;font-family:'Manrope',system-ui,sans-serif;font-size:17px}
+*{font-variation-settings:"SOFT" 100,"WONK" 0;font-optical-sizing:auto}
+a{color:#B8432C}a:hover{color:#9E3722}
+*{box-sizing:border-box}
+.wrap{max-width:1200px;margin-inline:auto;padding-inline:40px}
+.nav-links a{text-decoration:none;color:#1F2340;font-size:15px;font-weight:500}
+.nav-links a:hover{color:#9E3722}
+.btn-coral:hover{background:#9E3722 !important}
+details summary{cursor:pointer;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details[open] .plus{transform:rotate(45deg)}
+input,select,textarea{font:inherit}
+@media (max-width:860px){
+.wrap{padding-inline:20px}
+.nav-links{display:none !important}
+.phone{transform:scale(.92)}
+}
+</style>
+</head>
+<body>
+<div style="width: 100%; overflow-x: hidden">
+
+<header style="position: sticky; top: 0; z-index: 10; background: rgba(252,248,243,0.94); border-block-end: 1px solid #E6DCD3">
+<div class="wrap" style="display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 76px">
+<a href="#top" aria-label="Zaffa home" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #B8432C">
+<svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4.5 4.5H19.5" stroke="#B8432C" stroke-width="3.5"></path><path d="M19.5 4.5C14 8.5 10 15.5 4.5 19.5" stroke="#B8432C" stroke-width="3"></path><path d="M4.5 19.5H19.5" stroke="#B8432C" stroke-width="2.5"></path></svg>
+<span style="font-family: 'Fraunces', Georgia, serif; font-size: 34px; font-weight: 600; letter-spacing: -0.01em; line-height: 1">zaffa</span>
+</a>
+<nav class="nav-links" aria-label="Main" style="display: flex; gap: 32px">
+<a href="#what">What we do</a>
+<a href="#how">How it works</a>
+<a href="#packages">Packages</a>
+<a href="#about">About</a>
+<a href="#faq">FAQ</a>
+</nav>
+<a href="#contact" class="btn-coral" style="display: inline-flex; align-items: center; min-height: 44px; padding-inline: 22px; border-radius: 999px; background: #B8432C; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 15px">Request your invitation</a>
+</div>
+</header>
+
+<section id="top" style="padding-block: 88px 96px">
+<div class="wrap" style="display: flex; flex-wrap: wrap; align-items: center; gap: 64px">
+<div style="flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 28px">
+<p style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #9E3722">Digital wedding invitations · RSVP · Guest list</p>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h1 class="hero-title" style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: clamp(2.5rem, 1.75rem + 3.2vw, 4.5rem); line-height: 1.05; letter-spacing: -0.02em; color: #1F2340">Wedding invitations in <em style="font-style: italic; font-weight: 400">every</em> language your families speak.</h1>
+</div>
+<p style="margin: 0; font-size: 19px; line-height: 1.65; color: #5F5B6E; max-width: 560px">An elegant invitation website your guests open from one link, anywhere in the world. They read your story, find the venue and RSVP in seconds. You follow every reply from a private dashboard.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 14px">
+<a href="#contact" class="btn-coral" style="display: inline-flex; align-items: center; min-height: 52px; padding-inline: 28px; border-radius: 999px; background: #B8432C; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 16px">Request your invitation</a>
+<a href="#demo" style="display: inline-flex; align-items: center; min-height: 52px; padding-inline: 28px; border-radius: 999px; border: 1.5px solid #9E3722; color: #9E3722; text-decoration: none; font-weight: 600; font-size: 16px">See a sample wedding</a>
+</div>
+<p style="margin: 0; font-size: 14px; color: #5F5B6E">For couples marrying in Europe · One language or several, beautifully together</p>
+</div>
+
+<div style="flex: 1 1 320px; display: flex; justify-content: center">
+<div class="phone" style="width: 320px; height: 640px; border-radius: 44px; background: #15182E; padding: 12px; box-shadow: 0 30px 60px rgba(31,35,64,0.22)">
+<div style="width: 100%; height: 100%; border-radius: 34px; background: #1F2340; color: #FCF8F3; overflow: hidden; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 48px 24px 28px; gap: 18px">
+<p style="margin: 0; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #F2B544">You're invited to our wedding</p>
+<div style="width: 40px; height: 1px; background: #F2B544"></div>
+<p style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-size: 44px; font-weight: 600; line-height: 1">Sara &amp; Omar</p>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<p style="margin: 0; font-size: 14px">Saturday, 12 June 2027</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; width: 100%">
+<div style="border: 1px solid rgba(242,181,68,0.5); border-radius: 10px; padding: 8px 0"><p style="margin: 0; font-size: 20px; font-weight: 600">218</p><p style="margin: 0; font-size: 10px; color: #F2B544">days</p></div>
+<div style="border: 1px solid rgba(242,181,68,0.5); border-radius: 10px; padding: 8px 0"><p style="margin: 0; font-size: 20px; font-weight: 600">06</p><p style="margin: 0; font-size: 10px; color: #F2B544">hours</p></div>
+<div style="border: 1px solid rgba(242,181,68,0.5); border-radius: 10px; padding: 8px 0"><p style="margin: 0; font-size: 20px; font-weight: 600">41</p><p style="margin: 0; font-size: 10px; color: #F2B544">min</p></div>
+<div style="border: 1px solid rgba(242,181,68,0.5); border-radius: 10px; padding: 8px 0"><p style="margin: 0; font-size: 20px; font-weight: 600">09</p><p style="margin: 0; font-size: 10px; color: #F2B544">sec</p></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; margin-block-start: 4px">
+<p style="margin: 0; font-size: 13px">Villa Rosa, Vienna</p>
+</div>
+<div style="margin-block-start: auto; width: 100%; border-radius: 999px; background: #F2B544; color: #1F2340; padding: 12px 0; font-weight: 700; font-size: 14px">RSVP</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-label="Who it is for" style="background: #1F2340; color: #FCF8F3; padding-block: 64px">
+<div class="wrap" style="display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+<p style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-size: 34px; line-height: 1.3; max-width: 860px">Made for families who speak more than one language, so the invitation feels just as natural to the grandparents as to the friends.</p>
+</div>
+</section>
+
+<section id="what" style="padding-block: 104px">
+<div class="wrap" style="display: flex; flex-direction: column; gap: 56px">
+<div style="display: flex; flex-direction: column; gap: 6px; max-width: 720px">
+<p style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #9E3722">What we do</p>
+<h2 class="section-title" style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: clamp(2.125rem, 1.6rem + 2.2vw, 3.5rem); line-height: 1.1; color: #1F2340">Everything your guests need, on one beautiful page</h2>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px">
+<div style="background: #FFFFFF; border: 1px solid #E6DCD3; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9E3722" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h9M8.5 3v2M6 5c0 4 3 7 6 8M11 5c-1 4-4 7-7 8"></path><path d="M13 21l4-9 4 9M14.5 18h5"></path></svg>
+<h3 style="margin: 0; font-size: 20px; font-weight: 700; color: #1F2340">Every guest reads it in their language</h3>
+<p style="margin: 0; font-size: 17px; line-height: 1.65; color: #5F5B6E">Each line with its translation directly beneath. No switching, nobody left out. Or keep it to a single language.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E6DCD3; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9E3722" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h10M4 17h13"></path><path d="M20 17l-3-3M20 17l-3 3"></path></svg>
+<h3 style="margin: 0; font-size: 20px; font-weight: 700; color: #1F2340">Every script done properly</h3>
+<p style="margin: 0; font-size: 17px; line-height: 1.65; color: #5F5B6E">Right-to-left languages and non-Latin scripts get proper layout and typography, tested with real text. Never an afterthought.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E6DCD3; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9E3722" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M8 9l2 2 4-4M8 15h8"></path></svg>
+<h3 style="margin: 0; font-size: 20px; font-weight: 700; color: #1F2340">RSVP in seconds</h3>
+<p style="margin: 0; font-size: 17px; line-height: 1.65; color: #5F5B6E">Name, number of guests, attending or not, and a note for meal preferences. One link you share however you like.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E6DCD3; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9E3722" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg>
+<h3 style="margin: 0; font-size: 20px; font-weight: 700; color: #1F2340">Your private guest dashboard</h3>
+<p style="margin: 0; font-size: 17px; line-height: 1.65; color: #5F5B6E">See who's coming, total guests and notes at a glance. Search, filter and export a CSV for your caterer.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E6DCD3; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9E3722" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+<h3 style="margin: 0; font-size: 20px; font-weight: 700; color: #1F2340">Story, countdown, venue and map</h3>
+<p style="margin: 0; font-size: 17px; line-height: 1.65; color: #5F5B6E">Your story, the date with a live countdown, the venue with directions, and in Premium a schedule, gallery and music.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E6DCD3; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 14px">
+<svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9E3722" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6l7-3z"></path></svg>
+<h3 style="margin: 0; font-size: 20px; font-weight: 700; color: #1F2340">Private by design</h3>
+<p style="margin: 0; font-size: 17px; line-height: 1.65; color: #5F5B6E">Guest data stays in the EU and is deleted after your wedding. Your dashboard is password-protected.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="how" style="background: #F6E3D8; padding-block: 104px">
+<div class="wrap" style="display: flex; flex-direction: column; gap: 56px">
+<div style="display: flex; flex-direction: column; gap: 6px; max-width: 720px">
+<p style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #9E3722">How it works</p>
+<h2 class="section-title" style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: clamp(2.125rem, 1.6rem + 2.2vw, 3.5rem); line-height: 1.1; color: #1F2340">From first message to live invitation in about a week</h2>
+</div>
+<ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 20px">
+<li style="display: flex; flex-direction: column; gap: 10px; border-block-start: 2px solid #1F2340; padding-block-start: 20px">
+<span style="font-family: 'Fraunces', Georgia, serif; font-size: 40px; font-weight: 600; color: #9E3722; line-height: 1">01</span>
+<h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #1F2340">Choose your package</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #5F5B6E">Tell us about your wedding. We agree on the package, extras and price, and you pay a 50% deposit.</p>
+</li>
+<li style="display: flex; flex-direction: column; gap: 10px; border-block-start: 2px solid #1F2340; padding-block-start: 20px">
+<span style="font-family: 'Fraunces', Georgia, serif; font-size: 40px; font-weight: 600; color: #9E3722; line-height: 1">02</span>
+<h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #1F2340">Share your details</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #5F5B6E">Fill in a short form with your names, date, venue and story, and upload your photos.</p>
+</li>
+<li style="display: flex; flex-direction: column; gap: 10px; border-block-start: 2px solid #1F2340; padding-block-start: 20px">
+<span style="font-family: 'Fraunces', Georgia, serif; font-size: 40px; font-weight: 600; color: #9E3722; line-height: 1">03</span>
+<h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #1F2340">Approve the translation</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #5F5B6E">Send your own translation or let us prepare one. Nothing goes live until you approve every word.</p>
+</li>
+<li style="display: flex; flex-direction: column; gap: 10px; border-block-start: 2px solid #1F2340; padding-block-start: 20px">
+<span style="font-family: 'Fraunces', Georgia, serif; font-size: 40px; font-weight: 600; color: #9E3722; line-height: 1">04</span>
+<h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #1F2340">Preview and refine</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #5F5B6E">Watch your invitation take shape on a private preview link. Two rounds of changes are included.</p>
+</li>
+<li style="display: flex; flex-direction: column; gap: 10px; border-block-start: 2px solid #1F2340; padding-block-start: 20px">
+<span style="font-family: 'Fraunces', Georgia, serif; font-size: 40px; font-weight: 600; color: #9E3722; line-height: 1">05</span>
+<h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #1F2340">Share with your guests</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #5F5B6E">Pay the remaining 50%, and your invitation goes live at its own address, ready for WhatsApp.</p>
+</li>
+</ol>
+</div>
+</section>
+
+<section id="packages" style="padding-block: 104px">
+<div class="wrap" style="display: flex; flex-direction: column; gap: 56px">
+<div style="display: flex; flex-direction: column; gap: 6px; max-width: 720px">
+<p style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #9E3722">Packages</p>
+<h2 class="section-title" style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: clamp(2.125rem, 1.6rem + 2.2vw, 3.5rem); line-height: 1.1; color: #1F2340">Clear prices, language choice always included</h2>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; align-items: stretch">
+<div style="background: #F6E3D8; border: 1px solid #E6DCD3; border-radius: 24px; padding: 36px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h3 style="margin: 0; font-size: 22px; font-weight: 700; color: #1F2340">Essential</h3>
+<p style="margin: 0; font-size: 15px; color: #5F5B6E">Everything you need, beautifully done</p>
+</div>
+<p style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-size: 52px; font-weight: 600; color: #1F2340; line-height: 1">€250</p>
+<ul style="margin: 0; padding-inline-start: 20px; display: flex; flex-direction: column; gap: 9px; font-size: 15px; line-height: 1.5; color: #1F2340">
+<li>1 template with your choice of languages</li>
+<li>Names, date and live countdown</li>
+<li>Your story, venue and map, contact</li>
+<li>RSVP form with your deadline</li>
+<li>Guest dashboard with CSV export</li>
+<li>Template color palette and section order</li>
+</ul>
+<a href="#contact" style="margin-block-start: auto; display: inline-flex; justify-content: center; align-items: center; min-height: 48px; border-radius: 999px; border: 1.5px solid #9E3722; color: #9E3722; text-decoration: none; font-weight: 600">Choose Essential</a>
+</div>
+<div style="background: #1F2340; color: #FCF8F3; border-radius: 24px; padding: 36px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<h3 style="margin: 0; font-size: 22px; font-weight: 700">Premium</h3>
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; background: #F2B544; color: #1F2340; border-radius: 999px; padding: 5px 12px">Most complete</span>
+</div>
+<p style="margin: 0; font-size: 15px; color: #D6D3E2">The full wedding-day experience</p>
+</div>
+<p style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-size: 52px; font-weight: 600; line-height: 1">€450</p>
+<ul style="margin: 0; padding-inline-start: 20px; display: flex; flex-direction: column; gap: 9px; font-size: 15px; line-height: 1.5">
+<li>Everything in Essential</li>
+<li>Schedule of the day</li>
+<li>Photo gallery, up to 20 photos</li>
+<li>Dress code section</li>
+<li>Background music and opening animation</li>
+<li>Custom colors and curated fonts</li>
+</ul>
+<a href="#contact" style="margin-block-start: auto; display: inline-flex; justify-content: center; align-items: center; min-height: 48px; border-radius: 999px; background: #F2B544; color: #1F2340; text-decoration: none; font-weight: 700">Choose Premium</a>
+</div>
+<div style="background: #F6E3D8; border: 1px solid #E6DCD3; border-radius: 24px; padding: 36px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h3 style="margin: 0; font-size: 22px; font-weight: 700; color: #1F2340">Bespoke</h3>
+<p style="margin: 0; font-size: 15px; color: #5F5B6E">Designed around your wedding</p>
+</div>
+<p style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-size: 52px; font-weight: 600; color: #1F2340; line-height: 1"><span style="font-family: 'Manrope', sans-serif; font-size: 18px; font-weight: 500; color: #5F5B6E">from </span>€700</p>
+<ul style="margin: 0; padding-inline-start: 20px; display: flex; flex-direction: column; gap: 9px; font-size: 15px; line-height: 1.5; color: #1F2340">
+<li>Everything in Premium</li>
+<li>A design beyond our templates</li>
+<li>Custom sections</li>
+<li>Video</li>
+</ul>
+<a href="#contact" style="margin-block-start: auto; display: inline-flex; justify-content: center; align-items: center; min-height: 48px; border-radius: 999px; border: 1.5px solid #9E3722; color: #9E3722; text-decoration: none; font-weight: 600">Let's talk</a>
+</div>
+</div>
+<div style="border: 1px dashed #5F5B6E; border-radius: 20px; padding: 28px 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 40px">
+<h3 style="margin: 0; font-size: 17px; font-weight: 700; color: #1F2340">Add-ons</h3>
+<div style="display: flex; flex-wrap: wrap; gap: 10px 32px; font-size: 15px; color: #1F2340">
+<span>Video section · €50</span>
+<span>Custom domain · €40 + domain</span>
+<span>Extra section · €40</span>
+<span>Extra revision round · €30</span>
+<span>Rush delivery in 3 days · +€100</span>
+</div>
+</div>
+</div>
+</section>
+
+<section id="demo" style="background: #1F2340; color: #FCF8F3; padding-block: 96px">
+<div class="wrap" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 32px">
+<div style="flex: 1 1 520px; display: flex; flex-direction: column; gap: 10px">
+<h2 class="section-title" style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: clamp(2.125rem, 1.6rem + 2.2vw, 3.5rem); line-height: 1.1">Open a sample wedding on your phone</h2>
+<p style="margin: 0; font-size: 17px; line-height: 1.6; color: #D6D3E2; max-width: 560px">Click through a complete invitation for a fictional couple, in two languages, exactly as your guests would see it.</p>
+</div>
+<a href="#demo" style="display: inline-flex; align-items: center; min-height: 52px; padding-inline: 30px; border-radius: 999px; background: #F2B544; color: #1F2340; text-decoration: none; font-weight: 700; font-size: 16px">View the sample invitation</a>
+</div>
+</section>
+
+<section id="about" style="padding-block: 104px">
+<div class="wrap" style="display: flex; flex-wrap: wrap; gap: 56px; align-items: flex-start">
+<div style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #9E3722">About us</p>
+<h2 class="section-title" style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: clamp(2.125rem, 1.6rem + 2.2vw, 3.5rem); line-height: 1.1; color: #1F2340">A small studio that cares about every language</h2>
+</div>
+<div style="flex: 999 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 20px; font-size: 18px; line-height: 1.7; color: #1F2340">
+<p style="margin: 0">We make digital invitations for couples whose families span languages and countries, so every guest feels the invitation was written for them.</p>
+<p style="margin: 0">Most invitations are made in one language, and any others are squeezed in later. We design for every language from the start. Each wedding is built by hand on our own tested templates, so it feels personal and arrives on time.</p>
+<div style="display: flex; align-items: center; gap: 16px; margin-block-start: 8px">
+<div aria-hidden="true" style="width: 56px; height: 56px; border-radius: 50%; background: #E6DCD3; display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', Georgia, serif; font-size: 24px; font-weight: 700; color: #1F2340">HS</div>
+<div style="display: flex; flex-direction: column">
+<span style="font-size: 16px; font-weight: 700; color: #1F2340">Haytham Saba</span>
+<span style="font-size: 15px; color: #5F5B6E">Founder and web developer · Ljubljana, Slovenia</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="faq" style="background: #F6E3D8; padding-block: 104px">
+<div class="wrap" style="display: flex; flex-wrap: wrap; gap: 56px; align-items: flex-start">
+<div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #9E3722">FAQ</p>
+<h2 class="section-title" style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: clamp(2.125rem, 1.6rem + 2.2vw, 3.5rem); line-height: 1.1; color: #1F2340">Questions couples ask</h2>
+</div>
+<div style="flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column">
+<details style="border-block-end: 1px solid #E6DCD3; padding-block: 22px">
+<summary style="display: flex; justify-content: space-between; gap: 16px; font-size: 18px; font-weight: 600; color: #1F2340">How long does it take?<span class="plus" aria-hidden="true" style="font-size: 24px; line-height: 1; color: #9E3722">+</span></summary>
+<p style="margin: 12px 0 0; font-size: 17px; line-height: 1.65; color: #5F5B6E">About one week, starting once we have all your content and your deposit. Need it sooner? Rush delivery in 3 days is available.</p>
+</details>
+<details style="border-block-end: 1px solid #E6DCD3; padding-block: 22px">
+<summary style="display: flex; justify-content: space-between; gap: 16px; font-size: 18px; font-weight: 600; color: #1F2340">Which languages can we use?<span class="plus" aria-hidden="true" style="font-size: 24px; line-height: 1; color: #9E3722">+</span></summary>
+<p style="margin: 12px 0 0; font-size: 17px; line-height: 1.65; color: #5F5B6E">Every package includes your choice of languages: one, or more shown together on the same page. Tell us which you need and we will confirm.</p>
+</details>
+<details style="border-block-end: 1px solid #E6DCD3; padding-block: 22px">
+<summary style="display: flex; justify-content: space-between; gap: 16px; font-size: 18px; font-weight: 600; color: #1F2340">Who translates the texts?<span class="plus" aria-hidden="true" style="font-size: 24px; line-height: 1; color: #9E3722">+</span></summary>
+<p style="margin: 12px 0 0; font-size: 17px; line-height: 1.65; color: #5F5B6E">You can send your own translation, or we prepare one for you. Either way, you approve every word before anything goes live.</p>
+</details>
+<details style="border-block-end: 1px solid #E6DCD3; padding-block: 22px">
+<summary style="display: flex; justify-content: space-between; gap: 16px; font-size: 18px; font-weight: 600; color: #1F2340">How do guests RSVP?<span class="plus" aria-hidden="true" style="font-size: 24px; line-height: 1; color: #9E3722">+</span></summary>
+<p style="margin: 12px 0 0; font-size: 17px; line-height: 1.65; color: #5F5B6E">You share one link. Each household enters their name, how many people are coming and whether they'll attend, with an optional note. After your deadline, the form closes and shows your contact number.</p>
+</details>
+<details style="border-block-end: 1px solid #E6DCD3; padding-block: 22px">
+<summary style="display: flex; justify-content: space-between; gap: 16px; font-size: 18px; font-weight: 600; color: #1F2340">How does payment work?<span class="plus" aria-hidden="true" style="font-size: 24px; line-height: 1; color: #9E3722">+</span></summary>
+<p style="margin: 12px 0 0; font-size: 17px; line-height: 1.65; color: #5F5B6E">50% when we agree on everything, and 50% when your invitation is ready to go live. Two rounds of changes are included.</p>
+</details>
+<details style="border-block-end: 1px solid #E6DCD3; padding-block: 22px">
+<summary style="display: flex; justify-content: space-between; gap: 16px; font-size: 18px; font-weight: 600; color: #1F2340">What happens after the wedding?<span class="plus" aria-hidden="true" style="font-size: 24px; line-height: 1; color: #9E3722">+</span></summary>
+<p style="margin: 12px 0 0; font-size: 17px; line-height: 1.65; color: #5F5B6E">Your invitation stays online for 3 months after the wedding. You get a CSV of your guest list, and guest data is deleted within about 30 days.</p>
+</details>
+</div>
+</div>
+</section>
+
+<section id="contact" style="padding-block: 104px">
+<div class="wrap" style="display: flex; flex-wrap: wrap; gap: 56px; align-items: flex-start">
+<div style="flex: 1 1 340px; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #9E3722">Contact</p>
+<h2 class="section-title" style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: clamp(2.125rem, 1.6rem + 2.2vw, 3.5rem); line-height: 1.1; color: #1F2340">Tell us about your wedding</h2>
+</div>
+<p style="margin: 0; font-size: 17px; line-height: 1.65; color: #5F5B6E">Send us a few details and we'll reply within a day with availability and next steps. Prefer to chat? Message us directly.</p>
+<div style="display: flex; flex-direction: column; gap: 12px; font-size: 16px">
+<a href="mailto:[YOUR EMAIL]" style="display: flex; align-items: center; gap: 12px; min-height: 44px; text-decoration: none; color: #1F2340; font-weight: 600"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9E3722" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>[YOUR EMAIL]</a>
+<a href="#contact" style="display: flex; align-items: center; gap: 12px; min-height: 44px; text-decoration: none; color: #1F2340; font-weight: 600"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9E3722" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-3.9A8 8 0 1112 20a8 8 0 01-4.1-1.1L4 20z"></path></svg>WhatsApp · [YOUR NUMBER]</a>
+<a href="#contact" style="display: flex; align-items: center; gap: 12px; min-height: 44px; text-decoration: none; color: #1F2340; font-weight: 600"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9E3722" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>Instagram · [@YOUR HANDLE]</a>
+</div>
+</div>
+<form aria-label="Inquiry form" style="flex: 999 1 480px; min-width: 0; background: #FFFFFF; border: 1px solid #E6DCD3; border-radius: 24px; padding: 36px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px">
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 600; color: #1F2340">Your names
+<input type="text" placeholder="Sara &amp; Omar" style="min-height: 48px; padding-inline: 14px; border: 1px solid #5F5B6E; border-radius: 12px; background: #FCF8F3; font-weight: 400">
+</label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 600; color: #1F2340">Email
+<input type="email" placeholder="you@example.com" style="min-height: 48px; padding-inline: 14px; border: 1px solid #5F5B6E; border-radius: 12px; background: #FCF8F3; font-weight: 400">
+</label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 600; color: #1F2340">Wedding date
+<input type="date" style="min-height: 48px; padding-inline: 14px; border: 1px solid #5F5B6E; border-radius: 12px; background: #FCF8F3; font-weight: 400">
+</label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 600; color: #1F2340">Languages
+<input type="text" placeholder="e.g. English and Italian" style="min-height: 48px; padding-inline: 14px; border: 1px solid #5F5B6E; border-radius: 12px; background: #FCF8F3; font-weight: 400">
+</label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 600; color: #1F2340">Package
+<select style="min-height: 48px; padding-inline: 12px; border: 1px solid #5F5B6E; border-radius: 12px; background: #FCF8F3; font-weight: 400">
+<option>Not sure yet</option>
+<option>Essential · €250</option>
+<option>Premium · €450</option>
+<option>Bespoke · from €700</option>
+</select>
+</label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 600; color: #1F2340">Wedding city
+<input type="text" placeholder="e.g. Berlin" style="min-height: 48px; padding-inline: 14px; border: 1px solid #5F5B6E; border-radius: 12px; background: #FCF8F3; font-weight: 400">
+</label>
+<label style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 600; color: #1F2340">Anything else?
+<textarea rows="4" placeholder="Tell us about your wedding, or anything you'd like on your invitation" style="padding: 12px 14px; border: 1px solid #5F5B6E; border-radius: 12px; background: #FCF8F3; font-weight: 400; resize: vertical"></textarea>
+</label>
+<div style="grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<p style="margin: 0; font-size: 13px; color: #5F5B6E; max-width: 380px">We only use these details to reply to you. See our <a href="#privacy">privacy notice</a>.</p>
+<button type="button" class="btn-coral" style="min-height: 52px; padding-inline: 30px; border: 0; border-radius: 999px; background: #B8432C; color: #FFFFFF; font-weight: 700; font-size: 16px; cursor: pointer">Send inquiry</button>
+</div>
+</form>
+</div>
+</section>
+
+<footer style="background: #1F2340; color: #D6D3E2; padding-block: 56px 40px">
+<div class="wrap" style="display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 8px; max-width: 360px">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M4.5 4.5H19.5" stroke="#FCF8F3" stroke-width="3.5"></path><path d="M19.5 4.5C14 8.5 10 15.5 4.5 19.5" stroke="#FCF8F3" stroke-width="3"></path><path d="M4.5 19.5H19.5" stroke="#FCF8F3" stroke-width="2.5"></path></svg>
+<span style="font-family: 'Fraunces', Georgia, serif; font-size: 32px; font-weight: 600; color: #FCF8F3; line-height: 1">zaffa</span><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #F2B544; align-self: flex-end; margin-block-end: 6px"></span>
+</div>
+<p style="margin: 0; font-size: 15px; line-height: 1.6">Bilingual digital wedding invitations with RSVP and guest management. Made in Ljubljana for couples across Europe.</p>
+</div>
+<nav aria-label="Footer" style="display: grid; grid-template-columns: repeat(2, minmax(140px, 1fr)); gap: 12px 40px; font-size: 15px">
+<a href="#what" style="color: #D6D3E2">What we do</a>
+<a href="#privacy" style="color: #D6D3E2">Privacy notice</a>
+<a href="#packages" style="color: #D6D3E2">Packages</a>
+<a href="#terms" style="color: #D6D3E2">Terms</a>
+<a href="#faq" style="color: #D6D3E2">FAQ</a>
+<a href="#imprint" style="color: #D6D3E2">Legal notice</a>
+</nav>
+</div>
+<div style="border-block-start: 1px solid rgba(252,248,243,0.18); padding-block-start: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 14px; color: #C9C6D6">
+<span>© 2026 Zaffa · [LEGAL NAME / REGISTRATION]</span>
+<span>Ljubljana, Slovenia</span>
+</div>
+</div>
+</footer>
+
+</div>
+</body>
+</html>
