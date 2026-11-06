@@ -16,6 +16,8 @@ export default defineConfig({
     include: ["**/*.test.{ts,tsx}"],
     exclude: ["node_modules/**", ".next/**", "e2e/**"],
     coverage: {
+      // Text + JSON only: the HTML reporter writes .js files that ESLint would scan.
+      reporter: ["text", "json-summary"],
       include: ["lib/**", "app/**/actions.ts", "components/marketing/ContactFormView.tsx"],
       exclude: ["**/*.test.{ts,tsx}", "lib/site-config.ts"],
       thresholds: { lines: 80, functions: 80, branches: 80, statements: 80 },
