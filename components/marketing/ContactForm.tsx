@@ -49,7 +49,7 @@ export function ContactForm() {
         <input
           name="languages"
           type="text"
-          placeholder="e.g. the languages your families speak"
+          placeholder="e.g. your families' languages"
           className={fieldClass}
         />
       </Field>

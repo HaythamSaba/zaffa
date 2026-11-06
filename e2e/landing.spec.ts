@@ -43,6 +43,19 @@ test.describe("landing page", () => {
     await expect(page.locator("#faq details").first()).toHaveAttribute("open", "");
   });
 
+  test("marketing copy stays language-neutral", async ({ page }) => {
+    const text = await page.locator("body").innerText();
+    const placeholders = await page
+      .locator("input[placeholder], textarea[placeholder]")
+      .evaluateAll((els) => els.map((el) => el.getAttribute("placeholder") ?? ""));
+    const copy = [text, ...placeholders].join("\n");
+
+    expect(copy).not.toMatch(
+      /\b(bilingual|english|arabic|italian|german|french|spanish|turkish|persian|urdu|hebrew|hindi|greek|russian|polish|dutch|swedish|slovenian)\b/i,
+    );
+    expect(copy).not.toMatch(/[֐-ࣿ]/); // no Hebrew/Arabic script
+  });
+
   test("header CTA links to the contact section", async ({ page }) => {
     const cta = page.locator("header").getByRole("link", { name: /request/i });
     await expect(cta).toHaveAttribute("href", "/#contact");

@@ -13,7 +13,7 @@ export function SiteFooter() {
               <Logo hasDot />
             </span>
             <p className="text-small leading-relaxed">
-              Bilingual digital wedding invitations with RSVP and guest
+              Multilingual digital wedding invitations with RSVP and guest
               management. Made in Ljubljana for couples across Europe.
             </p>
           </div>
