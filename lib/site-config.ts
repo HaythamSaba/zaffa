@@ -46,6 +46,18 @@ export const siteConfig = {
     instagram: { label: "Instagram · [@YOUR HANDLE]", href: "#contact" },
   } satisfies Record<string, ContactChannel>,
 
+  /** Business details for the legal notice, privacy notice and terms. */
+  legal: {
+    name: "[LEGAL NAME]",
+    form: "[LEGAL FORM, e.g. sole proprietor (s.p.)]",
+    address: "[STREET, POSTCODE CITY, COUNTRY]",
+    registration: "[REGISTRATION NUMBER / REGISTER]",
+    vatId: "[VAT ID, or 'not VAT registered']",
+    email: "[YOUR EMAIL]",
+    phone: "[YOUR PHONE]",
+    lastUpdated: "[DATE]",
+  },
+
   founder: {
     name: "Haytham Saba",
     initials: "HS",

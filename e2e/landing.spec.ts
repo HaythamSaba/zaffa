@@ -119,3 +119,67 @@ test.describe("landing page with prefers-reduced-motion", () => {
     await expect(sample).toHaveCSS("transform", /^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
   });
 });
+
+test.describe("SEO and legal pages", () => {
+  for (const { path, title } of [
+    { path: "/privacy", title: "Privacy notice" },
+    { path: "/terms", title: "Terms" },
+    { path: "/legal", title: "Legal notice" },
+  ]) {
+    test(`${path} is a noindex draft with one h1`, async ({ page }) => {
+      const response = await page.goto(path);
+
+      expect(response?.status()).toBe(200);
+      await expect(page.locator("h1")).toHaveCount(1);
+      await expect(page.locator("h1")).toHaveText(title);
+      await expect(page.getByRole("note")).toContainText("DRAFT");
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`${path}$`));
+    });
+  }
+
+  test("every footer link resolves", async ({ page, request }) => {
+    await page.goto("/");
+    const hrefs = await page.locator("footer nav a").evaluateAll((links) =>
+      links.map((a) => (a as HTMLAnchorElement).getAttribute("href") ?? ""),
+    );
+
+    for (const href of hrefs) {
+      const response = await request.get(href.split("#")[0] || "/");
+      expect(response.status(), href).toBe(200);
+    }
+  });
+
+  test("home page is indexable and has social preview metadata", async ({ page, request }) => {
+    await page.goto("/");
+
+    await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
+    const ogImage = await page.locator('meta[property="og:image"]').getAttribute("content");
+    expect(ogImage).toBeTruthy();
+    await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute("content", "1200");
+    await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute("content", "630");
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
+
+    const image = await request.get(new URL(ogImage!).pathname + new URL(ogImage!).search);
+    expect(image.status()).toBe(200);
+    expect(image.headers()["content-type"]).toContain("image/png");
+  });
+
+  test("favicon and apple icon are served", async ({ page, request }) => {
+    await page.goto("/");
+    const icon = await page.locator('link[rel="icon"][type="image/svg+xml"]').getAttribute("href");
+    const apple = await page.locator('link[rel="apple-touch-icon"]').getAttribute("href");
+
+    expect((await request.get(icon!)).headers()["content-type"]).toContain("image/svg+xml");
+    expect((await request.get(apple!)).headers()["content-type"]).toContain("image/png");
+  });
+
+  test("sitemap lists the home page and robots.txt points to it", async ({ request }) => {
+    const sitemap = await (await request.get("/sitemap.xml")).text();
+    const robots = await (await request.get("/robots.txt")).text();
+
+    expect(sitemap).toMatch(/<loc>https?:\/\/[^<]+\/<\/loc>/);
+    expect(sitemap).not.toContain("/privacy");
+    expect(robots).toMatch(/Sitemap: https?:\/\/\S+\/sitemap\.xml/);
+  });
+});
