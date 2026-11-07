@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import {
   ChartIcon,
@@ -53,20 +54,21 @@ export function WhatWeDo() {
   return (
     <section id="what" aria-labelledby="what-title" className="py-20 md:py-26">
       <Container className="flex flex-col gap-12 md:gap-14">
-        <SectionHeading id="what-title" eyebrow="What we do">
-          Everything your guests need, on one beautiful page
-        </SectionHeading>
+        <Reveal>
+          <SectionHeading id="what-title" eyebrow="What we do">
+            Everything your guests need, on one beautiful page
+          </SectionHeading>
+        </Reveal>
 
         <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,18.75rem),1fr))] gap-6">
-          {features.map(({ title, body, Icon }) => (
-            <li
-              key={title}
-              className="flex flex-col gap-3.5 rounded-card border border-line bg-white p-7 md:p-8 motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_-12px_color-mix(in_oklab,var(--color-indigo)_25%,transparent)]"
-            >
-              <Icon className="size-8 text-coral-deep" />
-              <h3 className="text-h4 font-bold text-indigo">{title}</h3>
-              <p className="text-dusk">{body}</p>
-            </li>
+          {features.map(({ title, body, Icon }, index) => (
+            <Reveal as="li" key={title} index={index}>
+              <div className="flex h-full flex-col gap-3.5 rounded-card border border-line bg-white p-7 md:p-8 motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_-12px_color-mix(in_oklab,var(--color-indigo)_25%,transparent)]">
+                <Icon className="size-8 text-coral-deep" />
+                <h3 className="text-h4 font-bold text-indigo">{title}</h3>
+                <p className="text-dusk">{body}</p>
+              </div>
+            </Reveal>
           ))}
         </ul>
       </Container>

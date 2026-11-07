@@ -59,7 +59,7 @@ export function ContactFormView({ state, formAction, isPending }: Props) {
     <form
       action={formAction}
       aria-labelledby="contact-title"
-      className="relative grid min-w-0 flex-[999_1_30rem] grid-cols-[repeat(auto-fit,minmax(min(100%,13.75rem),1fr))] gap-5 rounded-panel border border-line bg-white p-6 md:p-9"
+      className="relative grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,13.75rem),1fr))] gap-5 rounded-panel border border-line bg-white p-6 md:p-9"
     >
       <Field name="names" label="Your names" error={errors.names}>
         {(a11y) => (

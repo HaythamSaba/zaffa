@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { siteConfig, type ContactChannel } from "@/lib/site-config";
 import { ContactForm } from "./ContactForm";
@@ -17,7 +18,7 @@ export function Contact() {
   return (
     <section id="contact" aria-labelledby="contact-title" className="py-20 md:py-26">
       <Container className="flex flex-wrap items-start gap-12 md:gap-14">
-        <div className="flex flex-[1_1_21.25rem] flex-col gap-5.5">
+        <Reveal className="flex flex-[1_1_21.25rem] flex-col gap-5.5">
           <SectionHeading id="contact-title" eyebrow="Contact">
             Tell us about your wedding
           </SectionHeading>
@@ -38,9 +39,11 @@ export function Contact() {
               </li>
             ))}
           </ul>
-        </div>
+        </Reveal>
 
-        <ContactForm />
+        <Reveal index={1} className="min-w-0 flex-[999_1_30rem]">
+          <ContactForm />
+        </Reveal>
       </Container>
     </section>
   );

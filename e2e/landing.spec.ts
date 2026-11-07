@@ -56,8 +56,66 @@ test.describe("landing page", () => {
     expect(copy).not.toMatch(/[֐-ࣿ]/); // no Hebrew/Arabic script
   });
 
+  test("hero headline and mockup are never animated (LCP)", async ({ page }) => {
+    await expect(page.locator("#top [data-reveal]")).toHaveCount(0);
+    const h1Style = await page.locator("h1").evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { opacity: s.opacity, transform: s.transform };
+    });
+    expect(h1Style).toEqual({ opacity: "1", transform: "none" });
+  });
+
+  test("revealed content ends fully visible and in place", async ({ page }) => {
+    const reveals = page.locator("[data-reveal]");
+    expect(await reveals.count()).toBeGreaterThan(10);
+
+    for (const el of await reveals.all()) {
+      await el.scrollIntoViewIfNeeded();
+      await expect(el).toHaveCSS("opacity", "1");
+      await expect(el).toHaveCSS("transform", /^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
+    }
+  });
+
+  test("scrolling the whole page causes no layout shift", async ({ page }) => {
+    await page.evaluate(async () => {
+      for (let y = 0; y <= document.body.scrollHeight; y += 400) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 50));
+      }
+    });
+    const cls = await page.evaluate(
+      () =>
+        new Promise<number>((resolve) => {
+          let total = 0;
+          new PerformanceObserver((list) => {
+            for (const entry of list.getEntries() as (PerformanceEntry & {
+              value: number;
+              hadRecentInput: boolean;
+            })[]) {
+              if (!entry.hadRecentInput) total += entry.value;
+            }
+          }).observe({ type: "layout-shift", buffered: true });
+          setTimeout(() => resolve(total), 500);
+        }),
+    );
+    expect(cls).toBeLessThan(0.01);
+  });
+
   test("header CTA links to the contact section", async ({ page }) => {
     const cta = page.locator("header").getByRole("link", { name: /request/i });
     await expect(cta).toHaveAttribute("href", "/#contact");
+  });
+});
+
+test.describe("landing page with prefers-reduced-motion", () => {
+  test.use({ reducedMotion: "reduce" });
+
+  test("revealed content becomes visible without movement", async ({ page }) => {
+    await page.goto("/");
+    const sample = page.locator("#packages [data-reveal]").first();
+    await sample.scrollIntoViewIfNeeded();
+
+    await expect(sample).toHaveCSS("opacity", "1");
+    await expect(sample).toHaveCSS("transform", /^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
   });
 });

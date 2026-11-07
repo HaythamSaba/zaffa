@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 const faqs = [
@@ -38,11 +39,13 @@ export function Faq() {
   return (
     <section id="faq" aria-labelledby="faq-title" className="bg-blush py-20 md:py-26">
       <Container className="flex flex-wrap items-start gap-12 md:gap-14">
-        <SectionHeading id="faq-title" eyebrow="FAQ" className="flex-[1_1_18.75rem]">
-          Questions couples ask
-        </SectionHeading>
+        <Reveal className="flex-[1_1_18.75rem]">
+          <SectionHeading id="faq-title" eyebrow="FAQ">
+            Questions couples ask
+          </SectionHeading>
+        </Reveal>
 
-        <div className="flex min-w-0 flex-[999_1_32.5rem] flex-col">
+        <Reveal index={1} className="flex min-w-0 flex-[999_1_32.5rem] flex-col">
           {faqs.map((faq) => (
             <details key={faq.question} className="group border-b border-line py-3">
               <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 rounded-md py-2 text-[1.125rem] font-semibold text-indigo [&::-webkit-details-marker]:hidden hover:text-coral-deep">
@@ -57,7 +60,7 @@ export function Faq() {
               <p className="pt-2 pb-3 text-dusk">{faq.answer}</p>
             </details>
           ))}
-        </div>
+        </Reveal>
       </Container>
     </section>
   );

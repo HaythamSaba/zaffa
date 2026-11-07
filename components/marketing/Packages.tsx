@@ -1,10 +1,11 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { formatEuro } from "@/lib/format";
 import { addOns, packages, type Package } from "@/lib/site-config";
 
-function PackageCard({ pkg }: { pkg: Package }) {
+function PackageCard({ pkg, index }: { pkg: Package; index: number }) {
   const isFeatured = pkg.featured === true;
   const surface = isFeatured
     ? "surface-dark bg-indigo text-paper shadow-phone"
@@ -12,7 +13,11 @@ function PackageCard({ pkg }: { pkg: Package }) {
   const muted = isFeatured ? "text-paper-muted" : "text-dusk";
 
   return (
-    <li className={`flex flex-col gap-5 rounded-panel p-8 md:p-9 ${surface}`}>
+    <Reveal
+      as="li"
+      index={index}
+      className={`flex flex-col gap-5 rounded-panel p-8 md:p-9 ${surface}`}
+    >
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center justify-between gap-3">
           <h3 className="text-h4 font-bold">{pkg.name}</h3>
@@ -48,7 +53,7 @@ function PackageCard({ pkg }: { pkg: Package }) {
       >
         {pkg.cta}
       </ButtonLink>
-    </li>
+    </Reveal>
   );
 }
 
@@ -56,17 +61,19 @@ export function Packages() {
   return (
     <section id="packages" aria-labelledby="packages-title" className="py-20 md:py-26">
       <Container className="flex flex-col gap-12 md:gap-14">
-        <SectionHeading id="packages-title" eyebrow="Packages">
-          Clear prices, language choice always included
-        </SectionHeading>
+        <Reveal>
+          <SectionHeading id="packages-title" eyebrow="Packages">
+            Clear prices, language choice always included
+          </SectionHeading>
+        </Reveal>
 
         <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,18.75rem),1fr))] items-stretch gap-6">
-          {packages.map((pkg) => (
-            <PackageCard key={pkg.id} pkg={pkg} />
+          {packages.map((pkg, index) => (
+            <PackageCard key={pkg.id} pkg={pkg} index={index} />
           ))}
         </ul>
 
-        <div className="flex flex-wrap items-center gap-x-10 gap-y-4 rounded-card border border-dashed border-dusk px-7 py-7 md:px-8">
+        <Reveal className="flex flex-wrap items-center gap-x-10 gap-y-4 rounded-card border border-dashed border-dusk px-7 py-7 md:px-8">
           <h3 className="text-body font-bold text-indigo">Add-ons</h3>
           <ul className="flex flex-wrap gap-x-8 gap-y-2.5 text-small text-indigo">
             {addOns.map((addOn) => (
@@ -75,7 +82,7 @@ export function Packages() {
               </li>
             ))}
           </ul>
-        </div>
+        </Reveal>
       </Container>
     </section>
   );

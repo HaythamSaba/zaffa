@@ -1,5 +1,6 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
 import { siteConfig } from "@/lib/site-config";
 
 export function DemoCta() {
@@ -10,7 +11,7 @@ export function DemoCta() {
       className="surface-dark bg-indigo py-20 text-paper md:py-24"
     >
       <Container className="flex flex-wrap items-center justify-between gap-8">
-        <div className="flex flex-[1_1_32.5rem] flex-col gap-2.5">
+        <Reveal className="flex flex-[1_1_32.5rem] flex-col gap-2.5">
           <h2
             id="demo-title"
             className="font-display text-h1 font-semibold text-balance"
@@ -21,10 +22,12 @@ export function DemoCta() {
             Click through a complete invitation for a fictional couple, in two
             languages, exactly as your guests would see it.
           </p>
-        </div>
-        <ButtonLink href={siteConfig.demoUrl} variant="saffron">
-          View the sample invitation
-        </ButtonLink>
+        </Reveal>
+        <Reveal index={1}>
+          <ButtonLink href={siteConfig.demoUrl} variant="saffron">
+            View the sample invitation
+          </ButtonLink>
+        </Reveal>
       </Container>
     </section>
   );

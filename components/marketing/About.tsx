@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { siteConfig } from "@/lib/site-config";
 
@@ -8,15 +9,16 @@ export function About() {
   return (
     <section id="about" aria-labelledby="about-title" className="py-20 md:py-26">
       <Container className="flex flex-wrap items-start gap-12 md:gap-14">
-        <SectionHeading
-          id="about-title"
-          eyebrow="About us"
-          className="flex-[1_1_20rem]"
-        >
-          A small studio that cares about every language
-        </SectionHeading>
+        <Reveal className="flex-[1_1_20rem]">
+          <SectionHeading id="about-title" eyebrow="About us">
+            A small studio that cares about every language
+          </SectionHeading>
+        </Reveal>
 
-        <div className="flex min-w-0 flex-[999_1_30rem] flex-col gap-5 text-[1.125rem] leading-[1.7] text-indigo">
+        <Reveal
+          index={1}
+          className="flex min-w-0 flex-[999_1_30rem] flex-col gap-5 text-[1.125rem] leading-[1.7] text-indigo"
+        >
           <p>
             We make digital invitations for couples whose families span
             languages and countries, so every guest feels the invitation was
@@ -41,7 +43,7 @@ export function About() {
               <span className="text-small text-dusk">{founder.role}</span>
             </div>
           </div>
-        </div>
+        </Reveal>
       </Container>
     </section>
   );

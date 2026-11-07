@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 const steps = [
@@ -28,14 +29,18 @@ export function HowItWorks() {
   return (
     <section id="how" aria-labelledby="how-title" className="bg-blush py-20 md:py-26">
       <Container className="flex flex-col gap-12 md:gap-14">
-        <SectionHeading id="how-title" eyebrow="How it works">
-          From first message to live invitation in about a week
-        </SectionHeading>
+        <Reveal>
+          <SectionHeading id="how-title" eyebrow="How it works">
+            From first message to live invitation in about a week
+          </SectionHeading>
+        </Reveal>
 
         <ol className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,13.125rem),1fr))] gap-5 lg:grid-cols-5">
           {steps.map((step, index) => (
-            <li
+            <Reveal
+              as="li"
               key={step.title}
+              index={index}
               className="flex flex-col gap-2.5 border-t-2 border-indigo pt-5"
             >
               <span
@@ -48,7 +53,7 @@ export function HowItWorks() {
                 {step.title}
               </h3>
               <p className="text-small leading-relaxed text-dusk">{step.body}</p>
-            </li>
+            </Reveal>
           ))}
         </ol>
       </Container>
