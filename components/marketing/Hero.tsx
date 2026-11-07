@@ -17,10 +17,10 @@ export function Hero() {
 
           <h1
             id="hero-title"
-            className="font-display text-display font-semibold text-indigo text-balance"
+            className="font-display text-display font-light text-indigo text-balance"
           >
             Wedding invitations in{" "}
-            <em className="font-normal italic">every</em> language your
+            <em className="font-light bg-saffron px-2 italic">every</em> language your
             families speak.
           </h1>
 
