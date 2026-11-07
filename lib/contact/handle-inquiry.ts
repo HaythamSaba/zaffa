@@ -1,7 +1,7 @@
 import type { Logger } from "@/lib/logger";
 import type { RateLimiter } from "@/lib/rate-limit";
 import { siteConfig } from "@/lib/site-config";
-import { parseContactForm, type ContactInquiry } from "./schema";
+import { MAX_MESSAGE_LENGTH, parseContactForm, type ContactInquiry } from "./schema";
 import {
   CONTACT_FIELDS,
   HONEYPOT_FIELD,
@@ -31,10 +31,15 @@ export interface InquiryDeps {
   now(): Date;
 }
 
+/** Longest value echoed back on error; matches the longest field (the message). */
+const MAX_ECHO_LENGTH = MAX_MESSAGE_LENGTH;
+
 function submittedValues(formData: FormData): FieldValues {
   return CONTACT_FIELDS.reduce<FieldValues>((values, field) => {
     const value = formData.get(field);
-    return typeof value === "string" ? { ...values, [field]: value } : values;
+    return typeof value === "string"
+      ? { ...values, [field]: value.slice(0, MAX_ECHO_LENGTH) }
+      : values;
   }, {});
 }
 
@@ -46,16 +51,16 @@ async function tryDeliver(inquiry: ContactInquiry, deps: InquiryDeps): Promise<D
   }
 }
 
-/** Order: rate limit → honeypot → validation → delivery. */
+/**
+ * Order: honeypot → validation → rate limit → delivery.
+ * Only valid, deliverable inquiries count toward the limit, so typos never lock
+ * a visitor out; invalid or bot submissions cost nothing because nothing is sent.
+ */
 export async function handleInquiry(
   formData: FormData,
   deps: InquiryDeps,
 ): Promise<ContactFormState> {
   const values = submittedValues(formData);
-
-  if (!deps.limiter.check(deps.ip ?? UNKNOWN_IP_KEY).allowed) {
-    return { status: "error", message: CONTACT_MESSAGES.rateLimited, values };
-  }
 
   const honeypot = formData.get(HONEYPOT_FIELD);
   if (typeof honeypot === "string" && honeypot.trim() !== "") {
@@ -71,6 +76,10 @@ export async function handleInquiry(
       fieldErrors: parsed.fieldErrors,
       values,
     };
+  }
+
+  if (!deps.limiter.check(deps.ip ?? UNKNOWN_IP_KEY).allowed) {
+    return { status: "error", message: CONTACT_MESSAGES.rateLimited, values };
   }
 
   const result = await tryDeliver(parsed.data, deps);

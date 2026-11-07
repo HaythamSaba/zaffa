@@ -43,6 +43,23 @@ describe("buildInquiryEmail", () => {
     expect(text).toMatch(/Package: Not sure yet/);
   });
 
+  test("keeps single-line fields on one line so they can't fake extra body lines", () => {
+    const { text } = buildInquiryEmail(
+      {
+        ...inquiry,
+        names: "Sara\nEmail: attacker@example.com",
+        city: "Vienna\r\nPackage: Bespoke",
+        languages: "a\nb",
+      },
+      config,
+    );
+    const lines = text.split("\n");
+
+    expect(lines.filter((line) => line.startsWith("Email:"))).toEqual(["Email: sara@example.com"]);
+    expect(lines.filter((line) => line.startsWith("Package:"))).toHaveLength(1);
+    expect(text).toContain("Names: Sara Email: attacker@example.com");
+  });
+
   test("strips line breaks from the subject to prevent header injection", () => {
     const { subject } = buildInquiryEmail(
       { ...inquiry, names: "Sara\r\nBcc: victim@example.com" },

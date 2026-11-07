@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 import { HONEYPOT_FIELD, type ContactField, type ContactFormState } from "@/lib/contact/types";
 import { packageOptionLabel } from "@/lib/format";
 import { packages } from "@/lib/site-config";
@@ -123,9 +124,9 @@ export function ContactFormView({ state, formAction, isPending }: Props) {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <p className="max-w-95 text-[0.8125rem] text-dusk">
             We only use these details to reply to you. See our{" "}
-            <a href="/privacy" className="text-coral underline underline-offset-2 hover:text-coral-deep">
+            <Link href="/privacy" className="text-coral underline underline-offset-2 hover:text-coral-deep">
               privacy notice
-            </a>
+            </Link>
             .
           </p>
           <button

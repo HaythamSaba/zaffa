@@ -14,7 +14,10 @@ async function main() {
   try {
     html = await readFile(HTML_PATH, "utf8");
   } catch {
-    console.error(`check-bundle: ${HTML_PATH} not found. Run "npm run build" first.`);
+    console.error(
+      `check-bundle: ${HTML_PATH} not found. Run "npm run build" first. ` +
+        `If it still fails after a build, "/" is no longer fully prerendered and this check needs updating.`,
+    );
     process.exit(1);
   }
 

@@ -183,3 +183,12 @@ test.describe("SEO and legal pages", () => {
     expect(robots).toMatch(/Sitemap: https?:\/\/\S+\/sitemap\.xml/);
   });
 });
+
+test("responses carry the baseline security headers", async ({ request }) => {
+  const headers = (await request.get("/")).headers();
+
+  expect(headers["x-content-type-options"]).toBe("nosniff");
+  expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
+  expect(headers["x-frame-options"]).toBe("DENY");
+  expect(headers["permissions-policy"]).toContain("camera=()");
+});

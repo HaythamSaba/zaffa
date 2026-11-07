@@ -47,12 +47,13 @@ export function buildInquiryEmail(inquiry: ContactInquiry, { to, from }: Address
   const text = [
     "New inquiry from the Zaffa website",
     "",
-    `Names: ${inquiry.names}`,
+    // Single-line fields are flattened so they can't fake extra "Label:" lines.
+    `Names: ${singleLine(inquiry.names)}`,
     `Email: ${inquiry.email}`,
     `Wedding date: ${inquiry.weddingDate ?? EMPTY}`,
     `Package: ${packageLabel(inquiry.package)}`,
-    `Languages: ${inquiry.languages ?? EMPTY}`,
-    `Wedding city: ${inquiry.city ?? EMPTY}`,
+    `Languages: ${inquiry.languages ? singleLine(inquiry.languages) : EMPTY}`,
+    `Wedding city: ${inquiry.city ? singleLine(inquiry.city) : EMPTY}`,
     "",
     "Message:",
     inquiry.message ?? EMPTY,

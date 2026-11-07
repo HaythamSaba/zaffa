@@ -69,13 +69,32 @@ describe("handleInquiry", () => {
     expect(d.deliver).toHaveBeenCalledTimes(1);
   });
 
-  test("counts invalid submissions toward the rate limit", async () => {
+  test("does not count invalid submissions toward the rate limit (typos don't lock people out)", async () => {
     const d = deps({ limiter: createRateLimiter({ limit: 1, windowMs: 60_000 }) });
     await handleInquiry(form({ names: "" }), d);
+    await handleInquiry(form({ ...valid, email: "typo" }), d);
 
     const state = await handleInquiry(form(valid), d);
 
-    expect(state.message).toMatch(/too many/i);
+    expect(state.status).toBe("success");
+  });
+
+  test("does not count honeypot submissions toward the shared rate limit", async () => {
+    const d = deps({ ip: null, limiter: createRateLimiter({ limit: 1, windowMs: 60_000 }) });
+    await handleInquiry(form({ ...valid, [HONEYPOT_FIELD]: "spam" }), d);
+
+    const state = await handleInquiry(form(valid), d);
+
+    expect(state.status).toBe("success");
+  });
+
+  test("caps echoed values so oversized input isn't reflected back in full", async () => {
+    const d = deps();
+
+    const state = await handleInquiry(form({ ...valid, message: "a".repeat(10_000) }), d);
+
+    expect(state.status).toBe("error");
+    expect(state.values?.message?.length).toBe(2000);
   });
 
   test("shares one rate-limit bucket when the IP is unknown", async () => {
