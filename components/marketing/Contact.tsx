@@ -17,8 +17,8 @@ const channels: readonly Channel[] = [
 export function Contact() {
   return (
     <section id="contact" aria-labelledby="contact-title" className="py-20 md:py-26">
-      <Container className="flex flex-wrap items-start gap-12 md:gap-14">
-        <Reveal className="flex flex-[1_1_21.25rem] flex-col gap-5.5">
+      <Container className="grid items-start gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+        <Reveal className="flex flex-col gap-5.5">
           <SectionHeading id="contact-title" eyebrow="Contact">
             Tell us about your wedding
           </SectionHeading>
@@ -41,7 +41,7 @@ export function Contact() {
           </ul>
         </Reveal>
 
-        <Reveal index={1} className="min-w-0 flex-[999_1_30rem]">
+        <Reveal index={1} className="min-w-0">
           <ContactForm />
         </Reveal>
       </Container>

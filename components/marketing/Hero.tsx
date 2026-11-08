@@ -13,14 +13,18 @@ export function Hero() {
     >
       <Container className="flex flex-wrap items-center gap-12 md:gap-16">
         <div className="flex min-w-0 flex-[999_1_32.5rem] flex-col gap-7">
-          <Eyebrow>Digital wedding invitations · RSVP · Guest list</Eyebrow>
+          {/* Non-breaking spaces keep each "·" at the end of a line, never the start. */}
+          <Eyebrow>Digital wedding invitations&nbsp;· RSVP&nbsp;· Guest list</Eyebrow>
 
           <h1
             id="hero-title"
             className="font-display text-display font-light text-indigo text-balance"
           >
             Wedding invitations in{" "}
-            <em className="font-light bg-saffron px-2 italic">every</em> language your
+            <em className="box-decoration-clone bg-[linear-gradient(transparent_60%,var(--color-saffron)_60%,var(--color-saffron)_88%,transparent_88%)] px-1 font-light italic">
+              every
+            </em>{" "}
+            language your
             families speak.
           </h1>
 
