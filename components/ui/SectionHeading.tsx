@@ -11,7 +11,7 @@ type Props = {
 
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <p className="text-eyebrow font-bold uppercase text-coral-deep">{children}</p>
+    <p className="text-eyebrow font-bold uppercase text-coral-deep text-balance">{children}</p>
   );
 }
 

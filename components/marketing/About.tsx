@@ -8,8 +8,8 @@ export function About() {
 
   return (
     <section id="about" aria-labelledby="about-title" className="py-20 md:py-26">
-      <Container className="flex flex-wrap items-start gap-12 md:gap-14">
-        <Reveal className="flex-[1_1_20rem]">
+      <Container className="grid items-start gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+        <Reveal>
           <SectionHeading id="about-title" eyebrow="About us">
             A small studio that cares about every language
           </SectionHeading>
@@ -17,7 +17,7 @@ export function About() {
 
         <Reveal
           index={1}
-          className="flex min-w-0 flex-[999_1_30rem] flex-col gap-5 text-[1.125rem] leading-[1.7] text-indigo"
+          className="flex min-w-0 flex-col gap-5 text-[1.125rem] leading-[1.7] text-indigo"
         >
           <p>
             We make digital invitations for couples whose families span
