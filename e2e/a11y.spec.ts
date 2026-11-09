@@ -6,7 +6,8 @@ const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
 /** Scroll everything into view so reveal animations finish before axe checks contrast. */
 async function revealAll(page: Page): Promise<void> {
-  for (const el of await page.locator("[data-reveal]").all()) {
+  // :visible skips reveals that are display:none at this width (e.g. the FAQ photo on phones).
+  for (const el of await page.locator("[data-reveal]:visible").all()) {
     await el.scrollIntoViewIfNeeded();
     await expect(el).toHaveCSS("opacity", "1");
   }
