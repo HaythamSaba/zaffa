@@ -38,6 +38,24 @@ describe("Photo", () => {
     expect(img.getAttribute("loading")).toBe("lazy");
   });
 
+  test("keeps the subject in frame with the photo's focal point (object-position)", () => {
+    render(
+      <Photo
+        photo={{
+          src: "/images/venue.png",
+          width: 687,
+          height: 1031,
+          alt: "A domed gazebo",
+          label: "x",
+          focus: "50% 0%",
+        }}
+      />,
+    );
+
+    const img = screen.getByRole("img", { name: "A domed gazebo" }) as HTMLImageElement;
+    expect(img.style.objectPosition).toBe("50% 0%");
+  });
+
   test("priority photos load eagerly with high fetch priority", () => {
     render(
       <Photo

@@ -1,4 +1,5 @@
 import { getImageProps } from "next/image";
+import { preload } from "react-dom";
 import type { PhotoAsset } from "@/lib/photos";
 
 type Props = {
@@ -8,10 +9,11 @@ type Props = {
   /** Above-the-fold photo (the hero): load eagerly with high fetch priority. */
   priority?: boolean;
   /**
-   * Espresso gradient for white text on top (docs/brand.md). `true` is the hero
-   * gradient (.55 → .25 → .6); "strong" (.5 → .65) suits text in the middle of a band.
+   * Espresso gradient for white text on top (docs/brand.md). `true` is the brand.md
+   * example (.55 → .25 → .6); "strong" (.65 → .65 → .75) for text across the middle
+   * of a bright photo; "bottom" (clear top, .9 at the base) for titles at the bottom.
    */
-  overlay?: boolean | "strong";
+  overlay?: boolean | "strong" | "bottom";
   /** Position, size and shape, e.g. "absolute inset-0" or "relative h-75 rounded-arch". */
   className?: string;
   /** Where the placeholder label sits; defaults to bottom centre. */
@@ -20,7 +22,12 @@ type Props = {
 
 const overlayGradient = {
   standard: "bg-linear-to-b from-espresso/55 via-espresso/25 to-espresso/60",
-  strong: "bg-linear-to-b from-espresso/50 to-espresso/65",
+  // Measured against the real photos: a near-white pixel (sky, lake, fabric) needs
+  // ≥ ~.62 Espresso behind white body text for 4.5:1.
+  // Text across the middle of a bright photo (hero, closing band).
+  strong: "bg-linear-to-b from-espresso/65 via-espresso/65 to-espresso/75",
+  // Text at the bottom edge (arch cards): photo clear at the top, dark under the title.
+  bottom: "bg-linear-to-b from-espresso/5 from-40% via-espresso/60 via-70% to-espresso/90",
 } as const;
 
 const placeholderTone = {
@@ -67,7 +74,7 @@ export function Photo({
         <div
           aria-hidden="true"
           data-photo-overlay=""
-          className={`absolute inset-0 ${overlayGradient[overlay === "strong" ? "strong" : "standard"]}`}
+          className={`absolute inset-0 ${overlayGradient[overlay === true ? "standard" : overlay]}`}
         />
       )}
     </div>
@@ -94,6 +101,24 @@ function PhotoImage({
     fetchPriority: priority ? "high" : "auto",
   });
 
-  // eslint-disable-next-line @next/next/no-img-element -- getImageProps output (optimised srcset)
-  return <img {...props} alt={photo.alt} className="absolute inset-0 size-full object-cover" />;
+  // The hero is the LCP element: emit <link rel="preload"> in <head> so the browser
+  // starts the (responsive) download before it reaches the <img> in the body.
+  if (priority) {
+    preload(props.src, {
+      as: "image",
+      imageSrcSet: props.srcSet,
+      imageSizes: props.sizes,
+      fetchPriority: "high",
+    });
+  }
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element -- getImageProps output (optimised srcset)
+    <img
+      {...props}
+      alt={photo.alt}
+      style={{ ...props.style, objectPosition: photo.focus }}
+      className="absolute inset-0 size-full object-cover"
+    />
+  );
 }

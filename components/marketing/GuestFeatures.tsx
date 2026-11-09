@@ -44,7 +44,7 @@ export function GuestFeatures() {
               <Reveal as="li" key={card.title} index={index} className={ARCH_CARD}>
                 <Photo
                   photo={card.photo}
-                  overlay
+                  overlay="bottom"
                   sizes={CARD_SIZES}
                   className="absolute inset-0"
                   labelClassName="inset-x-2 top-1/3 justify-center text-center"

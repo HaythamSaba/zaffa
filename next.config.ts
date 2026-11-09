@@ -19,6 +19,8 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+  // AVIF first (much smaller photos, faster hero LCP); WebP for browsers without AVIF.
+  images: { formats: ["image/avif", "image/webp"] },
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {

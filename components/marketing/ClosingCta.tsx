@@ -27,7 +27,7 @@ export function ClosingCta() {
           <SectionHeading id="closing-title" size="band" align="center" isOnPhoto>
             Let&rsquo;s invite <b>everyone</b>
           </SectionHeading>
-          <p className="max-w-120 text-[0.9375rem] leading-[1.8] text-white/90">
+          <p className="max-w-120 text-[0.9375rem] leading-[1.8] text-white">
             Tell us your date and your families&rsquo; languages. We reply within a day.
           </p>
           <ButtonLink href="#contact" variant="light" size="lg">

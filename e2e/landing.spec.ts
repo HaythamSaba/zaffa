@@ -50,12 +50,14 @@ test.describe("landing page", () => {
     await expect(page.locator("footer")).toBeVisible();
   });
 
-  test("unfilled photo slots show labelled placeholders", async ({ page }) => {
-    const placeholders = page.locator('[data-photo-placeholder="true"]');
+  test("every photo slot renders an optimised, described image (no placeholders left)", async ({ page }) => {
+    await expect(page.locator('[data-photo-placeholder="true"]')).toHaveCount(0);
 
-    expect(await placeholders.count()).toBeGreaterThanOrEqual(9);
-    for (const label of await placeholders.allInnerTexts()) {
-      expect(label).toMatch(/^Photo · .+/);
+    const photos = page.locator('img[srcset*="/_next/image?url=%2Fimages%2F"]');
+    // hero, 5 arch cards, phone, FAQ (hidden on phones but in the DOM), closing band
+    await expect(photos).toHaveCount(9);
+    for (const alt of await photos.evaluateAll((imgs) => imgs.map((img) => img.getAttribute("alt") ?? ""))) {
+      expect(alt.length).toBeGreaterThan(10);
     }
   });
 

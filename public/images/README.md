@@ -24,4 +24,20 @@ Until a slot has a file, the `Photo` component shows a labelled placeholder.
 
 ## Sources and licences
 | File | Source | Licence |
-|---|---|---|
+|closing.jpg|https://unsplash.com/photos/wedding-ceremony-by-a-lake-with-guests-seated-outdoors-EQxK5iCPnT8| Free to use under the Unsplash License
+|
+
+|countdown.png|https://unsplash.com/photos/a-bride-and-groom-holding-a-white-balloon-that-says-best-day-ever-q5GslI_p_oU|Free to use under the Unsplash License
+
+|faq-table.png|https://unsplash.com/photos/three-white-taper-candles-Q3PzwHKpEdc|Free to use under the Unsplash License
+
+
+|gallery.png|https://unsplash.com/photos/gold-wedding-band-on-white-textile-8vaQKYnawHw|Free to use under the Unsplash License
+
+|hero.jpn|https://unsplash.com/photos/a-table-with-a-vase-of-flowers-and-candles-psziFFz8NxU|Licensed under the Unsplash+ License
+
+|phone-couple.png|https://unsplash.com/photos/man-and-woman-holding-hands-llWjwo200fo|Free to use under the Unsplash License
+
+|story.png|https://unsplash.com/photos/woman-holding-pink-rose-bouquet-fcBqKMOp5wI|Free to use under the Unsplash License
+
+|venue.png|https://unsplash.com/photos/white-folding-chair-in-front-of-body-of-water-jTnipV64uLo|Free to use under the Unsplash License

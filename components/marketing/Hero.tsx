@@ -16,7 +16,7 @@ export function Hero() {
         photo={photos.hero}
         priority
         sizes="100vw"
-        overlay
+        overlay="strong"
         className="absolute inset-0 -z-10"
         labelClassName="top-24 end-5 nav:top-30 nav:end-10"
       />
@@ -25,7 +25,7 @@ export function Hero() {
         <h1 id="hero-title" className="caps max-w-245 text-display text-balance">
           Invitations that bring <b>every family</b> to the celebration
         </h1>
-        <p className="max-w-130 text-white/90">
+        <p className="max-w-130 text-white">
           Elegant wedding invitation websites, in the languages your families
           speak, with RSVP built in.
         </p>
