@@ -42,7 +42,7 @@ export const photos = {
     focus: "38% 50%",
   },
   countdown: {
-    src: "/images/gallery.png",
+    src: "/images/countdown.png",
     width: 1170,
     height: 780,
     alt: "Two gold wedding rings resting on soft white fabric",

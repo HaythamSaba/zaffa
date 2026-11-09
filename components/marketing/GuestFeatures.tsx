@@ -14,12 +14,12 @@ const cards: readonly Card[] = [
   { kind: "photo", title: "Countdown", photo: photos.countdown },
   { kind: "photo", title: "Venue & map", photo: photos.venue },
   { kind: "photo", title: "Gallery", photo: photos.gallery },
+  { kind: "photo", title: "Every language", photo: photos.languages },
   {
     kind: "rsvp",
     title: "RSVP",
     body: "Name, how many are coming, a note for the kitchen. Done in seconds.",
   },
-  { kind: "photo", title: "Every language", photo: photos.languages },
 ];
 
 // Phones (<640px): 2 per row, 220px tall. From 640px: auto-fit columns, 300px tall.
