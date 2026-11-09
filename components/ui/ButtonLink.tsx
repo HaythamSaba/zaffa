@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 
-export type ButtonVariant = "coral" | "outline" | "saffron";
+export type ButtonVariant = "primary" | "light" | "outline";
 export type ButtonSize = "md" | "lg";
 
 type Props = {
@@ -12,37 +12,33 @@ type Props = {
   className?: string;
 };
 
+// Square corners, uppercase Montserrat 600 12px +0.18em, at least 48px tall (docs/brand.md).
 const base =
-  "inline-flex items-center justify-center rounded-full font-semibold text-center " +
-  "motion-safe:transition-[background-color,color,transform] motion-safe:duration-200 " +
-  "active:translate-y-px";
+  "label inline-flex items-center justify-center text-center " +
+  "motion-safe:transition-colors motion-safe:duration-200";
 
 const variants: Record<ButtonVariant, string> = {
-  coral: "bg-coral text-white hover:bg-coral-deep",
-  // Coral Deep text passes on both Paper (6.57:1) and Blush (5.59:1).
-  outline:
-    "border-[1.5px] border-coral-deep text-coral-deep hover:bg-coral-deep hover:text-white",
-  // Saffron buttons are only used on Indigo surfaces.
-  saffron: "bg-saffron font-bold text-indigo hover:bg-paper",
+  // White on Taupe 6.48:1; hover White on Cocoa 10.76:1.
+  primary: "bg-taupe text-white hover:bg-cocoa",
+  // On photos and Taupe surfaces: Cocoa on White, hovering to Sand.
+  light: "bg-white text-cocoa hover:bg-sand",
+  outline: "border border-taupe text-cocoa hover:bg-taupe hover:text-white",
 };
 
 const sizes: Record<ButtonSize, string> = {
-  md: "min-h-12 px-6 text-small",
-  lg: "min-h-13 px-7 text-base",
+  md: "min-h-12 px-7.5",
+  lg: "min-h-12.5 px-8.5",
 };
 
 export function ButtonLink({
   href,
   children,
-  variant = "coral",
-  size = "lg",
+  variant = "primary",
+  size = "md",
   className = "",
 }: Props) {
   return (
-    <Link
-      href={href}
-      className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
-    >
+    <Link href={href} className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}>
       {children}
     </Link>
   );

@@ -48,7 +48,7 @@ function PackageCard({ pkg, index }: { pkg: Package; index: number }) {
       <ButtonLink
         href="#contact"
         size="md"
-        variant={isFeatured ? "saffron" : "outline"}
+        variant={isFeatured ? "light" : "outline"}
         className="mt-auto w-full text-base"
       >
         {pkg.cta}

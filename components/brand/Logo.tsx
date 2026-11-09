@@ -1,28 +1,22 @@
 import { ZMark } from "./ZMark";
 
 type Props = {
-  /** Adds the Saffron dot after the wordmark (dark surfaces only). */
-  hasDot?: boolean;
+  /** Show the Two-Line Z before the wordmark (header). The footer uses the wordmark alone. */
+  hasMark?: boolean;
   className?: string;
 };
 
 /**
- * Symbol + lowercase wordmark. Plain Fraunces 600 until the final ff-ligature
- * SVG lands in public/brand/. Color comes from the parent via currentColor.
+ * `ZAFFA` in Cormorant Garamond 500, uppercase, +0.32em (docs/brand.md).
+ * Colour comes from the parent: Cocoa on light, White on photos.
  */
-export function Logo({ hasDot = false, className = "" }: Props) {
+export function Logo({ hasMark = true, className = "" }: Props) {
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <ZMark className="size-[1em] shrink-0" />
-      <span className="font-display leading-none font-semibold tracking-[-0.01em]">
-        zaffa
+      {hasMark && <ZMark className="size-6 shrink-0" />}
+      <span className="font-display text-[1.625rem] leading-none font-medium tracking-wordmark uppercase">
+        Zaffa
       </span>
-      {hasDot && (
-        <span
-          aria-hidden="true"
-          className="size-[0.2em] self-end rounded-full bg-saffron mb-[0.18em]"
-        />
-      )}
     </span>
   );
 }

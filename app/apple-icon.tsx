@@ -17,7 +17,7 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: brandColors.coral,
+          background: brandColors.taupe,
         }}
       >
         <svg
@@ -25,7 +25,7 @@ export default function AppleIcon() {
           height={MARK_PX}
           viewBox="0 0 24 24"
           fill="none"
-          stroke={brandColors.paper}
+          stroke={brandColors.ivory}
           strokeLinecap="round"
         >
           <path d="M4.5 4.5H19.5" strokeWidth="3.5" />

@@ -24,7 +24,7 @@ export function DemoCta() {
           </p>
         </Reveal>
         <Reveal index={1}>
-          <ButtonLink href={siteConfig.demoUrl} variant="saffron">
+          <ButtonLink href={siteConfig.demoUrl} variant="light">
             View the sample invitation
           </ButtonLink>
         </Reveal>

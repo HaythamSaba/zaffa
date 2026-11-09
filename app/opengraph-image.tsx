@@ -24,7 +24,7 @@ export default function OpenGraphImage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: brandColors.indigo,
+          background: brandColors.taupe,
         }}
       >
         <div style={{ display: "flex", alignItems: "flex-end" }}>
@@ -35,7 +35,7 @@ export default function OpenGraphImage() {
               fontWeight: 600,
               lineHeight: 1,
               letterSpacing: "-0.01em",
-              color: brandColors.paper,
+              color: brandColors.ivory,
             }}
           >
             zaffa
@@ -45,7 +45,7 @@ export default function OpenGraphImage() {
               width: DOT_PX,
               height: DOT_PX,
               borderRadius: "50%",
-              background: brandColors.saffron,
+              background: brandColors.ivory,
               marginLeft: 14,
               marginBottom: 40,
             }}

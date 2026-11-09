@@ -10,7 +10,7 @@ export function SiteFooter() {
         <div className="flex flex-wrap justify-between gap-8">
           <div className="flex max-w-90 flex-col gap-3">
             <span className="text-[2rem] text-paper">
-              <Logo hasDot />
+              <Logo hasMark={false} />
             </span>
             <p className="text-small leading-relaxed">
               Multilingual digital wedding invitations with RSVP and guest
