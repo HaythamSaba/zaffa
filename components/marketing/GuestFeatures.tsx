@@ -22,8 +22,11 @@ const cards: readonly Card[] = [
   { kind: "photo", title: "Every language", photo: photos.languages },
 ];
 
-const ARCH_CARD = "relative h-75 overflow-hidden rounded-arch";
-const CARD_SIZES = "(min-width: 1200px) 280px, (min-width: 900px) 25vw, (min-width: 520px) 50vw, 100vw";
+// Phones (<640px): 2 per row, 220px tall. From 640px: auto-fit columns, 300px tall.
+const ARCH_CARD = "relative h-55 overflow-hidden rounded-arch sm:h-75";
+const CARD_SIZES = "(min-width: 1200px) 280px, (min-width: 900px) 25vw, 50vw";
+const CARD_TITLE =
+  "font-display text-[0.9375rem] tracking-[0.14em] uppercase sm:text-h3 sm:tracking-[0.18em]";
 
 export function GuestFeatures() {
   return (
@@ -35,7 +38,7 @@ export function GuestFeatures() {
           </SectionHeading>
         </Reveal>
 
-        <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,15rem),1fr))] gap-7">
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] sm:gap-7">
           {cards.map((card, index) =>
             card.kind === "photo" ? (
               <Reveal as="li" key={card.title} index={index} className={ARCH_CARD}>
@@ -44,9 +47,9 @@ export function GuestFeatures() {
                   overlay
                   sizes={CARD_SIZES}
                   className="absolute inset-0"
-                  labelClassName="inset-x-0 top-1/3 justify-center"
+                  labelClassName="inset-x-2 top-1/3 justify-center text-center"
                 />
-                <h3 className="absolute inset-x-0 bottom-5.5 text-center font-display text-h3 tracking-[0.18em] text-white uppercase">
+                <h3 className={`absolute inset-x-2 bottom-4 text-center text-white sm:bottom-5.5 ${CARD_TITLE}`}>
                   {card.title}
                 </h3>
               </Reveal>
@@ -55,11 +58,11 @@ export function GuestFeatures() {
                 as="li"
                 key={card.title}
                 index={index}
-                className={`${ARCH_CARD} flex flex-col items-center justify-center gap-3 border border-stone bg-sand px-7 pt-15 pb-7 text-center`}
+                className={`${ARCH_CARD} flex flex-col items-center justify-center gap-1.5 border border-stone bg-sand px-3 pt-12 pb-4 text-center sm:gap-3 sm:px-7 sm:pt-15 sm:pb-7`}
               >
-                <RsvpIcon className="size-8.5 text-cocoa" />
-                <h3 className="font-display text-h3 tracking-[0.18em] uppercase">{card.title}</h3>
-                <p className="text-small text-taupe">{card.body}</p>
+                <RsvpIcon className="size-6 text-cocoa sm:size-8.5" />
+                <h3 className={CARD_TITLE}>{card.title}</h3>
+                <p className="text-[0.75rem] leading-snug text-taupe sm:text-small">{card.body}</p>
               </Reveal>
             ),
           )}

@@ -99,8 +99,8 @@ The marketing site uses only Cormorant Garamond and Montserrat.
 
 ## Logo
 
-- **Wordmark:** `ZAFFA` in Cormorant Garamond 500, uppercase, tracking +0.32em. Cocoa on light backgrounds, White on photos.
-- **Symbol: the "Two-Line Z"** (unchanged from earlier): a Z made from two equal horizontal bars, the top one slightly thicker, joined by a gentle S-curve diagonal with round ends. The top line is a text and the bottom line its translation. Use it next to the wordmark in the header, as the favicon and as the social avatar.
+- **Wordmark:** `ZAFFA` in Cormorant Garamond 500, uppercase, tracking +0.32em. Cocoa on light backgrounds, White on photos. The header and footer use **the wordmark alone**, without the Z mark.
+- **Symbol: the "Two-Line Z"** (unchanged from earlier): a Z made from two equal horizontal bars, the top one slightly thicker, joined by a gentle S-curve diagonal with round ends. The top line is a text and the bottom line its translation. Use it **only** for the favicon, the apple (home-screen) icon and social avatars; never next to the wordmark on the site.
 
 ```svg
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true">

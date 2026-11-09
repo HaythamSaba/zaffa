@@ -32,7 +32,7 @@ Zaffa makes elegant digital wedding invitation websites with built-in RSVP and a
 ## Phase 1: landing page rules
 
 ### Sections, in order
-1. Header over the hero photo (nav split around the centred logo; below 900px only the logo and a small "Contact" link)
+1. Header over the hero photo (nav split around the centred `ZAFFA` wordmark; below 900px only the wordmark and a small "Contact" link)
 2. Hero (full-bleed photo, dark overlay, curved bottom edge)
 3. Intro statement with the founder's signature (`#about`)
 4. What guests receive: arch photo cards + RSVP card (`#features`)
@@ -67,8 +67,8 @@ Zaffa makes elegant digital wedding invitation websites with built-in RSVP and a
 - Uppercase and letter-spacing apply to Latin, Cyrillic and Greek only; never to Arabic, Hebrew or other scripts.
 
 ### Logo
-- `ZMark` is an inline SVG using `currentColor`, taken from `docs/brand.md` (stroke widths 3 / 2.5 / 2).
-- The wordmark is `ZAFFA` in Cormorant Garamond 500, uppercase, tracking +0.32em: Cocoa on light, White on photos.
+- The header and footer use the `ZAFFA` wordmark alone (`Logo`): Cormorant Garamond 500, uppercase, tracking +0.32em; Cocoa on light, White on photos.
+- The Two-Line Z (`ZMark`, stroke widths 3 / 2.5 / 2, paths exported as `zMarkPaths`) is only for the favicon, apple icon and social avatars, never next to the wordmark.
 
 ### Photos
 - One reusable `Photo` component built on `next/image` (`getImageProps`, so no client JS). Until a real file exists in `public/images/`, it shows a labelled placeholder.

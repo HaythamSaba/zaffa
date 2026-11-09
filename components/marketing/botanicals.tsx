@@ -21,16 +21,24 @@ function Botanical({ className = "", children }: Props & { children: ReactNode }
   );
 }
 
+/** Sprig geometry (60-unit grid), shared with the Open Graph image. */
+export const sprigPaths = [
+  "M30 57C30 42 30 24 30 7",
+  "M30 46C22 44 17 38 17 31C24 32 29 38 30 46Z",
+  "M30 38C38 36 43 30 43 23C36 24 31 30 30 38Z",
+  "M30 28C23 26 20 20 21 14C26 16 29 21 30 28Z",
+  "M30 20C35 18 38 13 37 8C33 10 30 14 30 20Z",
+] as const;
+export const sprigBud = { cx: 30, cy: 5, r: 2 } as const;
+
 /** Tall sprig with four leaves and a bud; above the intro statement and on Premium. */
 export function Sprig({ className }: Props) {
   return (
     <Botanical className={className}>
-      <path d="M30 57C30 42 30 24 30 7" />
-      <path d="M30 46C22 44 17 38 17 31C24 32 29 38 30 46Z" />
-      <path d="M30 38C38 36 43 30 43 23C36 24 31 30 30 38Z" />
-      <path d="M30 28C23 26 20 20 21 14C26 16 29 21 30 28Z" />
-      <path d="M30 20C35 18 38 13 37 8C33 10 30 14 30 20Z" />
-      <circle cx="30" cy="5" r="2" />
+      {sprigPaths.map((d) => (
+        <path key={d} d={d} />
+      ))}
+      <circle {...sprigBud} />
     </Botanical>
   );
 }

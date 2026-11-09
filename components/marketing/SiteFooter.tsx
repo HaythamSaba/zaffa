@@ -7,7 +7,7 @@ export function SiteFooter() {
   return (
     <footer className="py-14">
       <Container className="flex flex-col items-center gap-4.5 text-center">
-        <Logo hasMark={false} className="text-cocoa" />
+        <Logo className="text-cocoa" />
         <nav aria-label="Footer">
           <ul className="flex flex-wrap justify-center gap-x-7">
             {footerNav.map((link) => (

@@ -1,18 +1,22 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
+import { sprigBud, sprigPaths } from "@/components/marketing/botanicals";
 import { brandColors } from "@/lib/brand-colors";
 
-// Link preview (WhatsApp, Instagram, etc.): Paper wordmark on Night Indigo + Saffron dot.
-export const alt = "zaffa";
+// Link preview (WhatsApp, Instagram, etc.): the Ivory ZAFFA wordmark centred on
+// Taupe, with a small Ivory botanical sprig above it (docs/brand.md).
+export const alt = "Zaffa";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const WORDMARK_PX = 220;
-const DOT_PX = 34;
+const WORDMARK_PX = 132;
+// +0.32em tracking, in px for the renderer.
+const WORDMARK_TRACKING_PX = Math.round(WORDMARK_PX * 0.32);
+const SPRIG_PX = 92;
 
-// Static Fraunces 600 (SOFT 100) subset containing only the glyphs of "zaffa".
-const fraunces = await readFile(join(process.cwd(), "assets/fonts/fraunces-600-soft-zaffa.ttf"));
+// Static Cormorant Garamond 500 subset containing only Z, A and F (OFL, see assets/fonts).
+const cormorant = await readFile(join(process.cwd(), "assets/fonts/cormorant-garamond-500-zaffa.ttf"));
 
 export default function OpenGraphImage() {
   return new ImageResponse(
@@ -22,40 +26,47 @@ export default function OpenGraphImage() {
           width: "100%",
           height: "100%",
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          gap: 36,
           background: brandColors.taupe,
         }}
       >
-        <div style={{ display: "flex", alignItems: "flex-end" }}>
-          <span
-            style={{
-              fontFamily: "Fraunces",
-              fontSize: WORDMARK_PX,
-              fontWeight: 600,
-              lineHeight: 1,
-              letterSpacing: "-0.01em",
-              color: brandColors.ivory,
-            }}
-          >
-            zaffa
-          </span>
-          <span
-            style={{
-              width: DOT_PX,
-              height: DOT_PX,
-              borderRadius: "50%",
-              background: brandColors.ivory,
-              marginLeft: 14,
-              marginBottom: 40,
-            }}
-          />
-        </div>
+        <svg
+          width={SPRIG_PX}
+          height={SPRIG_PX}
+          viewBox="0 0 60 60"
+          fill="none"
+          stroke={brandColors.ivory}
+          strokeWidth="1"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {sprigPaths.map((d) => (
+            <path key={d} d={d} />
+          ))}
+          <circle cx={sprigBud.cx} cy={sprigBud.cy} r={sprigBud.r} />
+        </svg>
+        <span
+          style={{
+            fontFamily: "Cormorant Garamond",
+            fontSize: WORDMARK_PX,
+            fontWeight: 500,
+            lineHeight: 1,
+            letterSpacing: WORDMARK_TRACKING_PX,
+            // Trailing tracking would push the word off-centre.
+            marginRight: -WORDMARK_TRACKING_PX,
+            color: brandColors.ivory,
+          }}
+        >
+          ZAFFA
+        </span>
       </div>
     ),
     {
       ...size,
-      fonts: [{ name: "Fraunces", data: fraunces, style: "normal", weight: 600 }],
+      fonts: [{ name: "Cormorant Garamond", data: cormorant, style: "normal", weight: 500 }],
     },
   );
 }

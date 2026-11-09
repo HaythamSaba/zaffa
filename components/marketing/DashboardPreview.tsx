@@ -37,10 +37,13 @@ export function DashboardPreview() {
 
           <Reveal index={1} className="min-w-0 bg-white p-2.5 shadow-frame">
             <div className="flex flex-col gap-5 border border-sand p-5 nav:p-6.5">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <p className="font-display text-[1.375rem] tracking-[0.1em] uppercase">
-                  Sara &amp; Omar · Guests
-                </p>
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div className="flex flex-col gap-0.5">
+                  <p className="label text-[0.625rem] text-mocha">Sara &amp; Omar</p>
+                  <p className="font-display text-[1.5rem] leading-none tracking-[0.1em] uppercase">
+                    Guests
+                  </p>
+                </div>
                 <span className="border border-linen px-2.5 py-1 text-[0.6875rem] font-semibold tracking-[0.08em] text-mocha">
                   Sample data
                 </span>
