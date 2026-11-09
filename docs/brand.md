@@ -61,6 +61,7 @@ The marketing site uses only Cormorant Garamond and Montserrat.
 | Stone | `#BFA694` | Thin decorative lines (decorative only) |
 | White | `#FFFFFF` | Photo frames, text on photos, light buttons |
 | Espresso | `#2B201C` | Phone bezel; base for dark overlays on photos |
+| Rosewood | `#9A3B2E` | **Form errors only:** error text, the error icon and the invalid-field border. Always paired with a written message and an icon, never colour alone. |
 
 ### Contrast (WCAG AA body text needs 4.5:1)
 
@@ -77,6 +78,9 @@ The marketing site uses only Cormorant Garamond and Montserrat.
 | Ivory on Taupe | 6.07:1 | Pass |
 | Sand on Taupe | 5.30:1 | Pass |
 | White on Cocoa | 10.76:1 | Pass |
+| Rosewood on White (form error) | 6.92:1 | Pass |
+| Rosewood on Ivory | 6.46:1 | Pass |
+| Rosewood on Sand | 5.63:1 | Pass |
 | Mocha on Sand | 4.23:1 | **Fail**: use Taupe on Sand |
 | Stone on Ivory | 2.16:1 | **Fail**: decoration only |
 | Linen on Ivory | 1.55:1 | **Fail**: decoration only |
@@ -125,6 +129,7 @@ For Tailwind v4, put this in `app/globals.css`, after `@import "tailwindcss";`, 
   --color-linen: #D9C6B6;
   --color-stone: #BFA694;
   --color-espresso: #2B201C;
+  --color-rosewood: #9A3B2E; /* form errors only */
 
   --font-display: var(--font-cormorant), Georgia, serif;
   --font-sans: var(--font-montserrat), system-ui, sans-serif;
@@ -149,3 +154,4 @@ Color rules:
 - Never put `text-mocha` on `bg-sand`; use `text-taupe`.
 - `stone` and `linen` are for lines and borders only, never for text.
 - White text on photos always needs the dark overlay.
+- `rosewood` is only for form errors (text, icon, invalid-field border), always with a written message.

@@ -27,21 +27,23 @@ Zaffa makes elegant digital wedding invitation websites with built-in RSVP and a
 - `templates/<id>/`: invitation templates (phase 2)
 - `lib/`: Supabase clients, validation, utilities
 - `public/brand/`: logo files
+- `public/images/`: licensed photos (see `public/images/README.md`); `lib/photos.ts` maps each photo slot to its file
 
 ## Phase 1: landing page rules
 
 ### Sections, in order
-1. Header
-2. Hero
-3. Who it's for
-4. What we do (6 features)
-5. How it works (5 steps)
-6. Packages + add-ons
-7. Demo call to action
-8. About
-9. FAQ (accordion)
-10. Contact (form + email/WhatsApp/Instagram)
-11. Footer
+1. Header over the hero photo (nav split around the centred logo; below 900px only the logo and a small "Contact" link)
+2. Hero (full-bleed photo, dark overlay, curved bottom edge)
+3. Intro statement with the founder's signature (`#about`)
+4. What guests receive: arch photo cards + RSVP card (`#features`)
+5. Sample invitation on a phone (`#demo`)
+6. Guest dashboard preview, labelled as sample data (`#dashboard`)
+7. How it works, 5 steps (`#how`)
+8. Packages + add-ons, arch cards (`#packages`)
+9. FAQ, 6 questions, accordion (`#faq`)
+10. Closing call to action on a photo band (curved top edge)
+11. Contact form + email/WhatsApp/Instagram (`#contact`, the target of every "Request your invitation" button)
+12. Footer
 
 ### Copy
 - Take the copy from the reference.
@@ -49,20 +51,28 @@ Zaffa makes elegant digital wedding invitation websites with built-in RSVP and a
 - Keep placeholders like `[YOUR EMAIL]` in one `lib/site-config.ts` so they're easy to fill in.
 - Never invent testimonials, stats or client logos.
 
-### Brand
-- Use only the tokens in `docs/brand.md`. No hard-coded hex values in components.
+### Brand: "Linen & Arches"
+- Use only the tokens in `docs/brand.md` (Ivory, Sand, Cocoa, Taupe, Mocha, Linen, Stone, Espresso, White, and Rosewood for form errors only). No hard-coded hex values in components. Direction A ("Procession": coral, indigo, saffron, Fraunces, Manrope) is retired.
 - Follow its contrast rules:
-  - Coral is never text on Blush.
-  - Saffron is only text on Indigo.
-  - Never pair Coral and Indigo as text and background.
+  - Mocha is never text on Sand; use Taupe.
+  - Stone and Linen are for lines and borders only, never text.
+  - White text on a photo always sits on the Espresso overlay.
+  - Rosewood is only for form error text, the error icon and the invalid-field border, always with a written message.
+- Shapes: arches (`--radius-arch`) for feature photo cards and package cards; curved section edges on the hero and closing band (no layout shift); framed photos (10px white frame + `--shadow-frame`); fine botanical line drawings used sparingly; square buttons, at least 48px tall.
 
 ### Fonts
-- Fraunces (headings, with `SOFT` 100, `WONK` 0) and Manrope (body), via `next/font/google`.
-- Only one italic accent word per section, at most.
+- Cormorant Garamond (display/headings) and Montserrat (body/UI), via `next/font/google`.
+- Headings are uppercase, weight 400, tracking +0.06em, with the key words in 700 (`<b>`). Italic only for small accents (a signature, "in about one week", the "&" in names).
+- Labels, nav and buttons: Montserrat 600, uppercase, +0.16–0.18em, 11–12px.
+- Uppercase and letter-spacing apply to Latin, Cyrillic and Greek only; never to Arabic, Hebrew or other scripts.
 
 ### Logo
-- `ZMark` is an inline SVG using `currentColor`, taken from the placeholder in `docs/brand.md`.
-- The wordmark is lowercase `zaffa` in Fraunces 600 until a final SVG lands in `public/brand/`.
+- `ZMark` is an inline SVG using `currentColor`, taken from `docs/brand.md` (stroke widths 3 / 2.5 / 2).
+- The wordmark is `ZAFFA` in Cormorant Garamond 500, uppercase, tracking +0.32em: Cocoa on light, White on photos.
+
+### Photos
+- One reusable `Photo` component built on `next/image` (`getImageProps`, so no client JS). Until a real file exists in `public/images/`, it shows a labelled placeholder.
+- Warm, natural-light photos where hands, tables and details matter more than faces. Licensed images only (or clients' photos with written permission).
 
 ### Layout and motion
 - Mobile first. Most visitors arrive from Instagram, TikTok or WhatsApp on a phone. It must look right at 375px.
@@ -76,7 +86,7 @@ Zaffa makes elegant digital wedding invitation websites with built-in RSVP and a
 - Never expose API keys to the client.
 
 ### SEO
-- Metadata, Open Graph image (Paper wordmark on Night Indigo + Saffron dot, 1200×630), favicon (Paper Z on Coral, 22% radius), `sitemap.ts`, `robots.ts`.
+- Metadata, Open Graph image (Ivory `ZAFFA` wordmark centred on Taupe with a small Ivory botanical sprig above it, 1200×630), favicon and apple icon (Ivory Z on Taupe, 22% radius), `sitemap.ts`, `robots.ts`.
 
 ### Accessibility
 - Real buttons and links.
