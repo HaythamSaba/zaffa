@@ -3,6 +3,7 @@ import Link from "next/link";
 import { HONEYPOT_FIELD, type ContactField, type ContactFormState } from "@/lib/contact/types";
 import { packageOptionLabel } from "@/lib/format";
 import { packages } from "@/lib/site-config";
+import { ErrorIcon } from "./icons";
 
 type Props = {
   state: ContactFormState;
@@ -10,11 +11,13 @@ type Props = {
   isPending: boolean;
 };
 
+// Square fields. Mocha border = 4.84:1 on Ivory (meets the 3:1 needed for input
+// outlines; Linen would not). Rosewood marks invalid fields, always with a message.
 const fieldBase =
-  "min-h-12 w-full rounded-xl border bg-paper px-3.5 text-body font-normal text-indigo placeholder:text-dusk/80";
+  "min-h-12 w-full border bg-ivory px-3.5 text-body font-normal text-cocoa placeholder:text-mocha";
 
 function fieldClass(hasError: boolean, extra = ""): string {
-  const border = hasError ? "border-2 border-coral-deep" : "border-dusk";
+  const border = hasError ? "border-2 border-rosewood" : "border-mocha";
   return `${fieldBase} ${border} ${extra}`;
 }
 
@@ -37,12 +40,13 @@ function Field({ name, label, error, isWide = false, children }: FieldProps) {
 
   return (
     <div className={`flex flex-col gap-2 ${isWide ? "col-span-full" : ""}`}>
-      <label htmlFor={id} className="text-sm font-semibold text-indigo">
+      <label htmlFor={id} className="text-[0.8125rem] font-semibold text-cocoa">
         {label}
       </label>
       {children(a11y)}
       {error && (
-        <p id={errorId} className="text-sm font-semibold text-coral-deep">
+        <p id={errorId} className="flex items-center gap-1.5 text-sm font-semibold text-rosewood">
+          <ErrorIcon className="size-4 shrink-0" />
           {error}
         </p>
       )}
@@ -60,7 +64,7 @@ export function ContactFormView({ state, formAction, isPending }: Props) {
     <form
       action={formAction}
       aria-labelledby="contact-title"
-      className="relative grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,13.75rem),1fr))] gap-5 rounded-panel border border-line bg-white p-6 md:p-9"
+      className="relative grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,13.75rem),1fr))] gap-5 border border-linen bg-white p-6 shadow-frame nav:p-9"
     >
       <Field name="names" label="Your names" error={errors.names}>
         {(a11y) => (
@@ -113,18 +117,19 @@ export function ContactFormView({ state, formAction, isPending }: Props) {
 
       <div className="col-span-full flex flex-col gap-4">
         {isError && state.message && (
-          <p role="alert" className="rounded-xl border-2 border-coral-deep bg-blush px-4 py-3 text-small font-semibold text-indigo">
+          <p role="alert" className="flex items-start gap-2 border-2 border-rosewood bg-white px-4 py-3 text-small font-semibold text-cocoa">
+            <ErrorIcon className="mt-0.5 size-5 shrink-0 text-rosewood" />
             {state.message}
           </p>
         )}
-        <p role="status" className={isSuccess ? "rounded-xl bg-indigo px-4 py-3 text-small font-semibold text-paper" : "sr-only"}>
+        <p role="status" className={isSuccess ? "border border-taupe bg-sand px-4 py-3 text-small font-semibold text-cocoa" : "sr-only"}>
           {isSuccess ? state.message : ""}
         </p>
 
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <p className="max-w-95 text-[0.8125rem] text-dusk">
+          <p className="max-w-95 text-[0.8125rem] text-mocha">
             We only use these details to reply to you. See our{" "}
-            <Link href="/privacy" className="text-coral underline underline-offset-2 hover:text-coral-deep">
+            <Link href="/privacy" className="text-taupe underline underline-offset-2 hover:text-cocoa">
               privacy notice
             </Link>
             .
@@ -132,7 +137,7 @@ export function ContactFormView({ state, formAction, isPending }: Props) {
           <button
             type="submit"
             disabled={isPending}
-            className="min-h-13 cursor-pointer rounded-full bg-coral px-7.5 text-base font-bold text-white hover:bg-coral-deep disabled:cursor-wait disabled:opacity-70 motion-safe:transition-colors active:translate-y-px"
+            className="label min-h-12 cursor-pointer bg-taupe px-8 text-white hover:bg-cocoa disabled:cursor-wait disabled:opacity-70 motion-safe:transition-colors"
           >
             {isPending ? "Sending…" : "Send inquiry"}
           </button>

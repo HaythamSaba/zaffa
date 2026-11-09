@@ -1,12 +1,14 @@
 import { expect, test } from "@playwright/test";
 
+// CLAUDE.md "Phase 1 > Sections, in order" (the closing band has no id; it is checked by heading).
 const SECTION_IDS = [
   "top",
-  "what",
+  "about",
+  "features",
+  "demo",
+  "dashboard",
   "how",
   "packages",
-  "demo",
-  "about",
   "faq",
   "contact",
 ] as const;
@@ -18,15 +20,50 @@ test.describe("landing page", () => {
 
   test("has exactly one h1 with the hero headline", async ({ page }) => {
     await expect(page.locator("h1")).toHaveCount(1);
-    await expect(page.locator("h1")).toContainText("language your families speak");
+    await expect(page.locator("h1")).toContainText(/every family/i);
   });
 
-  test("renders every section in order", async ({ page }) => {
+  test("renders every section in the v3 order, with the form after the closing call to action", async ({ page }) => {
+    const order = await page.evaluate(() =>
+      [...document.querySelectorAll("main > section")].map(
+        (s) => s.id || s.getAttribute("aria-labelledby") || "",
+      ),
+    );
+
+    expect(order).toEqual([
+      "top",
+      "about",
+      "features",
+      "demo",
+      "dashboard",
+      "how",
+      "packages",
+      "faq",
+      "closing-title",
+      "contact",
+    ]);
     for (const id of SECTION_IDS) {
       await expect(page.locator(`section#${id}`)).toHaveCount(1);
     }
-    await expect(page.getByRole("region", { name: "Who it's for" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /let.s invite everyone/i })).toBeVisible();
+    await expect(page.locator("#contact form")).toHaveCount(1);
     await expect(page.locator("footer")).toBeVisible();
+  });
+
+  test("unfilled photo slots show labelled placeholders", async ({ page }) => {
+    const placeholders = page.locator('[data-photo-placeholder="true"]');
+
+    expect(await placeholders.count()).toBeGreaterThanOrEqual(9);
+    for (const label of await placeholders.allInnerTexts()) {
+      expect(label).toMatch(/^Photo · .+/);
+    }
+  });
+
+  test("white text on photos always sits on the dark overlay", async ({ page }) => {
+    // Hero, closing band and the five arch photo cards.
+    await expect(page.locator("#top [data-photo-overlay]")).toHaveCount(1);
+    await expect(page.locator("section[aria-labelledby='closing-title'] [data-photo-overlay]")).toHaveCount(1);
+    await expect(page.locator("#features [data-photo-overlay]")).toHaveCount(5);
   });
 
   test("has no horizontal overflow", async ({ page }) => {
@@ -69,7 +106,8 @@ test.describe("landing page", () => {
     const reveals = page.locator("[data-reveal]");
     expect(await reveals.count()).toBeGreaterThan(10);
 
-    for (const el of await reveals.all()) {
+    // :visible skips reveals that are display:none at this width (e.g. the FAQ photo on phones).
+    for (const el of await page.locator("[data-reveal]:visible").all()) {
       await el.scrollIntoViewIfNeeded();
       await expect(el).toHaveCSS("opacity", "1");
       await expect(el).toHaveCSS("transform", /^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
@@ -101,9 +139,15 @@ test.describe("landing page", () => {
     expect(cls).toBeLessThan(0.01);
   });
 
-  test("header CTA links to the contact section", async ({ page }) => {
-    const cta = page.locator("header").getByRole("link", { name: /request/i });
-    await expect(cta).toHaveAttribute("href", "/#contact");
+  test("the header Contact link and every 'Request your invitation' button lead to the form", async ({ page }) => {
+    const headerContact = page.locator("header").getByRole("link", { name: "Contact", exact: true });
+    await expect(headerContact.first()).toHaveAttribute("href", "/#contact");
+
+    const requests = page.getByRole("link", { name: /request your invitation/i });
+    expect(await requests.count()).toBeGreaterThanOrEqual(2);
+    for (const href of await requests.evaluateAll((els) => els.map((el) => el.getAttribute("href")))) {
+      expect(href).toBe("#contact");
+    }
   });
 });
 

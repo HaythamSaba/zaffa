@@ -7,13 +7,21 @@ type Props = {
   sizes?: string;
   /** Above-the-fold photo (the hero): load eagerly with high fetch priority. */
   priority?: boolean;
-  /** Espresso gradient for white text on top (docs/brand.md). */
-  overlay?: boolean;
-  /** Size and shape of the frame, e.g. "absolute inset-0" or "h-75 rounded-arch". */
+  /**
+   * Espresso gradient for white text on top (docs/brand.md). `true` is the hero
+   * gradient (.55 → .25 → .6); "strong" (.5 → .65) suits text in the middle of a band.
+   */
+  overlay?: boolean | "strong";
+  /** Position, size and shape, e.g. "absolute inset-0" or "relative h-75 rounded-arch". */
   className?: string;
   /** Where the placeholder label sits; defaults to bottom centre. */
   labelClassName?: string;
 };
+
+const overlayGradient = {
+  standard: "bg-linear-to-b from-espresso/55 via-espresso/25 to-espresso/60",
+  strong: "bg-linear-to-b from-espresso/50 to-espresso/65",
+} as const;
 
 const placeholderTone = {
   light: "bg-linear-160 from-sand via-linen to-stone",
@@ -31,13 +39,13 @@ export function Photo({
   sizes = "100vw",
   priority = false,
   overlay = false,
-  className = "",
+  className = "relative",
   labelClassName = "inset-x-0 bottom-4 justify-center",
 }: Props) {
   const isDecorative = photo.alt === "";
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div className={`overflow-hidden ${className}`}>
       {photo.src && photo.width && photo.height ? (
         <PhotoImage photo={photo} sizes={sizes} priority={priority} />
       ) : (
@@ -59,7 +67,7 @@ export function Photo({
         <div
           aria-hidden="true"
           data-photo-overlay=""
-          className="absolute inset-0 bg-linear-to-b from-espresso/55 via-espresso/25 to-espresso/60"
+          className={`absolute inset-0 ${overlayGradient[overlay === "strong" ? "strong" : "standard"]}`}
         />
       )}
     </div>

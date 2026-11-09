@@ -1,40 +1,71 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
-import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
-import { mainNav } from "@/lib/site-config";
+import { headerNav, type NavLink } from "@/lib/site-config";
 
-export function SiteHeader() {
+type Props = {
+  /** "overlay": white, over the hero photo. "solid": Cocoa on Ivory (legal pages). */
+  variant?: "overlay" | "solid";
+};
+
+const variantClass = {
+  overlay: "surface-photo absolute inset-x-0 top-0 z-20 text-white",
+  solid: "relative border-b border-linen bg-ivory text-cocoa",
+} as const;
+
+const linkHover = {
+  overlay: "hover:text-sand",
+  solid: "hover:text-taupe",
+} as const;
+
+function NavItems({ links, hover }: { links: readonly NavLink[]; hover: string }) {
   return (
-    <header className="sticky top-0 z-20 border-b border-line bg-paper/95 backdrop-blur-sm">
-      <Container className="flex h-header items-center justify-between gap-6">
-        <Link
-          href="/#top"
-          aria-label="Zaffa home"
-          className="inline-flex min-h-11 items-center rounded-md text-coral text-[1.75rem] sm:text-[2.125rem]"
-        >
-          <Logo />
-        </Link>
+    <>
+      {links.map((link) => (
+        <li key={link.href}>
+          <Link
+            href={link.href}
+            className={`label inline-flex min-h-11 items-center tracking-[0.16em] ${hover}`}
+          >
+            {link.label}
+          </Link>
+        </li>
+      ))}
+    </>
+  );
+}
 
-        <nav aria-label="Main" className="hidden lg:block">
-          <ul className="flex gap-8">
-            {mainNav.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="inline-flex min-h-11 items-center rounded-sm text-small font-medium text-indigo underline-offset-6 hover:text-coral-deep hover:underline decoration-saffron decoration-2"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
+/** Nav split around the centred logo; below 900px only the logo and a "Contact" link. */
+export function SiteHeader({ variant = "overlay" }: Props) {
+  const hover = linkHover[variant];
+
+  return (
+    <header className={variantClass[variant]}>
+      <Container>
+        <nav aria-label="Main" className="grid h-22 grid-cols-[1fr_auto_1fr] items-center gap-6 nav:h-26">
+          <ul className="hidden gap-10 nav:flex">
+            <NavItems links={headerNav.start} hover={hover} />
           </ul>
-        </nav>
 
-        <ButtonLink href="/#contact" size="md" className="shrink-0 px-5.5">
-          <span className="sm:hidden">Request</span>
-          <span className="hidden sm:inline">Request your invitation</span>
-        </ButtonLink>
+          <Link
+            href="/#top"
+            aria-label="Zaffa home"
+            className="col-start-2 inline-flex min-h-11 items-center"
+          >
+            <Logo />
+          </Link>
+
+          <ul className="col-start-3 hidden justify-end gap-10 nav:flex">
+            <NavItems links={headerNav.end} hover={hover} />
+          </ul>
+
+          <Link
+            href="/#contact"
+            className={`label col-start-3 inline-flex min-h-11 items-center justify-self-end tracking-[0.16em] nav:hidden ${hover}`}
+          >
+            Contact
+          </Link>
+        </nav>
       </Container>
     </header>
   );

@@ -14,26 +14,27 @@ const channels: readonly Channel[] = [
   { ...siteConfig.contact.instagram, Icon: InstagramIcon },
 ];
 
+/** The inquiry form: the target of every "Request your invitation" button. */
 export function Contact() {
   return (
-    <section id="contact" aria-labelledby="contact-title" className="py-20 md:py-26">
-      <Container className="grid items-start gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+    <section id="contact" aria-labelledby="contact-title" className="py-24 nav:py-32">
+      <Container className="grid items-start gap-12 nav:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] nav:gap-16">
         <Reveal className="flex flex-col gap-5.5">
           <SectionHeading id="contact-title" eyebrow="Contact">
-            Tell us about your wedding
+            Tell us about <b>your wedding</b>
           </SectionHeading>
-          <p className="text-dusk">
+          <p className="text-[0.9375rem] leading-[1.85] text-taupe">
             Send us a few details and we&rsquo;ll reply within a day with
             availability and next steps. Prefer to chat? Message us directly.
           </p>
-          <ul className="flex flex-col gap-3">
+          <ul className="flex flex-col gap-2">
             {channels.map(({ label, href, Icon }) => (
               <li key={label}>
                 <a
                   href={href}
-                  className="inline-flex min-h-11 items-center gap-3 rounded-md font-semibold text-indigo hover:text-coral-deep"
+                  className="inline-flex min-h-11 items-center gap-3 text-small font-semibold text-cocoa hover:text-taupe"
                 >
-                  <Icon className="size-5.5 text-coral-deep" />
+                  <Icon className="size-5.5 text-taupe" />
                   {label}
                 </a>
               </li>

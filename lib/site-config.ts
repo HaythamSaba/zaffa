@@ -19,10 +19,13 @@ export interface Package {
   tagline: string;
   priceEur: number;
   priceFrom?: boolean;
+  /** Short v3 feature lines shown on the arch card. */
   features: readonly string[];
   cta: string;
   featured?: boolean;
   badge?: string;
+  /** Botanical line drawing on the card. */
+  icon: "small-sprig" | "sprig" | "blossom";
 }
 
 export interface AddOn {
@@ -32,9 +35,9 @@ export interface AddOn {
 
 export const siteConfig = {
   name: "Zaffa",
-  title: "Zaffa: wedding invitations in every language your families speak",
+  title: "Zaffa: invitations that bring every family to the celebration",
   description:
-    "Elegant digital wedding invitations with built-in RSVP and a private guest dashboard. One language or several, beautifully together.",
+    "Elegant wedding invitation websites, in the languages your families speak, with RSVP built in.",
   location: "Ljubljana, Slovenia",
   copyrightYear: 2026,
   legalName: "[LEGAL NAME / REGISTRATION]",
@@ -61,25 +64,31 @@ export const siteConfig = {
   founder: {
     name: "Haytham Saba",
     initials: "HS",
-    role: "Founder and web developer · Ljubljana, Slovenia",
+    /** Handwritten-style signature under the intro statement. */
+    signature: "Haytham",
+    role: "Founder · Ljubljana",
   },
 } as const;
 
-export const mainNav: readonly NavLink[] = [
-  { label: "What we do", href: "/#what" },
-  { label: "How it works", href: "/#how" },
-  { label: "Packages", href: "/#packages" },
-  { label: "About", href: "/#about" },
-  { label: "FAQ", href: "/#faq" },
-];
+/** Header nav, split around the centred logo (docs/landing-reference.html). */
+export const headerNav: { start: readonly NavLink[]; end: readonly NavLink[] } = {
+  start: [
+    { label: "About", href: "/#about" },
+    { label: "What we do", href: "/#features" },
+  ],
+  end: [
+    { label: "Packages", href: "/#packages" },
+    { label: "Contact", href: "/#contact" },
+  ],
+};
 
 export const footerNav: readonly NavLink[] = [
-  { label: "What we do", href: "/#what" },
-  { label: "Privacy notice", href: "/privacy" },
+  { label: "About", href: "/#about" },
   { label: "Packages", href: "/#packages" },
-  { label: "Terms", href: "/terms" },
   { label: "FAQ", href: "/#faq" },
-  { label: "Legal notice", href: "/legal" },
+  { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
+  { label: "Legal", href: "/legal" },
 ];
 
 export const packages: readonly Package[] = [
@@ -89,14 +98,13 @@ export const packages: readonly Package[] = [
     tagline: "Everything you need, beautifully done",
     priceEur: 250,
     features: [
-      "1 template with your choice of languages",
-      "Names, date and live countdown",
-      "Your story, venue and map, contact",
-      "RSVP form with your deadline",
-      "Guest dashboard with CSV export",
-      "Template color palette and section order",
+      "Names, date and countdown",
+      "Your story, venue and map",
+      "RSVP with your deadline",
+      "Guest dashboard, CSV export",
     ],
     cta: "Choose Essential",
+    icon: "small-sprig",
   },
   {
     id: "premium",
@@ -105,15 +113,14 @@ export const packages: readonly Package[] = [
     priceEur: 450,
     features: [
       "Everything in Essential",
-      "Schedule of the day",
-      "Photo gallery, up to 20 photos",
-      "Dress code section",
-      "Background music and opening animation",
-      "Custom colors and curated fonts",
+      "Schedule, gallery, dress code",
+      "Music and opening animation",
+      "Your own colors and fonts",
     ],
     cta: "Choose Premium",
     featured: true,
-    badge: "Most complete",
+    badge: "Most loved",
+    icon: "sprig",
   },
   {
     id: "bespoke",
@@ -123,18 +130,19 @@ export const packages: readonly Package[] = [
     priceFrom: true,
     features: [
       "Everything in Premium",
-      "A design beyond our templates",
+      "A design made just for you",
       "Custom sections",
       "Video",
     ],
     cta: "Let's talk",
+    icon: "blossom",
   },
 ];
 
 export const addOns: readonly AddOn[] = [
-  { name: "Video section", price: "€50" },
-  { name: "Custom domain", price: "€40 + domain" },
-  { name: "Extra section", price: "€40" },
-  { name: "Extra revision round", price: "€30" },
-  { name: "Rush delivery in 3 days", price: "+€100" },
+  { name: "video", price: "€50" },
+  { name: "custom domain", price: "€40" },
+  { name: "extra section", price: "€40" },
+  { name: "extra revision", price: "€30" },
+  { name: "rush delivery in 3 days", price: "+€100" },
 ];

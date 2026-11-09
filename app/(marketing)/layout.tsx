@@ -1,6 +1,9 @@
 import { SiteFooter } from "@/components/marketing/SiteFooter";
-import { SiteHeader } from "@/components/marketing/SiteHeader";
 
+/**
+ * Each page renders its own <SiteHeader> and <main id="main">: the home page
+ * overlays the header on the hero photo, the legal pages use the solid header.
+ */
 export default function MarketingLayout({ children }: LayoutProps<"/">) {
   return (
     <div className="overflow-x-clip">
@@ -10,12 +13,11 @@ export default function MarketingLayout({ children }: LayoutProps<"/">) {
       </noscript>
       <a
         href="#main"
-        className="sr-only z-30 rounded-full bg-indigo px-5 py-3 font-semibold text-paper focus:not-sr-only focus:fixed focus:top-3 focus:start-3"
+        className="label sr-only z-30 bg-cocoa px-5 py-3 text-white focus:not-sr-only focus:fixed focus:top-3 focus:start-3"
       >
         Skip to content
       </a>
-      <SiteHeader />
-      <main id="main">{children}</main>
+      {children}
       <SiteFooter />
     </div>
   );

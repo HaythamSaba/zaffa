@@ -4,52 +4,49 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { formatEuro } from "@/lib/format";
 import { addOns, packages, type Package } from "@/lib/site-config";
+import { Blossom, SmallSprig, Sprig } from "./botanicals";
+
+const icons = { "small-sprig": SmallSprig, sprig: Sprig, blossom: Blossom } as const;
 
 function PackageCard({ pkg, index }: { pkg: Package; index: number }) {
   const isFeatured = pkg.featured === true;
+  const Icon = icons[pkg.icon];
+  // Premium: Ivory/Sand on Taupe (6.07 / 5.30:1). Others: Cocoa/Taupe on Ivory.
   const surface = isFeatured
-    ? "surface-dark bg-indigo text-paper shadow-phone"
-    : "border border-line bg-blush text-indigo";
-  const muted = isFeatured ? "text-paper-muted" : "text-dusk";
+    ? "surface-photo bg-taupe text-ivory"
+    : "border border-linen text-cocoa";
+  const muted = isFeatured ? "text-sand" : "text-taupe";
 
   return (
     <Reveal
       as="li"
       index={index}
-      className={`flex flex-col gap-5 rounded-panel p-8 md:p-9 ${surface}`}
+      className={`relative flex flex-col items-center gap-4 rounded-arch px-8.5 pt-22.5 pb-8.5 text-center ${surface}`}
     >
-      <div className="flex flex-col gap-1.5">
-        <div className="flex items-center justify-between gap-3">
-          <h3 className="text-h4 font-bold">{pkg.name}</h3>
-          {pkg.badge && (
-            <span className="rounded-full bg-saffron px-3 py-1.5 text-xs font-bold uppercase tracking-[0.08em] text-indigo">
-              {pkg.badge}
-            </span>
-          )}
-        </div>
-        <p className={`text-small ${muted}`}>{pkg.tagline}</p>
-      </div>
-
-      <p className="font-display text-price font-semibold">
+      {pkg.badge && (
+        <span className="label absolute top-11 text-[0.625rem] text-sand">{pkg.badge}</span>
+      )}
+      <Icon className={`size-10 ${muted}`} />
+      <h3 className="caps text-[1.625rem]">
+        <b>{pkg.name}</b>
+      </h3>
+      <p className="font-display text-price font-medium">
         {pkg.priceFrom && (
-          <span className={`font-sans text-[1.125rem] font-medium ${muted}`}>
-            from{" "}
+          <span className="me-1 align-middle font-sans text-[0.8125rem] tracking-[0.1em] text-mocha uppercase">
+            from
           </span>
         )}
         {formatEuro(pkg.priceEur)}
       </p>
-
-      <ul className="flex list-disc flex-col gap-2.5 ps-5 text-small marker:text-current">
+      <ul className={`text-small leading-loose ${muted}`}>
         {pkg.features.map((feature) => (
           <li key={feature}>{feature}</li>
         ))}
       </ul>
-
       <ButtonLink
         href="#contact"
-        size="md"
         variant={isFeatured ? "light" : "outline"}
-        className="mt-auto w-full text-base"
+        className="mt-auto w-full"
       >
         {pkg.cta}
       </ButtonLink>
@@ -58,30 +55,30 @@ function PackageCard({ pkg, index }: { pkg: Package; index: number }) {
 }
 
 export function Packages() {
+  const addOnLine = addOns.map((addOn) => `${addOn.name} ${addOn.price}`).join(" · ");
+
   return (
-    <section id="packages" aria-labelledby="packages-title" className="py-20 md:py-26">
-      <Container className="flex flex-col gap-12 md:gap-14">
-        <Reveal>
-          <SectionHeading id="packages-title" eyebrow="Packages">
-            Clear prices, language choice always included
+    <section id="packages" aria-labelledby="packages-title" className="py-24 nav:py-32">
+      <Container className="flex flex-col gap-15">
+        <Reveal className="flex flex-col items-center gap-3.5">
+          <SectionHeading id="packages-title" align="center">
+            Our <b>packages</b>
           </SectionHeading>
+          <p className="text-center text-small text-mocha">
+            Your choice of languages is included in every package.
+          </p>
         </Reveal>
 
-        <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,18.75rem),1fr))] items-stretch gap-6">
+        <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,18rem),1fr))] items-stretch gap-7">
           {packages.map((pkg, index) => (
             <PackageCard key={pkg.id} pkg={pkg} index={index} />
           ))}
         </ul>
 
-        <Reveal className="flex flex-wrap items-center gap-x-10 gap-y-4 rounded-card border border-dashed border-dusk px-7 py-7 md:px-8">
-          <h3 className="text-body font-bold text-indigo">Add-ons</h3>
-          <ul className="flex flex-wrap gap-x-8 gap-y-2.5 text-small text-indigo">
-            {addOns.map((addOn) => (
-              <li key={addOn.name}>
-                {addOn.name} · {addOn.price}
-              </li>
-            ))}
-          </ul>
+        <Reveal>
+          <p className="text-center text-[0.8125rem] leading-[1.8] text-mocha">
+            Add-ons · {addOnLine}
+          </p>
         </Reveal>
       </Container>
     </section>
