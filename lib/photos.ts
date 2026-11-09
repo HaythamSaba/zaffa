@@ -3,8 +3,8 @@
  * public/images/ (sources in public/images/README.md). A slot without `src`
  * shows a labelled placeholder. `width`/`height` are the file's real pixel size.
  *
- * Note: slots point at the file that shows the right subject, so some file
- * names differ from the slot name (e.g. `story` uses phone-couple.png).
+ * Each slot uses the file with its own name, so to change a picture, replace
+ * that file and update its `width`, `height`, `alt` and `focus` here.
  */
 export interface PhotoAsset {
   /** Path under /public, e.g. "/images/hero.png". Empty = placeholder. */
@@ -33,22 +33,22 @@ export const photos = {
     focus: "50% 60%",
   },
   story: {
-    src: "/images/phone-couple.png",
-    width: 1170,
-    height: 780,
-    alt: "A couple's hands with wedding rings resting on a bouquet of peach roses",
+    src: "/images/story.png",
+    width: 687,
+    height: 1031,
+    alt: "A bouquet of cream and pink roses with red berries, held above a hand wearing a wedding ring",
     label: "Your story",
     tone: "light",
-    focus: "38% 50%",
+    focus: "50% 22%",
   },
   countdown: {
     src: "/images/countdown.png",
-    width: 1170,
-    height: 780,
-    alt: "Two gold wedding rings resting on soft white fabric",
+    width: 687,
+    height: 1031,
+    alt: "A bride and groom kissing behind a white balloon in warm evening light",
     label: "Countdown",
     tone: "deep",
-    focus: "60% 62%",
+    focus: "50% 30%",
   },
   venue: {
     src: "/images/venue.png",
@@ -61,13 +61,13 @@ export const photos = {
     focus: "50% 0%",
   },
   gallery: {
-    src: "/images/story.png",
-    width: 687,
-    height: 1031,
-    alt: "A bride's bouquet of cream and pink roses with red berries",
+    src: "/images/gallery.png",
+    width: 1170,
+    height: 780,
+    alt: "Two gold wedding rings resting on soft white fabric",
     label: "Gallery",
     tone: "deep",
-    focus: "50% 22%",
+    focus: "60% 62%",
   },
   languages: {
     // Placeholder subject: the requested invitation-card photo is not in public/images yet.
@@ -80,13 +80,13 @@ export const photos = {
     focus: "62% 28%",
   },
   phoneCouple: {
-    src: "/images/countdown.png",
-    width: 687,
-    height: 1031,
-    alt: "A bride and groom kissing behind a white balloon in warm evening light",
+    src: "/images/phone-couple.png",
+    width: 1170,
+    height: 780,
+    alt: "A couple's hands with wedding rings resting on a bouquet of peach roses",
     label: "The couple",
     tone: "light",
-    focus: "50% 30%",
+    focus: "38% 50%",
   },
   faqTable: {
     src: "/images/faq-table.png",
