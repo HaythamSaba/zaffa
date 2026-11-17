@@ -121,6 +121,8 @@ Zaffa makes elegant digital wedding invitation websites with built-in RSVP and a
 
 Write every schema change as a migration file. Never change the database by hand once real couples exist.
 
+**Supabase projects:** the linked project `zaffa` (Frankfurt) is **DEVELOPMENT only**. Database tests (`npm run db:test`) must never run against a production project. Production will be a separate Frankfurt project, created before the first paying couple; only migrations (`npm run db:push`) ever target it. Before any `--remote` command, check which project is linked (`supabase/.temp/project-ref`). An applied migration is never edited; fix forward with a new one.
+
 ### Security rules (must hold)
 - RLS is on for every table.
 - The public can read only published events and their content and media.
