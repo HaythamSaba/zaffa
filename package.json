@@ -13,9 +13,14 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "check:bundle": "node scripts/check-bundle.mjs",
+    "db:push": "supabase db push --remote",
+    "db:test": "supabase test db --remote",
+    "db:advisors": "supabase db advisors --remote --type all --level warn",
+    "db:types": "supabase gen types typescript --linked --schema public > lib/supabase/database.types.ts",
     "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run check:bundle"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.109.0",
     "motion": "^14.10.1",
     "next": "16.4.5",
     "react": "19.3.0",
@@ -38,6 +43,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.5",
     "jsdom": "^29.1.1",
+    "supabase": "^3.2.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.12"
