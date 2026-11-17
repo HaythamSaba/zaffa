@@ -16,7 +16,7 @@
     "db:push": "supabase db push --remote",
     "db:test": "supabase test db --remote",
     "db:advisors": "supabase db advisors --remote --type all --level warn",
-    "db:types": "supabase gen types typescript --linked --schema public > lib/supabase/database.types.ts",
+    "db:types": "supabase gen types typescript --remote --schema public > lib/supabase/database.types.ts",
     "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run check:bundle"
   },
   "dependencies": {
