@@ -20,6 +20,34 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Database (Supabase)
+
+> **The linked Supabase project (`zaffa`, Frankfurt) is DEVELOPMENT only.**
+> Database tests (`npm run db:test`) must never run against a production
+> project. Production will be a separate Supabase project in Frankfurt
+> (Central EU), created before the first paying couple; only `npm run db:push`
+> (migrations) ever targets it, never tests and never hand edits.
+
+One-time setup (PowerShell, in this folder):
+
+```powershell
+npx supabase login
+npx supabase link --project-ref <dev-project-ref>
+```
+
+Then put the dev project's URL, publishable key and secret key in `.env.local`
+(see `.env.example`; Dashboard → Project Settings → API Keys).
+
+| Command | What it does |
+|---|---|
+| `npm run db:push` | Applies new files in `supabase/migrations/` to the linked project |
+| `npm run db:test` | Runs the pgTAP tests in `supabase/tests/` (each file rolls back) |
+| `npm run db:advisors` | Supabase's security and performance checks |
+| `npm run db:types` | Regenerates `lib/supabase/database.types.ts` |
+
+Rules: every schema change is a new migration file; schema and data changes
+go in separate migrations; a migration that has been applied is never edited.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
