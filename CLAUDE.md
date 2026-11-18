@@ -10,6 +10,11 @@ Zaffa makes elegant digital wedding invitation websites with built-in RSVP and a
 ## Current phase
 **Phase 2, weeks 1–2: invitation core.** Supabase schema with RLS (migrations + pgTAP tests), host-based routing in `proxy.ts`, template 1 "classic" (`templates/classic/`, from `docs/templates/classic-reference.html`), and a seeded, published demo couple (Layla & Adam) served at `/sample`.
 - Not yet (week 3+): saving RSVPs, the couple dashboard, the admin page, more templates, music, image upload.
+
+### Week 3 plan (decided Nov 2026)
+- **Saving RSVPs:** a server action validates with zod, checks the honeypot and a per-IP rate limit, then inserts with the service-role key in server code. The deadline and published checks are repeated in code, and the database constraints still apply.
+- **Then revoke the public RSVP insert:** in a new migration, drop the "Guests reply to open published events" policy and revoke `insert` on `rsvps` from `anon` and `authenticated`. Add a pgTAP test that anon can no longer insert, and update the existing RLS tests that expect anon inserts to succeed.
+- The couple's dashboard reads and edits RSVPs only with the service role (password + signed session cookie, as in the security rules).
 - Phase 1 (the marketing landing page) is **finished**. Its rules below still apply to everything under `app/(marketing)/` and `components/marketing/`.
 
 ## Stack
@@ -121,12 +126,16 @@ Zaffa makes elegant digital wedding invitation websites with built-in RSVP and a
 
 Write every schema change as a migration file. Never change the database by hand once real couples exist.
 
-**Supabase projects:** the linked project `zaffa` (Frankfurt) is **DEVELOPMENT only**. Database tests (`npm run db:test`) must never run against a production project. Production will be a separate Frankfurt project, created before the first paying couple; only migrations (`npm run db:push`) ever target it. Before any `--remote` command, check which project is linked (`supabase/.temp/project-ref`). An applied migration is never edited; fix forward with a new one.
+**Supabase projects:**
+- **`zaffa`** (Frankfurt) is **DEVELOPMENT** and the only project ever linked. `db:test`, `db:types`, `db:advisors` and `db:push` target it. `db:test` refuses to run unless the linked ref equals `SUPABASE_DEV_PROJECT_REF` in `.env.local`.
+- **`zaffa-prod`** (Frankfurt) is **PRODUCTION**. It is never linked and **never tested**: no `db:test`, no pgTAP, no ad-hoc queries, no hand edits. Only migrations reach it, with `npm run db:push:prod` (dry run first, ref from `SUPABASE_PROD_PROJECT_REF`), the demo seed included.
+- Sign-ups are off in both projects (Authentication settings); the admin account is created by hand.
+- An applied migration is never edited; fix forward with a new one.
 
 ### Security rules (must hold)
 - RLS is on for every table.
 - The public can read only published events and their content and media.
-- The public can insert an RSVP only for a published event before its `rsvp_deadline`. Validate in the database: `guest_count` between 1 and a sensible max, length limits on name and notes.
+- RSVPs are accepted only for a published event before its `rsvp_deadline`. Validate in the database: `guest_count` between 1 and a sensible max, length limits on name and notes. Until week 3 the public may insert directly (RLS policy); from week 3 only the server action inserts (service role), and the public insert is revoked (see "Week 3 plan").
 - The public can never read `rsvps`.
 - The couple's dashboard password is not a Supabase user, so RLS can't check it.
   - Verify it server-side against `dashboard_password_hash` (argon2 or bcrypt).

@@ -15,6 +15,38 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const TEST_DIR = join("supabase", "tests");
+const LINKED_REF_FILE = join("supabase", ".temp", "project-ref");
+
+/**
+ * Tests write fixtures, so they only ever run on the DEVELOPMENT project:
+ * SUPABASE_DEV_PROJECT_REF must be set, match the linked project, and differ
+ * from SUPABASE_PROD_PROJECT_REF. The dev ref is then targeted explicitly.
+ */
+function developmentRef() {
+  try {
+    process.loadEnvFile(".env.local");
+  } catch {
+    // No .env.local: rely on the environment.
+  }
+  const dev = process.env.SUPABASE_DEV_PROJECT_REF?.trim();
+  const prod = process.env.SUPABASE_PROD_PROJECT_REF?.trim();
+  let linked = "";
+  try {
+    linked = readFileSync(LINKED_REF_FILE, "utf8").trim();
+  } catch {
+    // Not linked.
+  }
+  const refuse = (reason) => {
+    console.error(`db:test refused: ${reason}. Tests must only run on the development project (see README).`);
+    process.exit(1);
+  };
+  if (!dev) refuse("SUPABASE_DEV_PROJECT_REF is not set in .env.local");
+  if (prod && prod === dev) refuse("SUPABASE_DEV_PROJECT_REF equals SUPABASE_PROD_PROJECT_REF");
+  if (linked !== dev) refuse(`the linked project (${linked || "none"}) is not the development project (${dev})`);
+  return dev;
+}
+
+const DEV_REF = developmentRef();
 const FINISH = /select\s+\*\s+from\s+finish\(\)\s*;\s*rollback\s*;\s*$/i;
 const BEGIN = /^begin;\s*$/m;
 const ASSERTION = /^select\s+(plan|ok|is|isnt|throws_ok|lives_ok|results_eq|is_empty|isnt_empty)\(/gm;
@@ -52,7 +84,7 @@ function runFile(file, workDir) {
 
   const output = execFileSync(
     "npx",
-    ["supabase", "db", "query", "--remote", "--yes", "--output-format", "json", "-f", wrapped],
+    ["supabase", "db", "query", `--remote=${DEV_REF}`, "--yes", "--output-format", "json", "-f", wrapped],
     { encoding: "utf8", shell: process.platform === "win32", stdio: ["ignore", "pipe", "pipe"] },
   );
   const json = JSON.parse(output.slice(output.indexOf("{")));
