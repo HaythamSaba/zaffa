@@ -1,10 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { isPlausiblePreviewToken } from "@/lib/events/preview-token";
 import { logger } from "@/lib/logger";
 import { getRoutingConfig } from "@/lib/routing/config";
 import { fetchPublishedSlug, fetchSlugForHost } from "@/lib/routing/fetch-host-slug";
 import { createCachedLookup } from "@/lib/routing/host-cache";
 import {
   INVITATION_PREFIX_HEADER,
+  PREVIEW_TOKEN_HEADER,
   UNAVAILABLE_PATH,
   publicPrefixFor,
   routeRequest,
@@ -51,10 +53,22 @@ const lookups: RouteLookups = {
   publishedSlug: cachedAndLogged("Published slug check", fetchPublishedSlug),
 };
 
-/** Request headers without our internal prefix header, so a client can't set it. */
+function previewTokenOf(request: NextRequest): string | null {
+  const token = request.nextUrl.searchParams.get("preview");
+  return isPlausiblePreviewToken(token) ? token : null;
+}
+
+/**
+ * Request headers for the app: our internal headers are always replaced, so a
+ * client can't set them. A well-formed ?preview= token is passed on in a
+ * header, which root layouts can read (they can't see search params).
+ */
 function forwardedHeaders(request: NextRequest): Headers {
   const headers = new Headers(request.headers);
   headers.delete(INVITATION_PREFIX_HEADER);
+  headers.delete(PREVIEW_TOKEN_HEADER);
+  const token = previewTokenOf(request);
+  if (token) headers.set(PREVIEW_TOKEN_HEADER, token);
   return headers;
 }
 
@@ -71,7 +85,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     {
       host: request.headers.get("host"),
       pathname: request.nextUrl.pathname,
-      hasPreviewToken: request.nextUrl.searchParams.has("preview"),
+      hasPreviewToken: previewTokenOf(request) !== null,
     },
     routing,
     lookups,

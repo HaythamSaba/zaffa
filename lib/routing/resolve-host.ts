@@ -33,6 +33,8 @@ export interface RouteLookups {
 
 /** Request header proxy.ts sets on invitation rewrites: the public path prefix ("" or "/sample"). */
 export const INVITATION_PREFIX_HEADER = "x-zaffa-invitation-prefix";
+/** Request header proxy.ts sets from a well-formed ?preview= token, so layouts can read it too. */
+export const PREVIEW_TOKEN_HEADER = "x-zaffa-preview-token";
 
 /**
  * The part of the public URL that stands for /sites/<slug>: "" on a couple's
@@ -67,8 +69,32 @@ export function classifyHost(rawHost: string | null | undefined, config: Routing
   return host.includes(".") ? { kind: "lookup", host } : { kind: "unknown" };
 }
 
+const MAX_DECODE_PASSES = 3;
+
+/**
+ * The path as the router will understand it, for prefix checks: percent-
+ * decoded until stable (catches %73ites and %2573ites), backslashes and
+ * repeated slashes collapsed, lowercased. Null for malformed escapes.
+ */
+export function normalizePathname(pathname: string): string | null {
+  let current = pathname;
+  for (let pass = 0; pass < MAX_DECODE_PASSES; pass += 1) {
+    let decoded: string;
+    try {
+      decoded = decodeURIComponent(current);
+    } catch {
+      return null;
+    }
+    if (decoded === current) break;
+    current = decoded;
+  }
+  return current.replace(/[\\/]+/g, "/").toLowerCase();
+}
+
+/** Prefix check on the normalised path (routeRequest has already rejected malformed ones). */
 function isUnder(pathname: string, prefix: string): boolean {
-  return pathname === prefix || pathname.startsWith(`${prefix}/`);
+  const normalized = normalizePathname(pathname) ?? pathname;
+  return normalized === prefix || normalized.startsWith(`${prefix}/`);
 }
 
 function siteRewrite(slug: string, pathname: string): RouteDecision {
@@ -101,6 +127,7 @@ export async function routeRequest(
   config: RoutingConfig,
   lookups: RouteLookups,
 ): Promise<RouteDecision> {
+  if (normalizePathname(request.pathname) === null) return { action: "not-found" };
   const route = classifyHost(request.host, config);
 
   switch (route.kind) {

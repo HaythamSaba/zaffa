@@ -7,31 +7,18 @@ import { classicPalette } from "@/templates/classic/palette";
 export const SHARE_IMAGE_SIZE = { width: 1200, height: 630 } as const;
 
 const JPEG_QUALITY = 78;
-const REMOTE_TIMEOUT_MS = 5000;
-const MAX_REMOTE_BYTES = 10 * 1024 * 1024;
+/** Refuse decompression bombs: ~40 megapixels is far above any real photo. */
+const MAX_INPUT_PIXELS = 40_000_000;
 const PUBLIC_DIR = join(process.cwd(), "public");
 
 /**
- * The bytes of a media URL: a file under public/ ("/images/...") or an https
- * photo (Supabase Storage, week 4). Null when missing, too large, or a path
- * that would leave public/.
+ * The bytes of a photo under public/ ("/images/..."). Null when missing or a
+ * path that would leave public/. Remote (https) photos are deliberately not
+ * fetched yet: when Storage uploads arrive (week 4), allow only the project's
+ * Supabase Storage origin, with redirects off and a streamed size cap (SSRF).
  */
 export async function loadPhoto(url: string | null | undefined): Promise<Buffer | null> {
-  if (!url) return null;
-
-  if (url.startsWith("https://")) {
-    try {
-      const response = await fetch(url, { signal: AbortSignal.timeout(REMOTE_TIMEOUT_MS) });
-      const length = Number(response.headers.get("content-length") ?? 0);
-      if (!response.ok || length > MAX_REMOTE_BYTES) return null;
-      const bytes = Buffer.from(await response.arrayBuffer());
-      return bytes.byteLength > MAX_REMOTE_BYTES ? null : bytes;
-    } catch {
-      return null;
-    }
-  }
-
-  if (!url.startsWith("/")) return null;
+  if (!url || !url.startsWith("/") || url.startsWith("//")) return null;
   const path = normalize(join(PUBLIC_DIR, url));
   if (!path.startsWith(PUBLIC_DIR + sep)) return null;
   try {
@@ -60,7 +47,7 @@ function framedCardSvg(): Buffer {
  * in the preview's title, so the image needs no text.
  */
 export async function renderShareImage(photo: Buffer | null): Promise<Buffer> {
-  const source = photo ? sharp(photo) : sharp(framedCardSvg());
+  const source = sharp(photo ?? framedCardSvg(), { limitInputPixels: MAX_INPUT_PIXELS });
   return source
     .resize({ ...SHARE_IMAGE_SIZE, fit: "cover", position: sharp.strategy.attention })
     .flatten({ background: classicPalette.parchment })

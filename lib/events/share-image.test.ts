@@ -32,7 +32,12 @@ describe("loadPhoto", () => {
     expect(photo?.byteLength).toBeGreaterThan(1000);
   });
 
-  test.each(["/../package.json", "/images/../../.env.local", "/images/missing.png", "relative.png", ""])(
+  test("never fetches remote URLs (no SSRF) until Storage uploads exist", async () => {
+    expect(await loadPhoto("https://169.254.169.254/latest/meta-data")).toBeNull();
+    expect(await loadPhoto("https://example.com/photo.jpg")).toBeNull();
+  });
+
+  test.each(["/../package.json", "/images/../../.env.local", "/images/missing.png", "relative.png", "//evil.example.com/x.png", ""])(
     "returns null for %j (outside public/, missing or not a path)",
     async (url) => {
       expect(await loadPhoto(url)).toBeNull();

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { hashPreviewToken, verifyPreviewToken } from "./preview-token";
+import { hashPreviewToken, isPlausiblePreviewToken, verifyPreviewToken } from "./preview-token";
 
 describe("preview tokens", () => {
   test("hashes a token to lowercase SHA-256 hex", () => {
@@ -30,4 +30,17 @@ describe("preview tokens", () => {
     const huge = "x".repeat(300);
     expect(verifyPreviewToken(huge, hashPreviewToken(huge))).toBe(false);
   });
+});
+
+describe("isPlausiblePreviewToken", () => {
+  test("accepts URL-safe tokens of 16-200 characters", () => {
+    expect(isPlausiblePreviewToken("k3J9_preview-token-ABC")).toBe(true);
+  });
+
+  test.each([undefined, "", "short", "has spaces in it here", "x".repeat(201), "<script>alert(1)</script>"])(
+    "rejects %j",
+    (token) => {
+      expect(isPlausiblePreviewToken(token)).toBe(false);
+    },
+  );
 });

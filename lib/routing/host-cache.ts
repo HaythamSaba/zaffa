@@ -24,18 +24,32 @@ export function createCachedLookup(fetchSlug: HostLookup, options: CachedLookupO
   const now = options.now ?? Date.now;
   const maxEntries = options.maxEntries ?? DEFAULT_MAX_ENTRIES;
   const cache = new Map<string, Entry>();
+  /** Lookups in flight: concurrent requests for the same key share one query. */
+  const pending = new Map<string, Promise<string | null>>();
 
-  return async (host) => {
-    const cached = cache.get(host);
-    if (cached && cached.expiresAt > now()) return cached.slug;
-
-    const slug = await fetchSlug(host);
+  function remember(host: string, slug: string | null): void {
     cache.delete(host);
     cache.set(host, { slug, expiresAt: now() + options.ttlMs });
     if (cache.size > maxEntries) {
       const oldest = cache.keys().next().value;
       if (oldest !== undefined) cache.delete(oldest);
     }
-    return slug;
+  }
+
+  return (host) => {
+    const cached = cache.get(host);
+    if (cached && cached.expiresAt > now()) return Promise.resolve(cached.slug);
+
+    const inFlight = pending.get(host);
+    if (inFlight) return inFlight;
+
+    const request = fetchSlug(host)
+      .then((slug) => {
+        remember(host, slug);
+        return slug;
+      })
+      .finally(() => pending.delete(host));
+    pending.set(host, request);
+    return request;
   };
 }

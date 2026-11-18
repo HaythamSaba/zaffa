@@ -239,3 +239,35 @@ describe("publicPrefixFor", () => {
     expect(publicPrefixFor("/sample/share-image", "/sites/layla-and-adam/share-image")).toBe("/sample");
   });
 });
+
+describe("path tricks can't reach /sites/", () => {
+  test.each(["/%73ites/layla-and-adam", "//sites/layla-and-adam", "/SITES/layla-and-adam", "/sites%2Flayla-and-adam", "/%2573ites/layla-and-adam"])(
+    "%s is a 404 on the production marketing site",
+    async (pathname) => {
+      expect(await routeRequest({ host: "zaffa.com", pathname }, production, lookups())).toEqual({
+        action: "not-found",
+      });
+    },
+  );
+
+  test.each(["/%73ites/layla-and-adam", "//sites/layla-and-adam", "/Sites/layla-and-adam"])(
+    "%s is a 404 on a couple's host",
+    async (pathname) => {
+      expect(await routeRequest({ host: "sara-and-omar.zaffa.com", pathname }, production, lookups())).toEqual({
+        action: "not-found",
+      });
+    },
+  );
+
+  test("a malformed escape is a 404, not a crash", async () => {
+    expect(await routeRequest({ host: "zaffa.com", pathname: "/%E0%A4%A" }, production, lookups())).toEqual({
+      action: "not-found",
+    });
+  });
+
+  test("ordinary encoded paths still work", async () => {
+    expect(await routeRequest({ host: "zaffa.com", pathname: "/privacy%20" }, production, lookups())).toEqual({
+      action: "next",
+    });
+  });
+});

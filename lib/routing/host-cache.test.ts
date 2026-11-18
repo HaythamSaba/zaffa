@@ -48,3 +48,16 @@ describe("createCachedLookup", () => {
     expect(fetchSlug).toHaveBeenCalledTimes(4);
   });
 });
+
+test("concurrent lookups for the same host share one database query", async () => {
+  let resolve: (slug: string | null) => void = () => {};
+  const fetchSlug = vi.fn(() => new Promise<string | null>((r) => (resolve = r)));
+  const lookup = createCachedLookup(fetchSlug, { ttlMs: 60_000, now: () => 0 });
+
+  const first = lookup("saraandomar.com");
+  const second = lookup("saraandomar.com");
+  resolve("sara-and-omar");
+
+  expect(await Promise.all([first, second])).toEqual(["sara-and-omar", "sara-and-omar"]);
+  expect(fetchSlug).toHaveBeenCalledTimes(1);
+});
