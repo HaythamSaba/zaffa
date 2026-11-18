@@ -6,8 +6,8 @@ const HOST = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/
 const MAX_HOST_LENGTH = 253;
 const SITES_PREFIX = "/sites";
 const SAMPLE_PREFIX = "/sample";
-/** Internal page shown when an invitation can't be loaded (see app/sites/%5Funavailable). */
-export const UNAVAILABLE_PATH = "/sites/_unavailable";
+/** Page shown when a custom domain's invitation can't be looked up (app/(status)/invitation-unavailable). */
+export const UNAVAILABLE_PATH = "/invitation-unavailable";
 
 export type HostRoute =
   | { readonly kind: "marketing" }
