@@ -1,24 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Zaffa: wedding invitation websites with RSVP (Next.js, Supabase, Vercel). See `CLAUDE.md` and `docs/spec.md`.
+
+## Requirements
+
+- **Node.js 22 (LTS) is required.** `package.json` sets `"engines": { "node": "22.x" }`, so Vercel builds and runs on Node 22 too, and npm warns on other versions. With [Volta](https://volta.sh) the project pins Node 22.23.5 automatically (`"volta"` in `package.json`); without it, install any Node 22.x.
+- Copy `.env.example` to `.env.local` and fill it in.
 
 ## Getting Started
 
-First, run the development server:
-
-```bash
+```powershell
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Marketing site: <http://localhost:3000>
+- Demo invitation: <http://localhost:3000/sample>
+- A couple's subdomain locally: set `ROOT_DOMAIN=localhost` in `.env.local`, then open <http://layla-and-adam.localhost:3000>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Before calling something done: `npm run verify` (lint, typecheck, unit tests, build, bundle budget) and `npm run test:e2e` (Playwright at 375 and 1280 px; uses the linked development Supabase project).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Database (Supabase)
+
+> **The linked Supabase project (`zaffa`, Frankfurt) is DEVELOPMENT only.**
+> Database tests (`npm run db:test`) must never run against a production
+> project. Production will be a separate Supabase project in Frankfurt
+> (Central EU), created before the first paying couple; only `npm run db:push`
+> (migrations) ever targets it, never tests and never hand edits.
+
+One-time setup (PowerShell, in this folder):
+
+```powershell
+npx supabase login
+npx supabase link --project-ref <dev-project-ref>
+```
+
+Then put the dev project's URL, publishable key and secret key in `.env.local`
+(see `.env.example`; Dashboard → Project Settings → API Keys).
+
+| Command | What it does |
+|---|---|
+| `npm run db:push` | Applies new files in `supabase/migrations/` to the linked project |
+| `npm run db:test` | Runs the pgTAP tests in `supabase/tests/` (each file rolls back) |
+| `npm run db:advisors` | Supabase's security and performance checks |
+| `npm run db:types` | Regenerates `lib/supabase/database.types.ts` |
+
+Rules: every schema change is a new migration file; schema and data changes
+go in separate migrations; a migration that has been applied is never edited.
 
 ## Learn More
 

@@ -8,7 +8,9 @@ Zaffa makes elegant digital wedding invitation websites with built-in RSVP and a
 - `docs/landing-reference.html`: the approved landing page design. Use it as a **visual reference only**. Rebuild it as clean Next.js components, never paste its inline-styled HTML.
 
 ## Current phase
-**Phase 1: marketing landing page** at the root domain. The invitation product (phase 2+) follows the spec's build order afterwards. Don't build phase 2 features until asked.
+**Phase 2, weeks 1–2: invitation core.** Supabase schema with RLS (migrations + pgTAP tests), host-based routing in `proxy.ts`, template 1 "classic" (`templates/classic/`, from `docs/templates/classic-reference.html`), and a seeded, published demo couple (Layla & Adam) served at `/sample`.
+- Not yet (week 3+): saving RSVPs, the couple dashboard, the admin page, more templates, music, image upload.
+- Phase 1 (the marketing landing page) is **finished**. Its rules below still apply to everything under `app/(marketing)/` and `components/marketing/`.
 
 ## Stack
 - Next.js (App Router) + TypeScript, Tailwind CSS (v4, tokens in `@theme`), Framer Motion
@@ -29,7 +31,7 @@ Zaffa makes elegant digital wedding invitation websites with built-in RSVP and a
 - `public/brand/`: logo files
 - `public/images/`: licensed photos (see `public/images/README.md`); `lib/photos.ts` maps each photo slot to its file
 
-## Phase 1: landing page rules
+## Phase 1: landing page rules (finished; still binding for the marketing site)
 
 ### Sections, in order
 1. Header over the hero photo (nav split around the centred `ZAFFA` wordmark; below 900px only the wordmark and a small "Contact" link)
@@ -105,17 +107,21 @@ Zaffa makes elegant digital wedding invitation websites with built-in RSVP and a
 - `sara-and-omar.<ROOT_DOMAIN>` is rewritten internally to `/sites/sara-and-omar`. `ROOT_DOMAIN` comes from an env var.
 - The bare root domain and `www` serve the marketing site.
 - Do the rewrite in `proxy.ts` (Next.js 16+) or `middleware.ts` (older).
-- Custom domains map to a slug via `events.custom_domain`.
+- Any other host (custom domains, per-couple `*.vercel.app` names) maps to a slug via `event_hosts`. The marketing hosts are listed in `MARKETING_HOSTS`; `/sample` on them serves the demo couple.
 - Guests never see `/sites/` in the URL. Test locally with `sara-and-omar.localhost:3000`.
 - Slugs are first names joined with "and", plus the year if two couples share names. Never surnames.
 
 ### Data model
-- `events`: id, owner_id, slug, template_id, languages, status (draft or published), date, venue, rsvp_deadline, contact_phone, theme_settings, dashboard_password_hash, custom_domain
+- `events`: id, owner_id, slug, template_id, languages, status (draft or published), package (essential, premium, bespoke), starts_at, timezone (IANA), venue, rsvp_deadline, contact_phone, theme_settings, dashboard_password_hash, preview_token_hash
+- `event_hosts`: host, event_id. Maps any address (a `*.vercel.app` name, a custom domain) to an event; replaces the spec's single `custom_domain` column (decided Nov 2026).
 - `content`: event_id, key, text_en, text_ar
-- `media`: event_id, url, position
+- `media`: event_id, url, position, alt_en, alt_ar
 - `rsvps`: event_id, name, guest_count, attending, notes, created_at
+- `theme_settings` (jsonb, validated with zod): section order, schedule times, map link, `arabicLocale` (default `ar-EG`; e.g. `ar-SY` for Levantine month names, `ar-u-nu-latn` for Western digits), `demo` flag.
 
 Write every schema change as a migration file. Never change the database by hand once real couples exist.
+
+**Supabase projects:** the linked project `zaffa` (Frankfurt) is **DEVELOPMENT only**. Database tests (`npm run db:test`) must never run against a production project. Production will be a separate Frankfurt project, created before the first paying couple; only migrations (`npm run db:push`) ever target it. Before any `--remote` command, check which project is linked (`supabase/.temp/project-ref`). An applied migration is never edited; fix forward with a new one.
 
 ### Security rules (must hold)
 - RLS is on for every table.

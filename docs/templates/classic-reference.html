@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zaffa template: Classic Elegance (reference)</title>
+<!--
+  VISUAL REFERENCE ONLY: approved invitation template "Classic Elegance".
+  Rebuild as templates/classic/ (React components fed by event data). All couple
+  details here (Layla & Adam, Villa Rosa, address, phone) are fictional sample data.
+  Links between screens (Invitation.dc.html etc.) are prototype links only.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..700&amp;family=Pinyon+Script&amp;family=EB+Garamond:ital,wght@0,400..600;1,400&amp;family=Amiri:wght@400;700&amp;family=Noto+Naskh+Arabic:wght@400..600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#7A5A2E}a:hover{color:#2E2A26}
+.ar{font-family:'Noto Naskh Arabic','Amiri',serif}
+.ar-display{font-family:'Amiri','Noto Naskh Arabic',serif}
+.open-btn:hover{background:#2E2A26 !important}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(184,149,90,.35)}50%{box-shadow:0 0 0 10px rgba(184,149,90,0)}}
+.seal{animation:glow 2.4s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.seal{animation:none}}
+.caps{font-family:'Bodoni Moda',serif;letter-spacing:.26em;text-transform:uppercase}
+.btn:hover{background:#2E2A26 !important}
+.ghost:hover{background:#F3ECDF !important}
+input,textarea{font:inherit}
+.field{width:100%;box-sizing:border-box;min-height:48px;padding:10px 14px;border:1px solid #6B655E;background:#FFFFFF;color:#2E2A26;font-family:'EB Garamond',Georgia,serif;font-size:17px}
+.field:focus{outline:2px solid #7A5A2E;outline-offset:2px}
+.choice{display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 14px;border:1px solid #6B655E;background:#FFFFFF;cursor:pointer}
+.choice input{width:20px;height:20px;accent-color:#7A5A2E;margin:0}
+body{background:#E9E4DA}
+</style>
+</head>
+<body>
+<main style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start;padding:40px">
+<figure style="margin:0;display:flex;flex-direction:column;gap:12px"><figcaption style="font:600 14px system-ui;color:#6B655E">1 · Opening</figcaption>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F3ECDF; font-family: 'EB Garamond', Georgia, serif; color: #2E2A26; display: flex; align-items: center; justify-content: center; padding: 28px">
+<div style="position: relative; width: 100%; height: 100%; box-sizing: border-box; background: #FBF8F1; border: 1px solid #B8955A; outline: 1px solid #B8955A; outline-offset: -8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 28px; gap: 22px; box-shadow: 0 24px 50px rgba(46,42,38,0.12)">
+<svg aria-hidden="true" width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="#B8955A" stroke-width="1" style="position: absolute; top: 14px; left: 14px"><path d="M2 40C2 18 18 2 40 2"></path><path d="M10 40C10 23 23 10 40 10"></path><circle cx="6" cy="6" r="2.5"></circle></svg>
+<svg aria-hidden="true" width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="#B8955A" stroke-width="1" style="position: absolute; top: 14px; right: 14px; transform: scaleX(-1)"><path d="M2 40C2 18 18 2 40 2"></path><path d="M10 40C10 23 23 10 40 10"></path><circle cx="6" cy="6" r="2.5"></circle></svg>
+<svg aria-hidden="true" width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="#B8955A" stroke-width="1" style="position: absolute; bottom: 14px; left: 14px; transform: scaleY(-1)"><path d="M2 40C2 18 18 2 40 2"></path><path d="M10 40C10 23 23 10 40 10"></path><circle cx="6" cy="6" r="2.5"></circle></svg>
+<svg aria-hidden="true" width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="#B8955A" stroke-width="1" style="position: absolute; bottom: 14px; right: 14px; transform: scale(-1)"><path d="M2 40C2 18 18 2 40 2"></path><path d="M10 40C10 23 23 10 40 10"></path><circle cx="6" cy="6" r="2.5"></circle></svg>
+
+<div class="seal" aria-hidden="true" style="width: 92px; height: 92px; border-radius: 50%; background: #7A5A2E; display: flex; align-items: center; justify-content: center; border: 3px solid #B8955A">
+<span style="font-family: 'Pinyon Script', cursive; font-size: 40px; color: #FBF8F1; line-height: 1">L&amp;A</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 4px">
+<p style="margin: 0; font-family: 'Bodoni Moda', serif; font-size: 13px; letter-spacing: 0.32em; text-transform: uppercase; color: #7A5A2E">You're invited</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 17px; color: #7A5A2E">أنتم مدعوون</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 2px">
+<p style="margin: 0; font-size: 17px; font-style: italic; color: #6B655E">to the wedding of</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 16px; color: #6B655E">لحضور حفل زفاف</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 0">
+<p style="margin: 0; font-family: 'Pinyon Script', cursive; font-size: 54px; line-height: 1.15">Layla &amp; Adam</p>
+<p class="ar-display" lang="ar" dir="rtl" style="margin: 0; font-size: 36px; line-height: 1.5; font-weight: 700">ليلى وآدم</p>
+</div>
+
+<div style="display: flex; align-items: center; gap: 12px; color: #B8955A" aria-hidden="true">
+<span style="width: 48px; height: 1px; background: #B8955A"></span>
+<svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 0L7.5 4.5L12 6L7.5 7.5L6 12L4.5 7.5L0 6L4.5 4.5Z" fill="#B8955A"></path></svg>
+<span style="width: 48px; height: 1px; background: #B8955A"></span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 2px">
+<p style="margin: 0; font-family: 'Bodoni Moda', serif; font-size: 15px; letter-spacing: 0.12em">12 · 06 · 2027</p>
+<p style="margin: 0; font-size: 15px; color: #6B655E">Vienna, Austria</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 15px; color: #6B655E">فيينا، النمسا</p>
+</div>
+
+<a href="Invitation.dc.html" class="open-btn" style="margin-top: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 58px; width: 230px; background: #7A5A2E; color: #FFFFFF; text-decoration: none; padding: 8px 16px; box-sizing: border-box">
+<span style="font-family: 'Bodoni Moda', serif; font-size: 12px; letter-spacing: 0.26em; text-transform: uppercase">Open invitation</span>
+<span class="ar" lang="ar" dir="rtl" style="font-size: 15px">افتحوا الدعوة</span>
+</a>
+</div>
+</div>
+</figure>
+<figure style="margin:0;display:flex;flex-direction:column;gap:12px"><figcaption style="font:600 14px system-ui;color:#6B655E">2 · Invitation</figcaption>
+<div style="width: 390px; height: 4900px; box-sizing: border-box; background: #FBF8F1; font-family: 'EB Garamond', Georgia, serif; color: #2E2A26; display: flex; flex-direction: column; overflow: hidden">
+
+<section aria-label="Welcome" style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 44px 28px 48px; gap: 22px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<p class="caps" style="margin: 0; font-size: 11px; color: #7A5A2E">Together with their families</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 15px; color: #7A5A2E">بحضور عائلتيهما الكريمتين</p>
+</div>
+<div style="width: 250px; height: 320px; border-radius: 125px 125px 0 0; border: 1px solid #B8955A; padding: 8px; box-sizing: border-box">
+<div style="width: 100%; height: 100%; border-radius: 117px 117px 0 0; background: linear-gradient(170deg, #EDE3D3 0%, #D8C6A8 60%, #BFA67E 100%); display: flex; align-items: flex-end; justify-content: center; padding: 16px; box-sizing: border-box">
+<span style="font-size: 12px; color: #2E2A26; letter-spacing: 0.06em">Photo · the couple</span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column">
+<h1 style="margin: 0; font-family: 'Pinyon Script', cursive; font-weight: 400; font-size: 58px; line-height: 1.1">Layla &amp; Adam</h1>
+<p class="ar-display" lang="ar" dir="rtl" style="margin: 0; font-size: 38px; line-height: 1.5; font-weight: 700">ليلى وآدم</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<p style="margin: 0; font-size: 19px; font-style: italic">joyfully invite you to celebrate their wedding</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 17px">يتشرّفان بدعوتكم لمشاركتهما فرحة زفافهما</p>
+</div>
+<div style="display: flex; align-items: center; gap: 12px" aria-hidden="true">
+<span style="width: 56px; height: 1px; background: #B8955A"></span>
+<svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 0L7.5 4.5L12 6L7.5 7.5L6 12L4.5 7.5L0 6L4.5 4.5Z" fill="#B8955A"></path></svg>
+<span style="width: 56px; height: 1px; background: #B8955A"></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<p class="caps" style="margin: 0; font-size: 13px">Saturday · 12 June 2027</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 17px">السبت ١٢ يونيو ٢٠٢٧</p>
+<p style="margin: 6px 0 0; font-size: 17px; color: #6B655E">Villa Rosa · Vienna</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 16px; color: #6B655E">فيلا روزا · فيينا</p>
+</div>
+</section>
+
+<section aria-label="Countdown" style="background: #2E2A26; color: #FBF8F1; padding: 40px 24px; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<p class="caps" style="margin: 0; font-size: 11px; color: #D9BE8C">Until the big day</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 15px; color: #D9BE8C">حتى اليوم الكبير</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; width: 100%">
+<div style="border: 1px solid rgba(217,190,140,0.5); padding: 12px 0; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Bodoni Moda', serif; font-size: 28px">208</span><span style="font-size: 12px; color: #D9BE8C">Days</span><span class="ar" lang="ar" dir="rtl" style="font-size: 12px; color: #D9BE8C">يوم</span></div>
+<div style="border: 1px solid rgba(217,190,140,0.5); padding: 12px 0; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Bodoni Moda', serif; font-size: 28px">14</span><span style="font-size: 12px; color: #D9BE8C">Hours</span><span class="ar" lang="ar" dir="rtl" style="font-size: 12px; color: #D9BE8C">ساعة</span></div>
+<div style="border: 1px solid rgba(217,190,140,0.5); padding: 12px 0; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Bodoni Moda', serif; font-size: 28px">36</span><span style="font-size: 12px; color: #D9BE8C">Minutes</span><span class="ar" lang="ar" dir="rtl" style="font-size: 12px; color: #D9BE8C">دقيقة</span></div>
+<div style="border: 1px solid rgba(217,190,140,0.5); padding: 12px 0; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Bodoni Moda', serif; font-size: 28px">05</span><span style="font-size: 12px; color: #D9BE8C">Seconds</span><span class="ar" lang="ar" dir="rtl" style="font-size: 12px; color: #D9BE8C">ثانية</span></div>
+</div>
+</section>
+
+<section aria-label="Our story" style="padding: 52px 28px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 class="caps" style="margin: 0; font-weight: 400; font-size: 18px">Our story</h2>
+<p class="ar-display" lang="ar" dir="rtl" style="margin: 0; font-size: 22px; font-weight: 700">قصتنا</p>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.6">We met at a friend's dinner in Vienna and haven't stopped talking since. Three years, two cities and countless cups of tea later, we're making it forever.</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 17px; line-height: 1.9">التقينا على عشاء عند صديق في فيينا، ومنذ ذلك اليوم لم نتوقف عن الحديث. بعد ثلاث سنوات ومدينتين وأكواب شاي لا تُحصى، قرّرنا أن نكمل الطريق معاً إلى الأبد.</p>
+</section>
+
+<section aria-label="The celebration" style="background: #F3ECDF; padding: 52px 24px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 class="caps" style="margin: 0; font-weight: 400; font-size: 18px">The celebration</h2>
+<p class="ar-display" lang="ar" dir="rtl" style="margin: 0; font-size: 22px; font-weight: 700">الحفل</p>
+</div>
+<div style="width: 100%; background: #FBF8F1; border: 1px solid #B8955A; padding: 22px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<p style="margin: 0; font-family: 'Bodoni Moda', serif; font-size: 22px">Villa Rosa</p>
+<p class="ar-display" lang="ar" dir="rtl" style="margin: 0; font-size: 20px">فيلا روزا</p>
+<p style="margin: 6px 0 0; font-size: 16px; color: #6B655E">Rosengasse 12, 1010 Vienna</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<p style="margin: 0; font-size: 17px">Saturday, 12 June 2027 · 6:00 PM</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 16px">السبت ١٢ يونيو ٢٠٢٧ · السادسة مساءً</p>
+</div>
+<div style="height: 150px; background: linear-gradient(135deg, #E6DCCB 25%, #EFE7DA 25%, #EFE7DA 50%, #E6DCCB 50%, #E6DCCB 75%, #EFE7DA 75%); background-size: 28px 28px; display: flex; align-items: center; justify-content: center">
+<span style="font-size: 13px; color: #2E2A26; background: #FBF8F1; padding: 4px 10px">Map preview</span>
+</div>
+<a href="#directions" class="ghost" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 52px; border: 1px solid #7A5A2E; color: #7A5A2E; text-decoration: none; padding: 6px">
+<span class="caps" style="font-size: 11px">Get directions</span>
+<span class="ar" lang="ar" dir="rtl" style="font-size: 14px">الاتجاهات</span>
+</a>
+</div>
+</section>
+
+<section aria-label="Schedule" style="padding: 52px 28px; display: flex; flex-direction: column; align-items: center; gap: 22px">
+<div style="display: flex; flex-direction: column; gap: 2px; text-align: center">
+<h2 class="caps" style="margin: 0; font-weight: 400; font-size: 18px">The day</h2>
+<p class="ar-display" lang="ar" dir="rtl" style="margin: 0; font-size: 22px; font-weight: 700">برنامج اليوم</p>
+</div>
+<ol style="list-style: none; margin: 0; padding: 0; width: 100%; display: flex; flex-direction: column">
+<li style="display: grid; grid-template-columns: 84px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid #E3D7C3"><span style="font-family: 'Bodoni Moda', serif; font-size: 16px; color: #7A5A2E">6:00 PM</span><span style="display: flex; flex-direction: column"><span style="font-size: 18px">Welcome drinks</span><span class="ar" lang="ar" dir="rtl" style="font-size: 16px">الاستقبال</span></span></li>
+<li style="display: grid; grid-template-columns: 84px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid #E3D7C3"><span style="font-family: 'Bodoni Moda', serif; font-size: 16px; color: #7A5A2E">6:30 PM</span><span style="display: flex; flex-direction: column"><span style="font-size: 18px">The zaffa &amp; ceremony</span><span class="ar" lang="ar" dir="rtl" style="font-size: 16px">الزفّة والمراسم</span></span></li>
+<li style="display: grid; grid-template-columns: 84px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid #E3D7C3"><span style="font-family: 'Bodoni Moda', serif; font-size: 16px; color: #7A5A2E">7:30 PM</span><span style="display: flex; flex-direction: column"><span style="font-size: 18px">Dinner</span><span class="ar" lang="ar" dir="rtl" style="font-size: 16px">العشاء</span></span></li>
+<li style="display: grid; grid-template-columns: 84px 1fr; gap: 14px; padding: 14px 0"><span style="font-family: 'Bodoni Moda', serif; font-size: 16px; color: #7A5A2E">9:00 PM</span><span style="display: flex; flex-direction: column"><span style="font-size: 18px">Music &amp; dancing</span><span class="ar" lang="ar" dir="rtl" style="font-size: 16px">الموسيقى والرقص</span></span></li>
+</ol>
+</section>
+
+<section aria-label="Dress code" style="background: #F3ECDF; padding: 44px 28px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px">
+<h2 class="caps" style="margin: 0; font-weight: 400; font-size: 18px">Dress code</h2>
+<p class="ar-display" lang="ar" dir="rtl" style="margin: -8px 0 0; font-size: 22px; font-weight: 700">اللباس</p>
+<p style="margin: 0; font-size: 18px">Formal attire · soft, light colours welcome</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 16px">لباس رسمي · نرحّب بالألوان الهادئة الفاتحة</p>
+</section>
+
+<section aria-label="Gallery" style="padding: 52px 24px; display: flex; flex-direction: column; align-items: center; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 2px; text-align: center">
+<h2 class="caps" style="margin: 0; font-weight: 400; font-size: 18px">Moments</h2>
+<p class="ar-display" lang="ar" dir="rtl" style="margin: 0; font-size: 22px; font-weight: 700">لحظات</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%">
+<div style="height: 190px; border-radius: 80px 80px 0 0; background: linear-gradient(170deg, #EDE3D3, #CDB894); display: flex; align-items: flex-end; justify-content: center; padding: 10px; box-sizing: border-box"><span style="font-size: 11px; color: #2E2A26">Photo</span></div>
+<div style="height: 190px; border-radius: 80px 80px 0 0; background: linear-gradient(170deg, #E8DCC8, #BFA67E); display: flex; align-items: flex-end; justify-content: center; padding: 10px; box-sizing: border-box"><span style="font-size: 11px; color: #2E2A26">Photo</span></div>
+<div style="height: 190px; border-radius: 80px 80px 0 0; background: linear-gradient(170deg, #E8DCC8, #BFA67E); display: flex; align-items: flex-end; justify-content: center; padding: 10px; box-sizing: border-box"><span style="font-size: 11px; color: #2E2A26">Photo</span></div>
+<div style="height: 190px; border-radius: 80px 80px 0 0; background: linear-gradient(170deg, #EDE3D3, #CDB894); display: flex; align-items: flex-end; justify-content: center; padding: 10px; box-sizing: border-box"><span style="font-size: 11px; color: #2E2A26">Photo</span></div>
+</div>
+</section>
+
+<section id="rsvp" aria-label="RSVP" style="background: #2E2A26; padding: 52px 22px; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; color: #FBF8F1">
+<h2 style="margin: 0; font-family: 'Pinyon Script', cursive; font-weight: 400; font-size: 44px; line-height: 1.1">Will you join us?</h2>
+<p class="ar-display" lang="ar" dir="rtl" style="margin: 0; font-size: 26px; font-weight: 700">هل ستشاركوننا فرحتنا؟</p>
+<p style="margin: 8px 0 0; font-size: 16px; color: #D9BE8C">Kindly reply by 1 May 2027</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 15px; color: #D9BE8C">يُرجى الرد قبل ١ مايو ٢٠٢٧</p>
+</div>
+<form aria-label="RSVP form" style="background: #FBF8F1; padding: 24px 18px; display: flex; flex-direction: column; gap: 18px">
+<label style="display: flex; flex-direction: column; gap: 6px">
+<span style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-size: 16px; font-weight: 600">Full name</span><span class="ar" lang="ar" dir="rtl" style="font-size: 15px; font-weight: 600">الاسم الكامل</span></span>
+<input class="field" type="text" placeholder="e.g. The Haddad family">
+</label>
+<fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px">
+<legend style="padding: 0; margin-bottom: 6px; width: 100%"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-size: 16px; font-weight: 600">Will you attend?</span><span class="ar" lang="ar" dir="rtl" style="font-size: 15px; font-weight: 600">هل ستحضرون؟</span></span></legend>
+<label class="choice"><input type="radio" name="attend" checked><span style="display: flex; flex-direction: column"><span style="font-size: 17px">Joyfully accept</span><span class="ar" lang="ar" dir="rtl" style="font-size: 15px">يسعدنا الحضور</span></span></label>
+<label class="choice"><input type="radio" name="attend"><span style="display: flex; flex-direction: column"><span style="font-size: 17px">Regretfully decline</span><span class="ar" lang="ar" dir="rtl" style="font-size: 15px">نعتذر عن الحضور</span></span></label>
+</fieldset>
+<label style="display: flex; flex-direction: column; gap: 6px">
+<span style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-size: 16px; font-weight: 600">Number of guests</span><span class="ar" lang="ar" dir="rtl" style="font-size: 15px; font-weight: 600">عدد الضيوف</span></span>
+<input class="field" type="number" min="1" max="10" value="2">
+</label>
+<label style="display: flex; flex-direction: column; gap: 6px">
+<span style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-size: 16px; font-weight: 600">Notes <span style="font-weight: 400; color: #6B655E">(optional)</span></span><span class="ar" lang="ar" dir="rtl" style="font-size: 15px; font-weight: 600">ملاحظات <span style="font-weight: 400; color: #6B655E">(اختياري)</span></span></span>
+<textarea class="field" rows="3" placeholder="Dietary needs, allergies, anything else"></textarea>
+</label>
+<a href="Thanks.dc.html" class="btn" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 58px; background: #7A5A2E; color: #FFFFFF; text-decoration: none; padding: 6px">
+<span class="caps" style="font-size: 12px">Send reply</span>
+<span class="ar" lang="ar" dir="rtl" style="font-size: 15px">إرسال الرد</span>
+</a>
+<p style="margin: 0; font-size: 13px; line-height: 1.5; color: #6B655E; text-align: center">Your reply is shared only with Layla &amp; Adam and deleted after the wedding.</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: -10px 0 0; font-size: 13px; line-height: 1.7; color: #6B655E; text-align: center">يُشارَك ردّكم مع ليلى وآدم فقط، ويُحذف بعد الزفاف.</p>
+</form>
+</section>
+
+<section aria-label="Contact" style="padding: 44px 28px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px">
+<h2 class="caps" style="margin: 0; font-weight: 400; font-size: 16px">Questions?</h2>
+<p class="ar-display" lang="ar" dir="rtl" style="margin: -6px 0 0; font-size: 20px; font-weight: 700">للاستفسار</p>
+<p style="margin: 0; font-size: 17px">Call or message Layla</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 16px">اتصلوا أو راسلوا ليلى</p>
+<a href="tel:+436600000000" style="display: inline-flex; align-items: center; min-height: 44px; font-family: 'Bodoni Moda', serif; font-size: 18px; letter-spacing: 0.06em" dir="ltr">+43 660 000 0000</a>
+</section>
+
+<footer style="margin-top: auto; padding: 28px; border-top: 1px solid #E3D7C3; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center">
+<p style="margin: 0; font-family: 'Pinyon Script', cursive; font-size: 30px; color: #7A5A2E">L&amp;A</p>
+<p style="margin: 0; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #6B655E">Made with Zaffa</p>
+</footer>
+</div>
+</figure>
+<figure style="margin:0;display:flex;flex-direction:column;gap:12px"><figcaption style="font:600 14px system-ui;color:#6B655E">3 · RSVP received</figcaption>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FBF8F1; font-family: 'EB Garamond', Georgia, serif; color: #2E2A26; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 30px; gap: 22px">
+<div aria-hidden="true" style="width: 84px; height: 84px; border-radius: 50%; border: 1px solid #B8955A; display: flex; align-items: center; justify-content: center">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#7A5A2E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+</div>
+<div style="display: flex; flex-direction: column">
+<h1 style="margin: 0; font-family: 'Pinyon Script', cursive; font-weight: 400; font-size: 48px; line-height: 1.1">Thank you</h1>
+<p class="ar-display" lang="ar" dir="rtl" style="margin: 0; font-size: 30px; font-weight: 700">شكراً لكم</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<p style="margin: 0; font-size: 18px">Your reply has reached Layla &amp; Adam. They can't wait to celebrate with you.</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 16px; line-height: 1.8">وصل ردّكم إلى ليلى وآدم، وهما بانتظار الاحتفال معكم بفارغ الصبر.</p>
+</div>
+<div style="width: 100%; border: 1px solid #B8955A; padding: 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px">
+<p class="caps" style="margin: 0; font-size: 11px; color: #7A5A2E">Your reply · ردّكم</p>
+<p style="margin: 0; font-size: 18px">The Haddad family · 2 guests</p>
+<p style="margin: 0; font-size: 17px">Joyfully accept</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: -8px 0 0; font-size: 15px">يسعدنا الحضور</p>
+</div>
+<a href="#calendar" class="btn" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 56px; background: #7A5A2E; color: #FFFFFF; text-decoration: none; padding: 6px; box-sizing: border-box">
+<span class="caps" style="font-size: 11px">Add to calendar</span>
+<span class="ar" lang="ar" dir="rtl" style="font-size: 15px">أضيفوا الموعد إلى التقويم</span>
+</a>
+<a href="Invitation.dc.html" class="ghost" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 52px; border: 1px solid #7A5A2E; color: #7A5A2E; text-decoration: none; padding: 6px; box-sizing: border-box">
+<span class="caps" style="font-size: 11px">Back to the invitation</span>
+<span class="ar" lang="ar" dir="rtl" style="font-size: 14px">العودة إلى الدعوة</span>
+</a>
+<p style="margin: 0; font-size: 14px; color: #6B655E">Need to change something? Message Layla directly.</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: -16px 0 0; font-size: 14px; color: #6B655E">تريدون تعديل الرد؟ راسلوا ليلى مباشرة.</p>
+</div>
+</figure>
+<figure style="margin:0;display:flex;flex-direction:column;gap:12px"><figcaption style="font:600 14px system-ui;color:#6B655E">4 · RSVP closed</figcaption>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FBF8F1; font-family: 'EB Garamond', Georgia, serif; color: #2E2A26; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 30px; gap: 22px">
+<div aria-hidden="true" style="width: 84px; height: 84px; border-radius: 50%; border: 1px solid #B8955A; display: flex; align-items: center; justify-content: center">
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#7A5A2E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="1.5"></rect><path d="M4 9.5h16M8.5 3v4M15.5 3v4"></path></svg>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h1 class="caps" style="margin: 0; font-weight: 400; font-size: 17px">RSVP is now closed</h1>
+<p class="ar-display" lang="ar" dir="rtl" style="margin: 0; font-size: 24px; font-weight: 700">انتهت فترة تأكيد الحضور</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<p style="margin: 0; font-size: 18px; line-height: 1.5">Replies closed on 1 May 2027. If you still need to reach the couple, please contact Layla directly.</p>
+<p class="ar" lang="ar" dir="rtl" style="margin: 0; font-size: 16px; line-height: 1.8">انتهت مهلة الرد في ١ مايو ٢٠٢٧. للتواصل مع العروسين، يُرجى الاتصال بليلى مباشرة.</p>
+</div>
+<a href="tel:+436600000000" class="btn" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 58px; background: #7A5A2E; color: #FFFFFF; text-decoration: none; padding: 6px; box-sizing: border-box">
+<span class="caps" style="font-size: 11px">Call Layla</span>
+<span style="font-family: 'Bodoni Moda', serif; font-size: 15px; letter-spacing: 0.06em" dir="ltr">+43 660 000 0000</span>
+</a>
+<a href="Invitation.dc.html" class="ghost" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 52px; border: 1px solid #7A5A2E; color: #7A5A2E; text-decoration: none; padding: 6px; box-sizing: border-box">
+<span class="caps" style="font-size: 11px">View the invitation</span>
+<span class="ar" lang="ar" dir="rtl" style="font-size: 14px">عرض الدعوة</span>
+</a>
+<p style="margin: 0; font-family: 'Pinyon Script', cursive; font-size: 30px; color: #7A5A2E">L&amp;A</p>
+</div>
+</figure></main>
+</body>
+</html>

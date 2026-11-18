@@ -1,0 +1,65 @@
+/*
+ * Template "classic" (Classic Elegance): docs/templates/classic-reference.html.
+ * Imported by app/sites/invitation.css, so it never loads on the marketing site.
+ * templates/classic/palette.ts mirrors these colours for the contrast test.
+ */
+@theme {
+  --color-classic-ink: #2e2a26;
+  --color-classic-umber: #7a5a2e;
+  --color-classic-gold: #b8955a;
+  --color-classic-champagne: #d9be8c;
+  --color-classic-parchment: #fbf8f1;
+  --color-classic-cream: #f3ecdf;
+  --color-classic-smoke: #6b655e;
+  --color-classic-rule: #e3d7c3;
+  --color-classic-white: #ffffff;
+
+  --shadow-classic-card: 0 24px 50px rgb(46 42 38 / 0.12);
+  --radius-classic-arch: 999px 999px 0 0;
+}
+
+/* Font families from next/font variables set on <html> (templates/classic/fonts.ts). */
+@theme inline {
+  --font-bodoni: var(--font-classic-bodoni), Georgia, serif;
+  --font-script: var(--font-classic-pinyon), cursive;
+  --font-garamond: var(--font-classic-garamond), Georgia, serif;
+  --font-amiri: var(--font-classic-amiri), var(--font-classic-naskh), serif;
+  --font-naskh: var(--font-classic-naskh), var(--font-classic-amiri), serif;
+}
+
+/* Small Latin labels: Bodoni, uppercase, wide tracking. Never on Arabic (see Bi). */
+@utility classic-caps {
+  font-family: var(--font-bodoni);
+  text-transform: uppercase;
+  letter-spacing: 0.26em;
+}
+
+@keyframes classic-seal-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(184 149 90 / 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgb(184 149 90 / 0);
+  }
+}
+
+@utility classic-seal-glow {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: classic-seal-glow 2.4s ease-in-out infinite;
+  }
+}
+
+/* Map preview: a quiet diagonal pattern (decorative). */
+@utility classic-map-pattern {
+  background-image: linear-gradient(
+    135deg,
+    var(--color-classic-rule) 25%,
+    var(--color-classic-cream) 25%,
+    var(--color-classic-cream) 50%,
+    var(--color-classic-rule) 50%,
+    var(--color-classic-rule) 75%,
+    var(--color-classic-cream) 75%
+  );
+  background-size: 28px 28px;
+}
