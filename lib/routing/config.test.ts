@@ -12,6 +12,8 @@ describe("getRoutingConfig", () => {
 
     expect(config.rootDomain).toBe("zaffa.com");
     expect([...config.marketingHosts].sort()).toEqual([
+      "127.0.0.1",
+      "localhost",
       "www.zaffa.com",
       "zaffa-studio.vercel.app",
       "zaffa.com",
@@ -42,9 +44,11 @@ describe("getRoutingConfig", () => {
     expect(config.allowSitesPath).toBe(true);
   });
 
-  test("production does not add localhost on its own", () => {
+  test("localhost serves marketing in production too (local `next start` and e2e), without /sites/", () => {
     const config = getRoutingConfig({ NODE_ENV: "production" });
-    expect(config.marketingHosts.has("localhost")).toBe(false);
+    expect(config.marketingHosts.has("localhost")).toBe(true);
+    expect(config.marketingHosts.has("127.0.0.1")).toBe(true);
+    expect(config.allowSitesPath).toBe(false);
   });
 
   test("a missing or invalid root domain means no subdomain routing", () => {

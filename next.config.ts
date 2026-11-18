@@ -23,6 +23,8 @@ const nextConfig: NextConfig = {
   images: { formats: ["image/avif", "image/webp"] },
   cacheComponents: true,
   partialPrefetching: true,
+  // Two root layouts (marketing, invitations): unmatched URLs use app/global-not-found.tsx.
+  experimental: { globalNotFound: true },
   turbopack: {
     rules: {
       "*.css": {

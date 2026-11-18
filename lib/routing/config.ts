@@ -15,7 +15,8 @@ export interface RoutingConfig {
 type Env = Readonly<Record<string, string | undefined>>;
 
 export const DEFAULT_DEMO_SLUG = "layla-and-adam";
-const DEVELOPMENT_MARKETING_HOSTS = ["localhost", "127.0.0.1"];
+/** Always marketing: `next dev`, a local `next start` and the e2e server. Never a host on Vercel. */
+const LOCAL_MARKETING_HOSTS = ["localhost", "127.0.0.1"];
 /** Vercel sets these to the deployment's own addresses; they serve marketing. */
 const VERCEL_HOST_VARIABLES = ["VERCEL_URL", "VERCEL_BRANCH_URL", "VERCEL_PROJECT_PRODUCTION_URL"];
 
@@ -34,7 +35,7 @@ export function getRoutingConfig(env: Env = process.env): RoutingConfig {
   const hosts = [
     ...hostList(env.MARKETING_HOSTS),
     ...VERCEL_HOST_VARIABLES.flatMap((name) => hostList(env[name])),
-    ...(isProduction ? [] : DEVELOPMENT_MARKETING_HOSTS),
+    ...LOCAL_MARKETING_HOSTS,
     ...(rootDomain ? [rootDomain, `www.${rootDomain}`] : []),
   ];
 
