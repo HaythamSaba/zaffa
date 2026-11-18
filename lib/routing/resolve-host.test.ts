@@ -1,6 +1,12 @@
 import { describe, expect, test } from "vitest";
 import type { RoutingConfig } from "./config";
-import { classifyHost, normalizeHost, routeRequest, type RouteLookups } from "./resolve-host";
+import {
+  classifyHost,
+  normalizeHost,
+  publicPrefixFor,
+  routeRequest,
+  type RouteLookups,
+} from "./resolve-host";
 
 const production: RoutingConfig = {
   rootDomain: "zaffa.com",
@@ -219,5 +225,17 @@ describe("routeRequest on a couple's host", () => {
     expect(await routeRequest({ host: "intranet", pathname: "/" }, production, lookups())).toEqual({
       action: "not-found",
     });
+  });
+});
+
+describe("publicPrefixFor", () => {
+  test("a couple's own host has no prefix", () => {
+    expect(publicPrefixFor("/", "/sites/sara-and-omar")).toBe("");
+    expect(publicPrefixFor("/share-image", "/sites/sara-and-omar/share-image")).toBe("");
+  });
+
+  test("the demo on the marketing site lives under /sample", () => {
+    expect(publicPrefixFor("/sample", "/sites/layla-and-adam")).toBe("/sample");
+    expect(publicPrefixFor("/sample/share-image", "/sites/layla-and-adam/share-image")).toBe("/sample");
   });
 });

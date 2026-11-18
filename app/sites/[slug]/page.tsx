@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { StatusNotice } from "@/components/invitation/StatusNotice";
 import { getInvitation } from "@/lib/events/get-invitation";
 import { isRsvpOpen } from "@/lib/events/rsvp-window";
+import { SHARE_IMAGE_SIZE } from "@/lib/events/share-image";
 import { formatDate } from "@/lib/i18n/format";
 import { logger } from "@/lib/logger";
+import { INVITATION_PREFIX_HEADER } from "@/lib/routing/resolve-host";
 import { templateFor } from "@/templates";
 
 export const instant = false;
@@ -31,13 +34,43 @@ export async function generateMetadata({ params, searchParams }: PageProps<"/sit
   });
   const title = `${names} · ${date}`;
   const description = invitation.texts["welcome.message"]?.[lang] ?? title;
+  const { origin, prefix } = await publicLocation(slug);
+  const image = { url: `${prefix}/share-image`, ...SHARE_IMAGE_SIZE, alt: names };
 
   return {
     title,
     description,
     robots,
-    openGraph: { type: "website", title, description, locale: lang === "ar" ? "ar" : "en" },
+    metadataBase: origin,
+    alternates: { canonical: prefix || "/" },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: prefix || "/",
+      locale: lang === "ar" ? "ar" : "en",
+      images: [image],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
   };
+}
+
+/**
+ * Where guests see this invitation: the request's own origin (a couple's host,
+ * or the marketing site for /sample) and the path prefix proxy.ts rewrote
+ * from. Without the proxy header (local /sites/<slug>), the prefix is that path.
+ */
+async function publicLocation(slug: string): Promise<{ origin: URL | null; prefix: string }> {
+  const requestHeaders = await headers();
+  const host = requestHeaders.get("host");
+  const isLocal = host?.startsWith("localhost") || host?.includes(".localhost") || host?.startsWith("127.0.0.1");
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? (isLocal ? "http" : "https");
+  const prefix = requestHeaders.get(INVITATION_PREFIX_HEADER) ?? `/sites/${slug}`;
+  try {
+    return { origin: host ? new URL(`${protocol}://${host}`) : null, prefix };
+  } catch {
+    return { origin: null, prefix };
+  }
 }
 
 /** A couple's invitation. Reached via proxy.ts rewrites; guests never see /sites/. */

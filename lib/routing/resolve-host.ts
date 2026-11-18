@@ -31,6 +31,20 @@ export interface RouteLookups {
   readonly publishedSlug: HostLookup;
 }
 
+/** Request header proxy.ts sets on invitation rewrites: the public path prefix ("" or "/sample"). */
+export const INVITATION_PREFIX_HEADER = "x-zaffa-invitation-prefix";
+
+/**
+ * The part of the public URL that stands for /sites/<slug>: "" on a couple's
+ * own host, "/sample" for the demo on the marketing site. Used to build
+ * absolute URLs guests can open (e.g. the WhatsApp preview image).
+ */
+export function publicPrefixFor(publicPathname: string, rewrittenPathname: string): string {
+  const rest = rewrittenPathname.replace(/^\/sites\/[^/]+/, "");
+  if (!rest) return publicPathname === "/" ? "" : publicPathname;
+  return publicPathname.slice(0, publicPathname.length - rest.length);
+}
+
 /** "Layla.Example.com:3000" → "layla.example.com"; null for anything malformed (incl. IPv6). */
 export function normalizeHost(raw: string | null | undefined): string | null {
   if (!raw) return null;

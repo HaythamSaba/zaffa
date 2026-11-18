@@ -3,7 +3,14 @@ import { logger } from "@/lib/logger";
 import { getRoutingConfig } from "@/lib/routing/config";
 import { fetchPublishedSlug, fetchSlugForHost } from "@/lib/routing/fetch-host-slug";
 import { createCachedLookup } from "@/lib/routing/host-cache";
-import { UNAVAILABLE_PATH, routeRequest, type HostLookup, type RouteLookups } from "@/lib/routing/resolve-host";
+import {
+  INVITATION_PREFIX_HEADER,
+  UNAVAILABLE_PATH,
+  publicPrefixFor,
+  routeRequest,
+  type HostLookup,
+  type RouteLookups,
+} from "@/lib/routing/resolve-host";
 
 /**
  * Host-based routing (CLAUDE.md "Routing"):
@@ -44,10 +51,19 @@ const lookups: RouteLookups = {
   publishedSlug: cachedAndLogged("Published slug check", fetchPublishedSlug),
 };
 
-function rewriteTo(request: NextRequest, pathname: string): NextResponse {
+/** Request headers without our internal prefix header, so a client can't set it. */
+function forwardedHeaders(request: NextRequest): Headers {
+  const headers = new Headers(request.headers);
+  headers.delete(INVITATION_PREFIX_HEADER);
+  return headers;
+}
+
+function rewriteTo(request: NextRequest, pathname: string, invitationPrefix?: string): NextResponse {
   const url = request.nextUrl.clone();
   url.pathname = pathname;
-  return NextResponse.rewrite(url);
+  const headers = forwardedHeaders(request);
+  if (invitationPrefix !== undefined) headers.set(INVITATION_PREFIX_HEADER, invitationPrefix);
+  return NextResponse.rewrite(url, { request: { headers } });
 }
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
@@ -63,9 +79,13 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
 
   switch (decision.action) {
     case "next":
-      return NextResponse.next();
+      return NextResponse.next({ request: { headers: forwardedHeaders(request) } });
     case "rewrite":
-      return rewriteTo(request, decision.pathname);
+      return rewriteTo(
+        request,
+        decision.pathname,
+        publicPrefixFor(request.nextUrl.pathname, decision.pathname),
+      );
     case "unavailable":
       return rewriteTo(request, UNAVAILABLE_PATH);
     case "not-found":
