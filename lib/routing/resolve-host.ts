@@ -1,0 +1,102 @@
+import { isValidSlug } from "@/lib/events/slug";
+import type { RoutingConfig } from "./config";
+
+/** Lowercase DNS name: labels of letters, digits and inner hyphens. */
+const HOST = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/;
+const MAX_HOST_LENGTH = 253;
+const SITES_PREFIX = "/sites";
+const SAMPLE_PREFIX = "/sample";
+/** Internal page shown when an invitation can't be loaded (see app/sites/%5Funavailable). */
+export const UNAVAILABLE_PATH = "/sites/_unavailable";
+
+export type HostRoute =
+  | { readonly kind: "marketing" }
+  | { readonly kind: "slug"; readonly slug: string }
+  | { readonly kind: "lookup"; readonly host: string }
+  | { readonly kind: "unknown" };
+
+export type RouteDecision =
+  | { readonly action: "next" }
+  | { readonly action: "rewrite"; readonly pathname: string }
+  | { readonly action: "not-found" }
+  | { readonly action: "unavailable" };
+
+/** Resolves a host from event_hosts to a slug, or null when none matches. */
+export type HostLookup = (host: string) => Promise<string | null>;
+
+/** "Layla.Example.com:3000" → "layla.example.com"; null for anything malformed (incl. IPv6). */
+export function normalizeHost(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  const host = raw.trim().toLowerCase().replace(/:\d+$/, "").replace(/\.$/, "");
+  if (host.length === 0 || host.length > MAX_HOST_LENGTH || !HOST.test(host)) return null;
+  return host;
+}
+
+export function classifyHost(rawHost: string | null | undefined, config: RoutingConfig): HostRoute {
+  const host = normalizeHost(rawHost);
+  if (!host) return { kind: "unknown" };
+  if (config.marketingHosts.has(host)) return { kind: "marketing" };
+
+  if (config.rootDomain && host.endsWith(`.${config.rootDomain}`)) {
+    const label = host.slice(0, -(config.rootDomain.length + 1));
+    return isValidSlug(label) ? { kind: "slug", slug: label } : { kind: "unknown" };
+  }
+
+  // event_hosts only stores names with a dot; single labels can't match.
+  return host.includes(".") ? { kind: "lookup", host } : { kind: "unknown" };
+}
+
+function isUnder(pathname: string, prefix: string): boolean {
+  return pathname === prefix || pathname.startsWith(`${prefix}/`);
+}
+
+function siteRewrite(slug: string, pathname: string): RouteDecision {
+  const rest = pathname === "/" ? "" : pathname;
+  return { action: "rewrite", pathname: `${SITES_PREFIX}/${slug}${rest}` };
+}
+
+function marketingRoute(pathname: string, config: RoutingConfig): RouteDecision {
+  if (isUnder(pathname, SAMPLE_PREFIX)) {
+    return siteRewrite(config.demoSlug, pathname.slice(SAMPLE_PREFIX.length) || "/");
+  }
+  if (isUnder(pathname, SITES_PREFIX)) {
+    return config.allowSitesPath ? { action: "next" } : { action: "not-found" };
+  }
+  return { action: "next" };
+}
+
+function coupleRoute(slug: string, pathname: string): RouteDecision {
+  // Guests never see /sites/, and one couple's host can't reach another couple.
+  if (isUnder(pathname, SITES_PREFIX)) return { action: "not-found" };
+  return siteRewrite(slug, pathname);
+}
+
+/**
+ * Decides what the proxy does with a request. A failing lookup (e.g. Supabase
+ * unreachable) becomes "unavailable" so guests see a friendly page.
+ */
+export async function routeRequest(
+  request: { readonly host: string | null; readonly pathname: string },
+  config: RoutingConfig,
+  lookup: HostLookup,
+): Promise<RouteDecision> {
+  const route = classifyHost(request.host, config);
+
+  switch (route.kind) {
+    case "marketing":
+      return marketingRoute(request.pathname, config);
+    case "slug":
+      return coupleRoute(route.slug, request.pathname);
+    case "unknown":
+      return { action: "not-found" };
+    case "lookup": {
+      let slug: string | null;
+      try {
+        slug = await lookup(route.host);
+      } catch {
+        return { action: "unavailable" };
+      }
+      return slug ? coupleRoute(slug, request.pathname) : { action: "not-found" };
+    }
+  }
+}
