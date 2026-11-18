@@ -1,24 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Zaffa: wedding invitation websites with RSVP (Next.js, Supabase, Vercel). See `CLAUDE.md` and `docs/spec.md`.
+
+## Requirements
+
+- **Node.js 22 (LTS) is required.** `package.json` sets `"engines": { "node": "22.x" }`, so Vercel builds and runs on Node 22 too, and npm warns on other versions. With [Volta](https://volta.sh) the project pins Node 22.23.5 automatically (`"volta"` in `package.json`); without it, install any Node 22.x.
+- Copy `.env.example` to `.env.local` and fill it in.
 
 ## Getting Started
 
-First, run the development server:
-
-```bash
+```powershell
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Marketing site: <http://localhost:3000>
+- Demo invitation: <http://localhost:3000/sample>
+- A couple's subdomain locally: set `ROOT_DOMAIN=localhost` in `.env.local`, then open <http://layla-and-adam.localhost:3000>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Before calling something done: `npm run verify` (lint, typecheck, unit tests, build, bundle budget) and `npm run test:e2e` (Playwright at 375 and 1280 px; uses the linked development Supabase project).
 
 ## Database (Supabase)
 
