@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import type { RoutingConfig } from "./config";
-import { classifyHost, normalizeHost, routeRequest } from "./resolve-host";
+import { classifyHost, normalizeHost, routeRequest, type RouteLookups } from "./resolve-host";
 
 const production: RoutingConfig = {
   rootDomain: "zaffa.com",
@@ -19,6 +19,13 @@ const development: RoutingConfig = {
 const noLookup = async (): Promise<string | null> => {
   throw new Error("lookup should not be called");
 };
+
+/** Every slug is published unless a test says otherwise. */
+const everySlugPublished = async (slug: string): Promise<string | null> => slug;
+
+function lookups(overrides: Partial<RouteLookups> = {}): RouteLookups {
+  return { host: noLookup, publishedSlug: everySlugPublished, ...overrides };
+}
 
 describe("normalizeHost", () => {
   test("lowercases and strips the port and a trailing dot", () => {
@@ -86,36 +93,36 @@ describe("classifyHost", () => {
 
 describe("routeRequest on a marketing host", () => {
   test("passes normal pages through", async () => {
-    expect(await routeRequest({ host: "zaffa.com", pathname: "/" }, production, noLookup)).toEqual({
+    expect(await routeRequest({ host: "zaffa.com", pathname: "/" }, production, lookups())).toEqual({
       action: "next",
     });
     expect(
-      await routeRequest({ host: "zaffa.com", pathname: "/privacy" }, production, noLookup),
+      await routeRequest({ host: "zaffa.com", pathname: "/privacy" }, production, lookups()),
     ).toEqual({ action: "next" });
   });
 
   test("/sample serves the demo couple without showing /sites/", async () => {
-    expect(await routeRequest({ host: "zaffa.com", pathname: "/sample" }, production, noLookup)).toEqual({
+    expect(await routeRequest({ host: "zaffa.com", pathname: "/sample" }, production, lookups())).toEqual({
       action: "rewrite",
       pathname: "/sites/layla-and-adam",
     });
     expect(
-      await routeRequest({ host: "zaffa.com", pathname: "/sample/opengraph-image" }, production, noLookup),
+      await routeRequest({ host: "zaffa.com", pathname: "/sample/opengraph-image" }, production, lookups()),
     ).toEqual({ action: "rewrite", pathname: "/sites/layla-and-adam/opengraph-image" });
   });
 
   test("/samples is an ordinary page, not the demo", async () => {
     expect(
-      await routeRequest({ host: "zaffa.com", pathname: "/samples" }, production, noLookup),
+      await routeRequest({ host: "zaffa.com", pathname: "/samples" }, production, lookups()),
     ).toEqual({ action: "next" });
   });
 
   test("/sites/* is a 404 in production and allowed in development", async () => {
     expect(
-      await routeRequest({ host: "zaffa.com", pathname: "/sites/layla-and-adam" }, production, noLookup),
+      await routeRequest({ host: "zaffa.com", pathname: "/sites/layla-and-adam" }, production, lookups()),
     ).toEqual({ action: "not-found" });
     expect(
-      await routeRequest({ host: "localhost:3000", pathname: "/sites/layla-and-adam" }, development, noLookup),
+      await routeRequest({ host: "localhost:3000", pathname: "/sites/layla-and-adam" }, development, lookups()),
     ).toEqual({ action: "next" });
   });
 });
@@ -123,13 +130,13 @@ describe("routeRequest on a marketing host", () => {
 describe("routeRequest on a couple's host", () => {
   test("rewrites a root-domain subdomain to the couple's site", async () => {
     expect(
-      await routeRequest({ host: "sara-and-omar.zaffa.com", pathname: "/" }, production, noLookup),
+      await routeRequest({ host: "sara-and-omar.zaffa.com", pathname: "/" }, production, lookups()),
     ).toEqual({ action: "rewrite", pathname: "/sites/sara-and-omar" });
     expect(
       await routeRequest(
         { host: "sara-and-omar.zaffa.com", pathname: "/opengraph-image" },
         production,
-        noLookup,
+        lookups(),
       ),
     ).toEqual({ action: "rewrite", pathname: "/sites/sara-and-omar/opengraph-image" });
   });
@@ -139,14 +146,54 @@ describe("routeRequest on a couple's host", () => {
       await routeRequest(
         { host: "sara-and-omar.zaffa.com", pathname: "/sites/layla-and-adam" },
         production,
-        noLookup,
+        lookups(),
       ),
     ).toEqual({ action: "not-found" });
   });
 
+  test("an unknown or unpublished couple subdomain is a real 404", async () => {
+    const publishedSlug = async (slug: string) => (slug === "layla-and-adam" ? slug : null);
+    expect(
+      await routeRequest({ host: "nobody-and-noone.zaffa.com", pathname: "/" }, production, lookups({ publishedSlug })),
+    ).toEqual({ action: "not-found" });
+    expect(
+      await routeRequest({ host: "layla-and-adam.zaffa.com", pathname: "/" }, production, lookups({ publishedSlug })),
+    ).toEqual({ action: "rewrite", pathname: "/sites/layla-and-adam" });
+  });
+
+  test("a draft preview link skips the published check; the page validates the token", async () => {
+    const publishedSlug = async () => null;
+    expect(
+      await routeRequest(
+        { host: "sara-and-omar.zaffa.com", pathname: "/", hasPreviewToken: true },
+        production,
+        lookups({ publishedSlug }),
+      ),
+    ).toEqual({ action: "rewrite", pathname: "/sites/sara-and-omar" });
+  });
+
+  test("a failed published check still rewrites, so the page shows 'temporarily unavailable'", async () => {
+    const publishedSlug = async (): Promise<string | null> => {
+      throw new Error("Supabase unreachable");
+    };
+    expect(
+      await routeRequest({ host: "sara-and-omar.zaffa.com", pathname: "/" }, production, lookups({ publishedSlug })),
+    ).toEqual({ action: "rewrite", pathname: "/sites/sara-and-omar" });
+  });
+
+  test("/sample doesn't hit the database", async () => {
+    expect(
+      await routeRequest(
+        { host: "zaffa.com", pathname: "/sample" },
+        production,
+        lookups({ publishedSlug: noLookup }),
+      ),
+    ).toEqual({ action: "rewrite", pathname: "/sites/layla-and-adam" });
+  });
+
   test("looks up a custom domain and rewrites to its slug", async () => {
     const lookup = async (host: string) => (host === "saraandomar.com" ? "sara-and-omar" : null);
-    expect(await routeRequest({ host: "SaraAndOmar.com", pathname: "/" }, production, lookup)).toEqual({
+    expect(await routeRequest({ host: "SaraAndOmar.com", pathname: "/" }, production, lookups({ host: lookup }))).toEqual({
       action: "rewrite",
       pathname: "/sites/sara-and-omar",
     });
@@ -154,7 +201,7 @@ describe("routeRequest on a couple's host", () => {
 
   test("an unknown custom domain is a 404", async () => {
     const lookup = async () => null;
-    expect(await routeRequest({ host: "unknown.example", pathname: "/" }, production, lookup)).toEqual({
+    expect(await routeRequest({ host: "unknown.example", pathname: "/" }, production, lookups({ host: lookup }))).toEqual({
       action: "not-found",
     });
   });
@@ -163,13 +210,13 @@ describe("routeRequest on a couple's host", () => {
     const lookup = async (): Promise<string | null> => {
       throw new Error("Supabase unreachable");
     };
-    expect(await routeRequest({ host: "saraandomar.com", pathname: "/" }, production, lookup)).toEqual({
+    expect(await routeRequest({ host: "saraandomar.com", pathname: "/" }, production, lookups({ host: lookup }))).toEqual({
       action: "unavailable",
     });
   });
 
   test("an unknown host shape is a 404", async () => {
-    expect(await routeRequest({ host: "intranet", pathname: "/" }, production, noLookup)).toEqual({
+    expect(await routeRequest({ host: "intranet", pathname: "/" }, production, lookups())).toEqual({
       action: "not-found",
     });
   });

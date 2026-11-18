@@ -1,40 +1,48 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { logger } from "@/lib/logger";
 import { getRoutingConfig } from "@/lib/routing/config";
-import { fetchSlugForHost } from "@/lib/routing/fetch-host-slug";
+import { fetchPublishedSlug, fetchSlugForHost } from "@/lib/routing/fetch-host-slug";
 import { createCachedLookup } from "@/lib/routing/host-cache";
-import { UNAVAILABLE_PATH, routeRequest } from "@/lib/routing/resolve-host";
+import { UNAVAILABLE_PATH, routeRequest, type HostLookup, type RouteLookups } from "@/lib/routing/resolve-host";
 
 /**
  * Host-based routing (CLAUDE.md "Routing"):
  * - MARKETING_HOSTS (and Vercel's own deployment hosts) serve the marketing
  *   site; /sample there serves the demo couple.
- * - <slug>.ROOT_DOMAIN rewrites to /sites/<slug> with no database lookup.
+ * - <slug>.ROOT_DOMAIN rewrites to /sites/<slug> after checking a published
+ *   event has that slug (else a real 404; ?preview= links skip the check).
  * - Any other host (custom domain, per-couple *.vercel.app) is looked up in
- *   event_hosts (cached 60 s, misses included).
- * Guests never see /sites/ in the address bar.
+ *   event_hosts.
+ * Both lookups are cached for 60 s, misses included. Guests never see /sites/.
  */
 
-const HOST_CACHE_TTL_MS = 60_000;
+const LOOKUP_CACHE_TTL_MS = 60_000;
 /** Matches no route, so Next renders the 404 page with a 404 status. */
 const NOT_FOUND_PATH = "/__not-found";
 
 const routing = getRoutingConfig();
 
-const lookup = createCachedLookup(
-  async (host) => {
-    try {
-      return await fetchSlugForHost(host);
-    } catch (error) {
-      logger.error("Host lookup failed", {
-        host,
-        reason: error instanceof Error ? error.message : "Unknown error",
-      });
-      throw error;
-    }
-  },
-  { ttlMs: HOST_CACHE_TTL_MS },
-);
+function cachedAndLogged(name: string, fetch: HostLookup): HostLookup {
+  return createCachedLookup(
+    async (key) => {
+      try {
+        return await fetch(key);
+      } catch (error) {
+        logger.error(`${name} failed`, {
+          key,
+          reason: error instanceof Error ? error.message : "Unknown error",
+        });
+        throw error;
+      }
+    },
+    { ttlMs: LOOKUP_CACHE_TTL_MS },
+  );
+}
+
+const lookups: RouteLookups = {
+  host: cachedAndLogged("Host lookup", fetchSlugForHost),
+  publishedSlug: cachedAndLogged("Published slug check", fetchPublishedSlug),
+};
 
 function rewriteTo(request: NextRequest, pathname: string): NextResponse {
   const url = request.nextUrl.clone();
@@ -44,9 +52,13 @@ function rewriteTo(request: NextRequest, pathname: string): NextResponse {
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   const decision = await routeRequest(
-    { host: request.headers.get("host"), pathname: request.nextUrl.pathname },
+    {
+      host: request.headers.get("host"),
+      pathname: request.nextUrl.pathname,
+      hasPreviewToken: request.nextUrl.searchParams.has("preview"),
+    },
     routing,
-    lookup,
+    lookups,
   );
 
   switch (decision.action) {

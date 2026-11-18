@@ -24,6 +24,13 @@ export type RouteDecision =
 /** Resolves a host from event_hosts to a slug, or null when none matches. */
 export type HostLookup = (host: string) => Promise<string | null>;
 
+export interface RouteLookups {
+  /** Custom domains and per-couple *.vercel.app names → slug (event_hosts). */
+  readonly host: HostLookup;
+  /** The slug itself if a published event has it, else null (ROOT_DOMAIN subdomains). */
+  readonly publishedSlug: HostLookup;
+}
+
 /** "Layla.Example.com:3000" → "layla.example.com"; null for anything malformed (incl. IPv6). */
 export function normalizeHost(raw: string | null | undefined): string | null {
   if (!raw) return null;
@@ -76,9 +83,9 @@ function coupleRoute(slug: string, pathname: string): RouteDecision {
  * unreachable) becomes "unavailable" so guests see a friendly page.
  */
 export async function routeRequest(
-  request: { readonly host: string | null; readonly pathname: string },
+  request: { readonly host: string | null; readonly pathname: string; readonly hasPreviewToken?: boolean },
   config: RoutingConfig,
-  lookup: HostLookup,
+  lookups: RouteLookups,
 ): Promise<RouteDecision> {
   const route = classifyHost(request.host, config);
 
@@ -86,17 +93,36 @@ export async function routeRequest(
     case "marketing":
       return marketingRoute(request.pathname, config);
     case "slug":
-      return coupleRoute(route.slug, request.pathname);
+      return subdomainRoute(route.slug, request, lookups.publishedSlug);
     case "unknown":
       return { action: "not-found" };
     case "lookup": {
       let slug: string | null;
       try {
-        slug = await lookup(route.host);
+        slug = await lookups.host(route.host);
       } catch {
         return { action: "unavailable" };
       }
       return slug ? coupleRoute(slug, request.pathname) : { action: "not-found" };
     }
   }
+}
+
+/**
+ * <slug>.ROOT_DOMAIN: a real 404 when no published event has the slug. Draft
+ * preview links skip the check (the page validates the token), and a failed
+ * check still rewrites so the page can show "temporarily unavailable".
+ */
+async function subdomainRoute(
+  slug: string,
+  request: { readonly pathname: string; readonly hasPreviewToken?: boolean },
+  publishedSlug: HostLookup,
+): Promise<RouteDecision> {
+  if (request.hasPreviewToken) return coupleRoute(slug, request.pathname);
+  try {
+    if ((await publishedSlug(slug)) === null) return { action: "not-found" };
+  } catch {
+    // Fall through: the page shows the unavailable notice.
+  }
+  return coupleRoute(slug, request.pathname);
 }
