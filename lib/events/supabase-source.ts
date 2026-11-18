@@ -1,4 +1,5 @@
 import "server-only";
+import { cacheLife, cacheTag } from "next/cache";
 import { getAdminClient } from "@/lib/supabase/admin";
 import { getPublicClient } from "@/lib/supabase/public";
 import {
@@ -24,8 +25,23 @@ export function toEventRows(row: EmbeddedEventRow): EventRows {
   return { event, content: content ?? [], media: media ?? [] };
 }
 
-/** Published invitations through RLS, with the publishable key. */
+/** How long a published invitation is served from cache before it's re-read. */
+export const INVITATION_CACHE_PROFILE = "minutes";
+
+/** Tag for revalidateTag() when the admin edits an event (week 3+). */
+export function invitationCacheTag(slug: string): string {
+  return `invitation:${slug}`;
+}
+
+/**
+ * Published invitations through RLS, with the publishable key. Cached for a few
+ * minutes; a failed request throws, and errors are never cached.
+ */
 async function fetchPublished(slug: string): Promise<EventRows | null> {
+  "use cache";
+  cacheLife(INVITATION_CACHE_PROFILE);
+  cacheTag(invitationCacheTag(slug));
+
   const { data, error } = await getPublicClient()
     .from("events")
     .select(INVITATION_SELECT)
