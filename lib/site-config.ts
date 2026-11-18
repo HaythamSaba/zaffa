@@ -41,7 +41,8 @@ export const siteConfig = {
   location: "Ljubljana, Slovenia",
   copyrightYear: 2026,
   legalName: "[LEGAL NAME / REGISTRATION]",
-  demoUrl: "#demo",
+  /** The live demo couple (Layla & Adam), served by proxy.ts on the marketing hosts. */
+  demoUrl: "/sample",
 
   contact: {
     email: { label: "[YOUR EMAIL]", href: "mailto:[YOUR EMAIL]" },
