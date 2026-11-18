@@ -25,13 +25,13 @@ insert into public.events
    rsvp_deadline, contact_phone, dashboard_password_hash, preview_token_hash)
 values
   ('10000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-0000000000a1',
-   'test-open', 'en+ar', 'published', 'premium', now() + interval '60 days', 'Europe/Vienna',
+   'test-open', 'en+ar', 'draft', 'premium', now() + interval '60 days', 'Europe/Vienna',
    'Rosengasse 12, Vienna', now() + interval '30 days', '+43 660 000 0000', 'hash-open', 'token-open'),
   ('10000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-0000000000a1',
    'test-draft', 'en', 'draft', 'essential', now() + interval '60 days', 'Europe/Berlin',
    'Somewhere', now() + interval '30 days', '+49 151 0000000', 'hash-draft', 'token-draft'),
   ('10000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-0000000000a1',
-   'test-closed', 'ar', 'published', 'essential', now() + interval '10 days', 'Europe/Stockholm',
+   'test-closed', 'ar', 'draft', 'essential', now() + interval '10 days', 'Europe/Stockholm',
    'Somewhere', now() - interval '1 day', '+46 70 000 0000', 'hash-closed', null);
 
 insert into public.content (event_id, key, text_en, text_ar)
@@ -39,6 +39,9 @@ values
   ('10000000-0000-0000-0000-000000000001', 'names', 'Test & Test', 'اختبار واختبار'),
   ('10000000-0000-0000-0000-000000000002', 'names', 'Draft & Draft', null),
   ('10000000-0000-0000-0000-000000000003', 'names', null, 'مغلق ومغلق');
+
+-- Publish after the content exists (publishing requires the names).
+update public.events set status = 'published' where slug in ('test-open', 'test-closed');
 
 insert into public.media (event_id, kind, url, position)
 values
@@ -188,10 +191,10 @@ select results_eq(
   'another signed-in user sees published events only');
 select is((select count(*)::int from public.rsvps), 0,
   'another signed-in user reads no rsvps');
-select is_empty(
+select throws_ok(
   $$update public.content set text_en = 'Hijacked'
-    where event_id = '10000000-0000-0000-0000-000000000001' returning key$$,
-  'another signed-in user cannot edit someone else''s content');
+    where event_id = '10000000-0000-0000-0000-000000000001'$$,
+  '42501', null, 'another signed-in user cannot edit someone else''s content');
 select throws_ok($$select dashboard_password_hash from public.events$$, '42501', null,
   'signed-in users cannot read dashboard_password_hash');
 
@@ -207,13 +210,15 @@ select results_eq(
   'the owner sees their own drafts');
 select is((select count(*)::int from public.rsvps), 2,
   'the owner reads the rsvps of their events');
-select isnt_empty(
+-- No writes through the API, not even for owners, until the admin page
+-- exists: the admin edits with Supabase Studio or the service role.
+select throws_ok(
   $$update public.content set text_en = 'Edited & Edited'
-    where event_id = '10000000-0000-0000-0000-000000000001' and key = 'names' returning key$$,
-  'the owner can edit their content');
-select isnt_empty(
-  $$update public.rsvps set guest_count = 3 where name = 'Existing household' returning id$$,
-  'the owner can correct an rsvp');
+    where event_id = '10000000-0000-0000-0000-000000000001' and key = 'names'$$,
+  '42501', null, 'owners cannot write content through the API');
+select throws_ok(
+  $$update public.rsvps set guest_count = 3 where name = 'Existing household'$$,
+  '42501', null, 'owners cannot change rsvps through the API (the dashboard uses the service role)');
 select throws_ok($$select preview_token_hash from public.events$$, '42501', null,
   'even the owner cannot read hashes through the API');
 

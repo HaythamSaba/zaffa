@@ -14,7 +14,7 @@
     "test:e2e": "playwright test",
     "check:bundle": "node scripts/check-bundle.mjs",
     "db:push": "supabase db push --remote",
-    "db:test": "supabase test db --remote",
+    "db:test": "node scripts/db-test.mjs",
     "db:advisors": "supabase db advisors --remote --type all --level warn",
     "db:types": "supabase gen types typescript --remote --schema public > lib/supabase/database.types.ts",
     "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run check:bundle"
