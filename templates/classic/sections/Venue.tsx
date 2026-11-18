@@ -19,8 +19,8 @@ export function Venue({ invitation }: Props) {
   );
 
   return (
-    <section aria-label={title.en ?? title.ar} className="flex flex-col items-center gap-5 bg-classic-cream px-6 py-13 text-center">
-      <SectionHeading text={title} languages={languages} />
+    <section aria-labelledby="venue-title" className="flex flex-col items-center gap-5 bg-classic-cream px-6 py-13 text-center">
+      <SectionHeading id="venue-title" text={title} languages={languages} />
 
       <div className="flex w-full flex-col gap-3.5 border border-classic-gold bg-classic-parchment px-4.5 py-5.5">
         <div className="flex flex-col gap-0.5">

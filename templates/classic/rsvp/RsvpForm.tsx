@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { Monogram } from "@/lib/events/monogram";
 import type { Languages, LocalizedText } from "@/lib/i18n/bilingual";
 import { Bi } from "../Bi";
@@ -40,10 +40,21 @@ function FieldLabel({ text, languages }: { text: LocalizedText; languages: Langu
 export function RsvpForm({ languages, arabicLocale, copy, isDemo, calendar, monogram }: Props) {
   const [reply, setReply] = useState<ReceivedReply | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const returningRef = useRef(false);
+
+  // After "Back to the invitation", put focus back on the form (not <body>).
+  useEffect(() => {
+    if (reply === null && returningRef.current) {
+      returningRef.current = false;
+      nameRef.current?.focus();
+    }
+  }, [reply]);
 
   function handleBack() {
-    setReply(null);
+    returningRef.current = true;
     rootRef.current?.closest("section")?.scrollIntoView?.({ block: "start" });
+    setReply(null);
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -76,12 +87,12 @@ export function RsvpForm({ languages, arabicLocale, copy, isDemo, calendar, mono
   return (
     <form
       onSubmit={handleSubmit}
-      aria-labelledby="rsvp-title"
       className="flex flex-col gap-4.5 bg-classic-parchment px-4.5 py-6 text-classic-ink"
     >
       <label className="flex flex-col gap-1.5">
         <FieldLabel text={copy.name} languages={languages} />
         <input
+          ref={nameRef}
           name="name"
           type="text"
           required

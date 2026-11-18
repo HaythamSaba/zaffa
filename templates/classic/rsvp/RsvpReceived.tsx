@@ -41,7 +41,8 @@ export function RsvpReceived({ languages, arabicLocale, copy, reply, calendar, m
         </svg>
       </div>
 
-      <div ref={titleRef} tabIndex={-1} role="status" className="flex flex-col outline-none">
+      {/* Focus moves here, which announces the title; no live region too (it would read twice). */}
+      <div ref={titleRef} tabIndex={-1} className="flex flex-col outline-none">
         <Bi
           text={received.title}
           languages={languages}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { timeUntil, type TimeRemaining } from "@/lib/events/rsvp-window";
-import type { Languages, LocalizedText } from "@/lib/i18n/bilingual";
+import { pickLanguages, type Languages, type LocalizedText } from "@/lib/i18n/bilingual";
 import { formatCount, type FormatContext, type Lang } from "@/lib/i18n/format";
 import { Bi } from "./Bi";
 
@@ -33,7 +33,8 @@ export function Countdown({ target, serverNow, languages, digitsLang, context, l
   }, []);
 
   const remaining = timeUntil(new Date(target), new Date(now));
-  const label = [title.en, title.ar].filter(Boolean).join(" · ");
+  // One language only: the page's main one (the timer has no lang of its own).
+  const label = pickLanguages(title, languages)[0]?.value;
 
   return (
     <div role="timer" aria-label={label} className="grid w-full grid-cols-4 gap-2">

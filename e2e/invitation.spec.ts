@@ -24,6 +24,7 @@ test.describe("demo invitation at /sample", () => {
   test("opens from the opening screen to the names, without /sites/ in the URL", async ({ page }) => {
     await page.goto("/sample");
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(page.getByRole("button", { name: /Open invitation/ })).toBeFocused();
     await openInvitation(page);
 
     const names = page.getByRole("heading", { level: 1 });
@@ -66,13 +67,16 @@ test.describe("demo invitation at /sample", () => {
     await page.getByRole("textbox", { name: /Full name/ }).fill("The Haddad family");
     await page.getByRole("button", { name: /Send reply/ }).click();
 
-    await expect(page.getByRole("status")).toContainText("Thank you");
+    const thanks = page.getByRole("heading", { name: "Thank you" });
+    await expect(thanks).toBeVisible();
+    await expect(page.locator(":focus")).toContainText("Thank you");
     await expect(page.getByText("The Haddad family")).toBeVisible();
     await expect(page.getByRole("link", { name: /Add to calendar/ })).toHaveAttribute("download", "layla-and-adam.ics");
     expect(writes).toEqual([]);
 
     await page.getByRole("button", { name: /Back to the invitation/ }).click();
     await expect(page.getByRole("button", { name: /Send reply/ })).toBeVisible();
+    await expect(page.getByRole("textbox", { name: /Full name/ })).toBeFocused();
   });
 
   test("has no horizontal overflow", async ({ page }) => {
@@ -137,4 +141,13 @@ test.describe("couple subdomains", () => {
 test("production never serves /sites/ directly on the marketing site", async ({ request }) => {
   const response = await request.get("/sites/layla-and-adam");
   expect(response.status()).toBe(404);
+});
+
+test.describe("path tricks", () => {
+  for (const path of ["/%73ites/layla-and-adam", "//sites/layla-and-adam", "/Sites/layla-and-adam"]) {
+    test(`${path} can't reach /sites/ on the marketing site`, async ({ request }) => {
+      // Absolute URL: "//sites/..." alone would be read as a protocol-relative host.
+      expect((await request.get(`http://localhost:${PORT}${path}`)).status()).toBe(404);
+    });
+  }
 });

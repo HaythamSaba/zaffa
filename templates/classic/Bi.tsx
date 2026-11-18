@@ -17,6 +17,8 @@ type Props = {
   ar?: string;
   /** Amiri (headings, names) instead of Noto Naskh Arabic (reading text). */
   arDisplay?: boolean;
+  /** id for the first element, e.g. a heading a section is labelled by. */
+  id?: string;
 };
 
 /**
@@ -33,6 +35,7 @@ export function Bi({
   en = "",
   ar = "",
   arDisplay = false,
+  id,
 }: Props) {
   const parts = pickLanguages(text, languages);
   if (parts.length === 0) return null;
@@ -41,16 +44,17 @@ export function Bi({
     <>
       {parts.map(({ lang, value }, index) => {
         const Element = index === 0 ? as : (restAs ?? as);
+        const elementId = index === 0 ? id : undefined;
         if (lang === "ar") {
           const font = arDisplay ? "font-amiri" : "font-naskh";
           return (
-            <Element key={lang} dir="rtl" lang="ar" className={`${font} ${className} ${ar}`}>
+            <Element key={lang} id={elementId} dir="rtl" lang="ar" className={`${font} ${className} ${ar}`}>
               {value}
             </Element>
           );
         }
         return (
-          <Element key={lang} className={`${className} ${en}`}>
+          <Element key={lang} id={elementId} className={`${className} ${en}`}>
             {value}
           </Element>
         );

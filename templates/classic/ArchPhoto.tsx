@@ -8,17 +8,16 @@ type Props = {
   sizes: string;
   /** Position and size, e.g. "h-76 w-58". The arch shape is added here. */
   className: string;
-  /** Shown on the placeholder when there's no photo. */
-  placeholderLabel: string;
   priority?: boolean;
 };
 
 /**
  * A photo cut into an arch. Uses next/image `fill`, so the box has a fixed
  * size and the photo can't shift the layout. The alt text is in the page's
- * main language (Arabic only for Arabic-only invitations).
+ * main language (Arabic only for Arabic-only invitations). Without a photo it
+ * shows a plain decorative arch: never placeholder text on a real invitation.
  */
-export function ArchPhoto({ photo, languages, sizes, className, placeholderLabel, priority = false }: Props) {
+export function ArchPhoto({ photo, languages, sizes, className, priority = false }: Props) {
   const alt = (languages === "ar" ? photo?.alt.ar : photo?.alt.en) ?? photo?.alt.en ?? photo?.alt.ar ?? "";
 
   return (
@@ -34,12 +33,7 @@ export function ArchPhoto({ photo, languages, sizes, className, placeholderLabel
           className="object-cover"
         />
       ) : (
-        <div
-          aria-hidden="true"
-          className="flex size-full items-end justify-center bg-linear-170 from-classic-cream to-classic-champagne p-4"
-        >
-          <span className="text-xs tracking-[0.06em] text-classic-ink">{placeholderLabel}</span>
-        </div>
+        <div aria-hidden="true" className="size-full bg-linear-170 from-classic-cream to-classic-champagne" />
       )}
     </div>
   );

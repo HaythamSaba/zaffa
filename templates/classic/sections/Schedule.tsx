@@ -15,8 +15,8 @@ export function Schedule({ invitation }: Props) {
   const title = message("schedule.title");
 
   return (
-    <section aria-label={title.en ?? title.ar} className="flex flex-col items-center gap-5.5 px-7 py-13">
-      <SectionHeading text={title} languages={languages} />
+    <section aria-labelledby="schedule-title" className="flex flex-col items-center gap-5.5 px-7 py-13">
+      <SectionHeading id="schedule-title" text={title} languages={languages} />
       <ol className="m-0 flex w-full list-none flex-col p-0">
         {invitation.schedule.map((item) => (
           <li

@@ -11,8 +11,8 @@ export function Story({ invitation }: Props) {
   const { languages, texts } = invitation;
   const title = message("story.title");
   return (
-    <section aria-label={title.en ?? title.ar} className="flex flex-col items-center gap-4.5 px-7 py-13 text-center">
-      <SectionHeading text={title} languages={languages} />
+    <section aria-labelledby="story-title" className="flex flex-col items-center gap-4.5 px-7 py-13 text-center">
+      <SectionHeading id="story-title" text={title} languages={languages} />
       <Bi text={texts.story} languages={languages} className="m-0" en="text-lg leading-[1.6]" ar="text-[1.0625rem] leading-[1.9]" />
     </section>
   );
@@ -23,8 +23,8 @@ export function DressCode({ invitation }: Props) {
   const { languages, texts } = invitation;
   const title = message("dressCode.title");
   return (
-    <section aria-label={title.en ?? title.ar} className="flex flex-col items-center gap-3 bg-classic-cream px-7 py-11 text-center">
-      <SectionHeading text={title} languages={languages} />
+    <section aria-labelledby="dress-code-title" className="flex flex-col items-center gap-3 bg-classic-cream px-7 py-11 text-center">
+      <SectionHeading id="dress-code-title" text={title} languages={languages} />
       <div className="flex flex-col gap-0.5">
         <Bi text={texts.dress_code} languages={languages} className="m-0" en="text-lg" ar="text-base" />
       </div>
@@ -38,8 +38,8 @@ export function Contact({ invitation }: Props) {
   const title = message("contact.title");
   const name = texts["contact.name"];
   return (
-    <section aria-label={title.en ?? title.ar} className="flex flex-col items-center gap-2.5 px-7 py-11 text-center">
-      <SectionHeading text={title} languages={languages} size="sm" />
+    <section aria-labelledby="contact-title" className="flex flex-col items-center gap-2.5 px-7 py-11 text-center">
+      <SectionHeading id="contact-title" text={title} languages={languages} size="sm" />
       {name && (
         <div className="flex flex-col gap-0.5">
           <Bi text={message("contact.message", { name })} languages={languages} className="m-0" en="text-[1.0625rem]" ar="text-base" />

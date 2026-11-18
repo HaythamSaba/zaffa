@@ -84,8 +84,9 @@ export function RsvpSection({ invitation, isOpen, monogram }: Props) {
       aria-labelledby="rsvp-title"
       className="classic-on-dark flex flex-col gap-5.5 bg-classic-ink px-5.5 py-13"
     >
-      <div id="rsvp-title" className="flex flex-col items-center gap-1 text-center text-classic-parchment">
+      <div className="flex flex-col items-center gap-1 text-center text-classic-parchment">
         <Bi
+          id="rsvp-title"
           text={message("rsvp.title")}
           languages={languages}
           as="h2"

@@ -11,16 +11,15 @@ export function Gallery({ invitation }: Props) {
   const title = message("gallery.title");
 
   return (
-    <section aria-label={title.en ?? title.ar} className="flex flex-col items-center gap-5 px-6 py-13">
-      <SectionHeading text={title} languages={languages} />
+    <section aria-labelledby="gallery-title" className="flex flex-col items-center gap-5 px-6 py-13">
+      <SectionHeading id="gallery-title" text={title} languages={languages} />
       <ul className="m-0 grid w-full list-none grid-cols-2 gap-2.5 p-0">
-        {invitation.gallery.map((photo) => (
-          <li key={photo.url}>
+        {invitation.gallery.map((photo, index) => (
+          <li key={`${photo.url}-${index}`}>
             <ArchPhoto
               photo={photo}
               languages={languages}
               sizes="(min-width: 480px) 220px, 46vw"
-              placeholderLabel="Photo"
               className="h-47.5 w-full"
             />
           </li>

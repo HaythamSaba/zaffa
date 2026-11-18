@@ -26,6 +26,13 @@ const FADE_MS = 700;
 export function OpeningGate({ card, buttonLabel, labelledBy, children }: Props) {
   const [phase, setPhase] = useState<Phase>("closed");
   const contentRef = useRef<HTMLDivElement>(null);
+  const openButtonRef = useRef<HTMLButtonElement>(null);
+
+  // The dialog takes focus as soon as it's interactive, so keyboard and
+  // screen-reader users start on "Open invitation", not behind the dialog.
+  useEffect(() => {
+    openButtonRef.current?.focus({ preventScroll: true });
+  }, []);
 
   useEffect(() => {
     const content = contentRef.current;
@@ -72,6 +79,7 @@ export function OpeningGate({ card, buttonLabel, labelledBy, children }: Props) 
           <div className="relative flex min-h-full w-full max-w-100 flex-col items-center justify-center gap-5.5 border border-classic-gold bg-classic-parchment px-7 py-10 text-center shadow-classic-card outline outline-classic-gold -outline-offset-8">
             {card}
             <button
+              ref={openButtonRef}
               type="button"
               onClick={handleOpen}
               className="mt-2.5 flex min-h-14.5 w-58 cursor-pointer flex-col items-center justify-center bg-classic-umber px-4 py-2 text-classic-white transition-colors hover:bg-classic-ink"

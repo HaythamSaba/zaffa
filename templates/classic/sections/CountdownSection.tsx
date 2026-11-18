@@ -12,11 +12,11 @@ export function CountdownSection({ invitation, serverNow }: Props) {
 
   return (
     <section
-      aria-label={title.en ?? title.ar}
+      aria-labelledby="countdown-title"
       className="classic-on-dark flex flex-col items-center gap-5 bg-classic-ink px-6 py-10 text-center text-classic-parchment"
     >
       <div className="flex flex-col gap-0.5">
-        <Bi text={title} languages={languages} className="m-0 text-classic-champagne" en="classic-caps text-[0.6875rem]" ar="text-[0.9375rem]" />
+        <Bi id="countdown-title" text={title} languages={languages} className="m-0 text-classic-champagne" en="classic-caps text-[0.6875rem]" ar="text-[0.9375rem]" />
       </div>
       <Countdown
         target={invitation.startsAt.getTime()}

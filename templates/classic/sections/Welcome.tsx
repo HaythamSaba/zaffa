@@ -36,7 +36,6 @@ export function Welcome({ invitation }: Props) {
           languages={languages}
           sizes="234px"
           priority
-          placeholderLabel="Photo · the couple"
           className="h-76 w-58.5"
         />
       </div>
