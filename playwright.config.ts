@@ -50,6 +50,8 @@ export default defineConfig({
     {
       command: `npm run start -- --port ${PORT}`,
       url: BASE_URL,
+      // Couple subdomains resolve locally: layla-and-adam.localhost:3100.
+      env: envWith({ ROOT_DOMAIN: "localhost" }),
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },
