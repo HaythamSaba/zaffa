@@ -20,11 +20,21 @@ Before calling something done: `npm run verify` (lint, typecheck, unit tests, bu
 
 ## Database (Supabase)
 
-Two Supabase projects, both in Frankfurt (Central EU), with the same migrations:
+### Now: single-project mode (until the first paying couple)
+
+One Supabase project, **`zaffa`** in Frankfurt (Central EU), serves **development and the live demo**: Vercel Production and Preview both use it.
+
+- **No real couple or guest data goes into `zaffa`.** It holds only fictional data: the demo couple, and test fixtures that are always rolled back.
+- It's the linked project, so every `db:*` command except `db:push:prod` targets it.
+- `SUPABASE_PROD_PROJECT_REF` stays unset; `db:test` doesn't need it.
+
+### Later: the split (before the first paying couple)
+
+Upgrade to Supabase Pro, create **`zaffa-prod`** in Frankfurt, push the migrations, switch Vercel Production's keys. See the [pre-launch checklist](#pre-launch-checklist). After that:
 
 | Project | Role | Linked? | What may touch it |
 |---|---|---|---|
-| `zaffa` | **Development** | Yes (the only linked project) | Everything: `db:push`, `db:test`, `db:types`, `db:advisors`, Studio edits |
+| `zaffa` | **Development** (and Vercel Preview) | Yes (the only linked project) | Everything: `db:push`, `db:test`, `db:types`, `db:advisors`, Studio edits |
 | `zaffa-prod` | **Production** (real couples and guests) | **Never** | **Only migrations**, with `npm run db:push:prod`. Never tests, never ad-hoc queries, never hand edits |
 
 > **Never run `npm run db:test` (or any pgTAP / SQL test) against production.**
@@ -41,10 +51,11 @@ npx supabase link --project-ref <dev-project-ref>   # development only
 
 Then fill in `.env.local` (see `.env.example`; Dashboard → Project Settings → API Keys):
 
-- `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`: the **development** project's (local dev and e2e).
-- `SUPABASE_DEV_PROJECT_REF`, `SUPABASE_PROD_PROJECT_REF`: the two project refs (from the dashboard URL `/project/<ref>`; not secret).
+- `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`: the `zaffa` project's (local dev and e2e).
+- `SUPABASE_DEV_PROJECT_REF`: the `zaffa` ref (from the dashboard URL `/project/<ref>`; not secret). Required by `db:test`.
+- `SUPABASE_PROD_PROJECT_REF`: leave unset until the split, then the `zaffa-prod` ref.
 
-On Vercel, the Production environment uses the **production** project's URL and keys. Preview deployments can use the development project.
+On Vercel, both Production and Preview use the `zaffa` keys for now. After the split, Production switches to `zaffa-prod`'s keys and Preview stays on `zaffa`.
 
 | Command | Target | What it does |
 |---|---|---|
@@ -52,16 +63,31 @@ On Vercel, the Production environment uses the **production** project's URL and 
 | `npm run db:test` | dev only | Runs the pgTAP tests in `supabase/tests/` (no Docker; every transaction rolls back) |
 | `npm run db:advisors` | dev (linked) | Supabase's security and performance checks |
 | `npm run db:types` | dev (linked) | Regenerates `lib/supabase/database.types.ts` |
-| `npm run db:push:prod` | **prod** | Dry run: lists the migrations production is missing |
-| `npm run db:push:prod -- --apply` | **prod** | Applies them, including the demo seed |
+| `npm run db:push:prod` | **prod** (after the split) | Dry run: lists the migrations production is missing |
+| `npm run db:push:prod -- --apply` | **prod** (after the split) | Applies them, including the demo seed |
 
-Order for a schema change: write the migration, `db:push` to dev, `db:test` until green, commit, then `db:push:prod` (dry run, then `--apply`).
+Order for a schema change: write the migration, `db:push` to dev, `db:test` until green, commit. After the split, also `db:push:prod` (dry run, then `--apply`).
 
 Rules:
 - Every schema change is a new migration file.
 - Schema and data changes go in separate migrations.
 - A migration that has been applied is never edited; fix forward with a new one.
-- Sign-ups are off in both projects (Authentication settings). The admin account is created by hand.
+- Sign-ups are off (Authentication settings). The admin account is created by hand.
+
+## Pre-launch checklist
+
+Before the first paying couple's data goes in:
+
+1. **Split Supabase** (single-project mode ends):
+   - [ ] Upgrade to Supabase Pro.
+   - [ ] Create `zaffa-prod` in **Frankfurt (Central EU)**. Turn off sign-ups (Authentication settings) and create the admin account by hand.
+   - [ ] Add `SUPABASE_PROD_PROJECT_REF=<ref>` to `.env.local`.
+   - [ ] `npm run db:push:prod` (dry run, check the list), then `npm run db:push:prod -- --apply`. This applies all migrations, including the demo couple.
+   - [ ] On Vercel, switch the **Production** environment's `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` to `zaffa-prod`'s values and redeploy. Preview stays on `zaffa`.
+   - [ ] Open the live demo (`/sample`) on production to confirm it loads from `zaffa-prod`. Never run tests against it.
+2. **Week 3 RSVP saving is live:** the service-role server action, then the public insert on `rsvps` revoked (see CLAUDE.md "Week 3 plan").
+3. A native speaker has read `locales/ar.json`.
+4. The legal pages (privacy, terms, legal notice) are final, not drafts.
 
 ## Learn More
 

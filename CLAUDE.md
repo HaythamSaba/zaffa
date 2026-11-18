@@ -126,10 +126,11 @@ Zaffa makes elegant digital wedding invitation websites with built-in RSVP and a
 
 Write every schema change as a migration file. Never change the database by hand once real couples exist.
 
-**Supabase projects:**
-- **`zaffa`** (Frankfurt) is **DEVELOPMENT** and the only project ever linked. `db:test`, `db:types`, `db:advisors` and `db:push` target it. `db:test` refuses to run unless the linked ref equals `SUPABASE_DEV_PROJECT_REF` in `.env.local`.
-- **`zaffa-prod`** (Frankfurt) is **PRODUCTION**. It is never linked and **never tested**: no `db:test`, no pgTAP, no ad-hoc queries, no hand edits. Only migrations reach it, with `npm run db:push:prod` (dry run first, ref from `SUPABASE_PROD_PROJECT_REF`), the demo seed included.
-- Sign-ups are off in both projects (Authentication settings); the admin account is created by hand.
+**Supabase projects: single-project mode until the first paying couple** (decided Nov 2026; the free tier allows two projects, and the other one is used elsewhere).
+- **`zaffa`** (Frankfurt) is the only project. It serves **development and the live demo**: Vercel Production and Preview both use it. It's the linked project, so `db:test`, `db:types`, `db:advisors` and `db:push` target it. `db:test` refuses to run unless the linked ref equals `SUPABASE_DEV_PROJECT_REF` in `.env.local`.
+- **No real couple or guest data goes into `zaffa`** until the split. It holds only fictional data (the demo couple, test fixtures that roll back).
+- **The split, before the first paying couple** (README "Pre-launch checklist"): upgrade to Supabase Pro, create **`zaffa-prod`** in Frankfurt with sign-ups off, push the migrations with `npm run db:push:prod` (dry run, then `-- --apply`; demo seed included), and switch Vercel Production's Supabase keys to it. From then on `zaffa-prod` is never linked and **never tested**: no `db:test`, no pgTAP, no ad-hoc queries, no hand edits; only migrations reach it.
+- Sign-ups are off (Authentication settings); the admin account is created by hand.
 - An applied migration is never edited; fix forward with a new one.
 
 ### Security rules (must hold)
