@@ -17,10 +17,12 @@
     "db:test": "node scripts/db-test.mjs",
     "db:advisors": "supabase db advisors --remote --type all --level warn",
     "db:types": "supabase gen types typescript --remote --schema public > lib/supabase/database.types.ts",
+    "password:set": "node scripts/set-dashboard-password.mjs",
     "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run check:bundle"
   },
   "dependencies": {
     "@supabase/postgrest-js": "^2.109.0",
+    "bcryptjs": "^3.0.3",
     "motion": "^14.10.1",
     "next": "16.4.5",
     "react": "19.3.0",
@@ -35,6 +37,7 @@
     "@tailwindcss/turbopack": "^4",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

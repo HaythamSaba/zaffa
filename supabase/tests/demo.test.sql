@@ -8,7 +8,7 @@ set search_path = public, extensions;
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(12);
+select plan(14);
 
 set local role anon;
 
@@ -69,6 +69,21 @@ select is_empty(
     where e.slug = 'layla-and-adam'
       and (coalesce(m.alt_en, '') = '' or coalesce(m.alt_ar, '') = '')$$,
   'every demo photo has alt text in both languages');
+
+-- rsvps is never readable by anon (see rls.test.sql); these two checks run
+-- as postgres, the same way the fixtures above are set up.
+set local role postgres;
+
+select is(
+  (select count(*)::int from public.rsvps r join public.events e on e.id = r.event_id
+   where e.slug = 'layla-and-adam'),
+  8, 'the demo has 8 fictional guest replies');
+select results_eq(
+  $$select (sum(guest_count) filter (where attending))::int,
+           (count(*) filter (where not attending))::int
+    from public.rsvps r join public.events e on e.id = r.event_id where e.slug = 'layla-and-adam'$$,
+  $$values (17, 2)$$,
+  'the demo replies total 17 attending and 2 declined households');
 
 select * from finish();
 rollback;

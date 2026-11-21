@@ -1,17 +1,25 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
-import { afterEach, describe, expect, test } from "vitest";
+import { afterEach, describe, expect, test, vi } from "vitest";
 import { buildInvitation, type EventRows } from "@/lib/events/build-invitation";
 import { demoRows } from "@/lib/events/fixtures";
+import { initialRsvpState } from "@/lib/rsvp/types";
 import { ClassicInvitation } from "./ClassicInvitation";
 
 afterEach(cleanup);
 
 const BEFORE_DEADLINE = new Date("2027-04-01T10:00:00Z").getTime();
+// The demo couple never calls this (it simulates client-side); only its shape matters here.
+const NOOP_RSVP_ACTION = vi.fn().mockResolvedValue(initialRsvpState);
 
 function renderInvitation(rows: EventRows = demoRows(), isRsvpOpen = true) {
   return render(
-    <ClassicInvitation invitation={buildInvitation(rows)} isRsvpOpen={isRsvpOpen} serverNow={BEFORE_DEADLINE} />,
+    <ClassicInvitation
+      invitation={buildInvitation(rows)}
+      isRsvpOpen={isRsvpOpen}
+      serverNow={BEFORE_DEADLINE}
+      rsvpAction={NOOP_RSVP_ACTION}
+    />,
   );
 }
 

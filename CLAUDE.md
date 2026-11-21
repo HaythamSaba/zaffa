@@ -121,7 +121,7 @@ Zaffa makes elegant digital wedding invitation websites with built-in RSVP and a
 
 Write every schema change as a migration file. Never change the database by hand once real couples exist.
 
-**Supabase projects:** the linked project `zaffa` (Frankfurt) is **DEVELOPMENT only**. Database tests (`npm run db:test`) must never run against a production project. Production will be a separate Frankfurt project, created before the first paying couple; only migrations (`npm run db:push`) ever target it. Before any `--remote` command, check which project is linked (`supabase/.temp/project-ref`). An applied migration is never edited; fix forward with a new one.
+**Supabase projects:** single-project mode. The linked project `zaffa` (Frankfurt) serves **both development and the live demo** (Vercel Production points at it too) — the free tier only allows two projects, and HabitFlow uses the other. It holds no real couple or guest data, only the fictional demo couple, so `npm run db:test` and `npm run db:push` both target it safely for now. A separate production project will be created before the first paying couple; only migrations (`npm run db:push`) will ever target it once it exists. Supabase's own CLI/dashboard label every project "production" by default — that label is not a signal this is a real production database. Before any `--remote` command, check which project is linked (`supabase/.temp/project-ref`). An applied migration is never edited; fix forward with a new one. Before pushing a migration, list what's pending and get explicit confirmation first; never run anything that deletes or rewrites existing data without asking.
 
 ### Security rules (must hold)
 - RLS is on for every table.
