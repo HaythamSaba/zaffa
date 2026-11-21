@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { DashboardView } from "@/components/dashboard/DashboardView";
 import { LoginForm } from "@/components/dashboard/LoginForm";
 import { getDashboardSessionSecret } from "@/lib/dashboard/env";
+import { isRsvpOpen as computeIsRsvpOpen } from "@/lib/events/rsvp-window";
 import { getDashboardEvent, listRsvpsForEvent } from "@/lib/dashboard/rsvp-store";
 import { SESSION_COOKIE_NAME, verifySession } from "@/lib/dashboard/session";
 import type { DashboardEvent } from "@/lib/dashboard/rsvp-store";
@@ -11,7 +12,7 @@ import { login } from "./actions";
 
 export function generateMetadata(): Metadata {
   // Private per couple: never indexed, same as the invitation page itself.
-  return { robots: { index: false, follow: false } };
+  return { title: "Guest dashboard", robots: { index: false, follow: false } };
 }
 
 async function hasValidSession(event: DashboardEvent): Promise<boolean> {
@@ -33,5 +34,16 @@ export default async function DashboardPage({ params }: { params: Promise<{ slug
 
   const rows = await listRsvpsForEvent(event.id);
 
-  return <DashboardView slug={slug} rows={rows} isDemo={event.isDemo} />;
+  return (
+    <DashboardView
+      slug={slug}
+      rows={rows}
+      isDemo={event.isDemo}
+      coupleNames={event.coupleNames}
+      startsAt={event.startsAt}
+      rsvpDeadline={event.rsvpDeadline}
+      timeZone={event.timeZone}
+      isRsvpOpen={computeIsRsvpOpen(event.rsvpDeadline, new Date())}
+    />
+  );
 }

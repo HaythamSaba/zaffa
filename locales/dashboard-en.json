@@ -29,11 +29,11 @@
   "dashboard.deleteConfirm": "Delete this reply? This can't be undone.",
   "dashboard.saveError": "Couldn't save. Please try again.",
   "dashboard.demoNotice": "Sample data for the demo invitation. Editing and deleting are turned off here; export still works.",
-  "dashboard.column.name": "Name",
-  "dashboard.column.guests": "Guests",
-  "dashboard.column.attending": "Attending",
-  "dashboard.column.notes": "Notes",
-  "dashboard.attendingYes": "Yes",
-  "dashboard.attendingNo": "No",
+  "dashboard.guest": "guest",
+  "dashboard.guests": "guests",
+  "dashboard.statusAttending": "Attending",
+  "dashboard.statusDeclined": "Declined",
+  "dashboard.repliesCloseBy": "Replies close",
+  "dashboard.repliesClosed": "Replies closed",
   "dashboard.privacy": "Guest replies are personal data: shared only with the two of you, exportable as CSV, and deleted about 30 days after the wedding."
 }

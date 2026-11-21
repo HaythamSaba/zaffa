@@ -6,6 +6,11 @@ export interface DashboardEvent {
   readonly id: string;
   readonly passwordHash: string | null;
   readonly isDemo: boolean;
+  /** For the dashboard header; falls back to "" if the couple hasn't written it yet. */
+  readonly coupleNames: string;
+  readonly startsAt: Date;
+  readonly rsvpDeadline: Date;
+  readonly timeZone: string;
 }
 
 function readIsDemo(themeSettings: unknown): boolean {
@@ -20,16 +25,24 @@ function readIsDemo(themeSettings: unknown): boolean {
 export async function getDashboardEvent(slug: string): Promise<DashboardEvent | null> {
   const { data, error } = await getAdminClient()
     .from("events")
-    .select("id, dashboard_password_hash, theme_settings")
+    .select(
+      "id, dashboard_password_hash, theme_settings, starts_at, rsvp_deadline, timezone, content(key, text_en, text_ar)",
+    )
     .eq("slug", slug)
     .maybeSingle();
   if (error) throw new Error(`Supabase: ${error.message}`);
   if (!data) return null;
 
+  const names = data.content?.find((row) => row.key === "names");
+
   return {
     id: data.id,
     passwordHash: data.dashboard_password_hash,
     isDemo: readIsDemo(data.theme_settings),
+    coupleNames: names?.text_en ?? names?.text_ar ?? "",
+    startsAt: new Date(data.starts_at),
+    rsvpDeadline: new Date(data.rsvp_deadline),
+    timeZone: data.timezone,
   };
 }
 

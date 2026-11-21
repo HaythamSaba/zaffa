@@ -4,8 +4,16 @@ import { rsvpsToCsv } from "@/lib/dashboard/csv";
 import { getDashboardSessionSecret } from "@/lib/dashboard/env";
 import { getDashboardEvent, listRsvpsForEvent } from "@/lib/dashboard/rsvp-store";
 import { SESSION_COOKIE_NAME, verifySession } from "@/lib/dashboard/session";
+import { isValidSlug } from "@/lib/events/slug";
 
 const NO_STORE_HEADERS = { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } as const;
+
+/** Never trust the URL segment for a header value, even though an invalid
+ * slug would already 404 above (getDashboardEvent) - that's an invariant
+ * enforced in a different file, not a guarantee of this one. */
+function exportFilename(slug: string): string {
+  return isValidSlug(slug) ? `${slug}-rsvps.csv` : "guests.csv";
+}
 
 /**
  * A Route Handler (not a Server Action) so it can set its own response
@@ -36,7 +44,7 @@ export async function GET(
     headers: {
       ...NO_STORE_HEADERS,
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": `attachment; filename="${slug}-rsvps.csv"`,
+      "Content-Disposition": `attachment; filename="${exportFilename(slug)}"`,
     },
   });
 }

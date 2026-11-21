@@ -11,3 +11,8 @@ export type DashboardMessageKey = keyof typeof en;
 export function dashboardMessage(key: DashboardMessageKey): string {
   return en[key];
 }
+
+/** "1 guest" / "4 guests". */
+export function guestCountLabel(count: number): string {
+  return `${count} ${count === 1 ? dashboardMessage("dashboard.guest") : dashboardMessage("dashboard.guests")}`;
+}

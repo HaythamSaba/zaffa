@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { cookies, headers } from "next/headers";
 import { getClientIp } from "@/lib/client-ip";
 import { checkDashboardLogin } from "@/lib/dashboard/auth";
+import { parseRsvpEdit } from "@/lib/dashboard/edit-schema";
 import { getDashboardSessionSecret } from "@/lib/dashboard/env";
 import { dashboardMessage } from "@/lib/dashboard/messages";
 import { getDashboardEvent, updateRsvpRow, deleteRsvpRow, type DashboardEvent } from "@/lib/dashboard/rsvp-store";
@@ -101,7 +102,9 @@ function logActionFailure(action: string, slug: string, error: unknown): SaveRsv
 export async function saveRsvpEdit(slug: string, id: string, edit: RsvpEdit): Promise<SaveRsvpResult> {
   try {
     const event = await requireWritableSession(slug);
-    return { ok: await updateRsvpRow(event.id, id, edit) };
+    const parsed = parseRsvpEdit(edit);
+    if (!parsed.success) return { ok: false };
+    return { ok: await updateRsvpRow(event.id, id, parsed.data) };
   } catch (error) {
     return logActionFailure("saveRsvpEdit", slug, error);
   }
