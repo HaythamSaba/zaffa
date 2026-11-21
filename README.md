@@ -20,11 +20,14 @@ Before calling something done: `npm run verify` (lint, typecheck, unit tests, bu
 
 ## Database (Supabase)
 
-> **The linked Supabase project (`zaffa`, Frankfurt) is DEVELOPMENT only.**
-> Database tests (`npm run db:test`) must never run against a production
-> project. Production will be a separate Supabase project in Frankfurt
-> (Central EU), created before the first paying couple; only `npm run db:push`
-> (migrations) ever targets it, never tests and never hand edits.
+> **Single-project mode:** the linked Supabase project (`zaffa`, Frankfurt)
+> serves both development and the live demo — it holds no real couple or
+> guest data, only the fictional demo couple. `npm run db:test` and
+> `npm run db:push` both target it safely for now. A separate production
+> project will be created before the first paying couple; only
+> `npm run db:push` will ever target it once it exists. Supabase's own
+> CLI/dashboard label every project "production" by default — that's not a
+> signal this is a real production database.
 
 One-time setup (PowerShell, in this folder):
 
@@ -42,6 +45,7 @@ Then put the dev project's URL, publishable key and secret key in `.env.local`
 | `npm run db:test` | Runs the pgTAP tests in `supabase/tests/` (each file rolls back) |
 | `npm run db:advisors` | Supabase's security and performance checks |
 | `npm run db:types` | Regenerates `lib/supabase/database.types.ts` |
+| `npm run password:set -- <slug> [password]` | Sets/resets a couple's dashboard password (generates a strong one and prints it once if omitted; a custom one must be ≥12 characters) |
 
 Rules: every schema change is a new migration file; schema and data changes
 go in separate migrations; a migration that has been applied is never edited.
