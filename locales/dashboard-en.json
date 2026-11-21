@@ -1,0 +1,9 @@
+{
+  "login.title": "Guest dashboard",
+  "login.password": "Password",
+  "login.submit": "Log in",
+  "login.submitting": "Checking…",
+  "login.error.invalid": "Incorrect password.",
+  "login.error.rateLimited": "Too many attempts. Please wait a few minutes and try again.",
+  "login.error.unconfigured": "This dashboard isn't set up yet. Contact Zaffa."
+}
