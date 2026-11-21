@@ -14,6 +14,7 @@ npm run dev
 
 - Marketing site: <http://localhost:3000>
 - Demo invitation: <http://localhost:3000/sample>
+- Demo dashboard: <http://localhost:3000/sample/dashboard>, password `zaffa-demo-2027` (read-only: editing and deleting are turned off for the demo; export still works)
 - A couple's subdomain locally: set `ROOT_DOMAIN=localhost` in `.env.local`, then open <http://layla-and-adam.localhost:3000>
 
 Before calling something done: `npm run verify` (lint, typecheck, unit tests, build, bundle budget) and `npm run test:e2e` (Playwright at 375 and 1280 px; uses the linked development Supabase project).
