@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import { DashboardView } from "@/components/dashboard/DashboardView";
 import { LoginForm } from "@/components/dashboard/LoginForm";
 import { getDashboardSessionSecret } from "@/lib/dashboard/env";
 import { getDashboardEvent, listRsvpsForEvent } from "@/lib/dashboard/rsvp-store";
@@ -32,10 +33,5 @@ export default async function DashboardPage({ params }: { params: Promise<{ slug
 
   const rows = await listRsvpsForEvent(event.id);
 
-  // TODO(next piece): replace with DashboardView (stats, search, filters, edit/delete, export).
-  return (
-    <main dir="ltr" lang="en" className="min-h-dvh bg-classic-parchment p-6 text-classic-ink">
-      {rows.length} {rows.length === 1 ? "reply" : "replies"} so far.
-    </main>
-  );
+  return <DashboardView slug={slug} rows={rows} isDemo={event.isDemo} />;
 }

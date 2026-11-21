@@ -6,8 +6,8 @@ import { getClientIp } from "@/lib/client-ip";
 import { checkDashboardLogin } from "@/lib/dashboard/auth";
 import { getDashboardSessionSecret } from "@/lib/dashboard/env";
 import { dashboardMessage } from "@/lib/dashboard/messages";
-import { getDashboardEvent, updateRsvpRow, deleteRsvpRow } from "@/lib/dashboard/rsvp-store";
-import { SESSION_COOKIE_NAME, SESSION_TTL_MS, signSession } from "@/lib/dashboard/session";
+import { getDashboardEvent, updateRsvpRow, deleteRsvpRow, type DashboardEvent } from "@/lib/dashboard/rsvp-store";
+import { SESSION_COOKIE_NAME, SESSION_TTL_MS, signSession, verifySession } from "@/lib/dashboard/session";
 import type { RsvpEdit } from "@/lib/dashboard/types";
 import { logger } from "@/lib/logger";
 import { createRateLimiter } from "@/lib/rate-limit";
@@ -69,13 +69,50 @@ export interface SaveRsvpResult {
   readonly ok: boolean;
 }
 
-/** Bound to a slug and event id; the couple can edit or delete, per CLAUDE.md's dashboard rules. */
-export async function saveRsvpEdit(eventId: string, id: string, edit: RsvpEdit): Promise<SaveRsvpResult> {
-  const ok = await updateRsvpRow(eventId, id, edit);
-  return { ok };
+/**
+ * Every mutating action re-checks the session itself: a Server Action is an
+ * independently callable endpoint, not something only reachable through the
+ * component that happens to render it, so page-level gating alone isn't
+ * enough. Demo events are always read-only, regardless of what the client
+ * sends - a hidden edit/delete button is not a security boundary either.
+ */
+async function requireWritableSession(slug: string): Promise<DashboardEvent> {
+  const event = await getDashboardEvent(slug);
+  if (!event?.passwordHash) throw new Error("Dashboard not available");
+
+  const token = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
+  const secret = getDashboardSessionSecret();
+  if (!token || !verifySession(token, event.id, event.passwordHash, new Date(), secret)) {
+    throw new Error("Not authenticated");
+  }
+  if (event.isDemo) throw new Error("The demo dashboard is read-only");
+  return event;
 }
 
-export async function removeRsvp(eventId: string, id: string): Promise<SaveRsvpResult> {
-  const ok = await deleteRsvpRow(eventId, id);
-  return { ok };
+function logActionFailure(action: string, slug: string, error: unknown): SaveRsvpResult {
+  logger.warn(`[dashboard] ${action} rejected`, {
+    slug,
+    reason: error instanceof Error ? error.message : "Unknown error",
+  });
+  return { ok: false };
+}
+
+/** Bound to a slug with `saveRsvpEdit.bind(null, slug)` before being handed to the dashboard. */
+export async function saveRsvpEdit(slug: string, id: string, edit: RsvpEdit): Promise<SaveRsvpResult> {
+  try {
+    const event = await requireWritableSession(slug);
+    return { ok: await updateRsvpRow(event.id, id, edit) };
+  } catch (error) {
+    return logActionFailure("saveRsvpEdit", slug, error);
+  }
+}
+
+/** Bound to a slug with `removeRsvp.bind(null, slug)` before being handed to the dashboard. */
+export async function removeRsvp(slug: string, id: string): Promise<SaveRsvpResult> {
+  try {
+    const event = await requireWritableSession(slug);
+    return { ok: await deleteRsvpRow(event.id, id) };
+  } catch (error) {
+    return logActionFailure("removeRsvp", slug, error);
+  }
 }

@@ -3,6 +3,10 @@ import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 /** 12 hours; the dashboard re-signs on activity rather than extending this. */
 export const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
 
+/** No Domain attribute is ever set on this cookie: the browser scopes it to the
+ * exact host, so one couple's session can never be sent to another couple's. */
+export const SESSION_COOKIE_NAME = "dashboard_session";
+
 interface SessionClaims {
   readonly eventId: string;
   /** A fingerprint of dashboard_password_hash, never the hash itself. */
