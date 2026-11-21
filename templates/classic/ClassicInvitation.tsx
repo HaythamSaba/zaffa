@@ -5,6 +5,7 @@ import { invitationSections, showsOpeningScreen } from "@/lib/events/sections";
 import type { SectionId } from "@/lib/events/types";
 import { formatNumericDate } from "@/lib/i18n/format";
 import { message } from "@/lib/i18n/messages";
+import type { SubmitRsvpAction } from "@/lib/rsvp/types";
 import { Bi } from "./Bi";
 import { formatContextOf, primaryLang } from "./localize";
 import { CornerFlourish, MonogramMark, Seal, StarDivider } from "./ornaments";
@@ -25,6 +26,8 @@ export type ClassicInvitationProps = {
   serverNow: number;
   /** Draft opened with a preview token. */
   isPreview?: boolean;
+  /** `submitRsvp` already bound to this invitation's slug. No data access happens here. */
+  rsvpAction: SubmitRsvpAction;
 };
 
 const OPENING_TITLE_ID = "opening-title";
@@ -90,7 +93,15 @@ function renderSection(id: SectionId, props: ClassicInvitationProps): ReactNode 
     case "gallery":
       return <Gallery key={id} invitation={invitation} />;
     case "rsvp":
-      return <RsvpSection key={id} invitation={invitation} isOpen={props.isRsvpOpen} monogram={monogram} />;
+      return (
+        <RsvpSection
+          key={id}
+          invitation={invitation}
+          isOpen={props.isRsvpOpen}
+          monogram={monogram}
+          rsvpAction={props.rsvpAction}
+        />
+      );
     case "contact":
       return <Contact key={id} invitation={invitation} />;
   }

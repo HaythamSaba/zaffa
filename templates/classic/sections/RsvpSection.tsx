@@ -4,6 +4,7 @@ import type { Monogram } from "@/lib/events/monogram";
 import { pickLanguages, type LocalizedText } from "@/lib/i18n/bilingual";
 import { formatDate } from "@/lib/i18n/format";
 import { message } from "@/lib/i18n/messages";
+import type { SubmitRsvpAction } from "@/lib/rsvp/types";
 import { Bi } from "../Bi";
 import { formatContextOf, localize, primaryLang, telHref } from "../localize";
 import type { CalendarLink, RsvpCopy } from "../rsvp/copy";
@@ -14,6 +15,7 @@ type Props = {
   invitation: InvitationData;
   isOpen: boolean;
   monogram: Monogram | null;
+  rsvpAction: SubmitRsvpAction;
 };
 
 /** The first shown language's value, for attributes that hold one string (placeholders). */
@@ -72,7 +74,7 @@ function calendarLink(invitation: InvitationData): CalendarLink {
 }
 
 /** "Will you join us?": the form before the deadline, the closed notice after it. */
-export function RsvpSection({ invitation, isOpen, monogram }: Props) {
+export function RsvpSection({ invitation, isOpen, monogram, rsvpAction }: Props) {
   const { languages } = invitation;
   const context = formatContextOf(invitation);
   const deadline = localize((lang) => formatDate(invitation.rsvpDeadline, lang, context));
@@ -115,6 +117,7 @@ export function RsvpSection({ invitation, isOpen, monogram }: Props) {
           isDemo={invitation.settings.demo}
           calendar={calendarLink(invitation)}
           monogram={monogram}
+          action={rsvpAction}
         />
       ) : (
         <RsvpClosed

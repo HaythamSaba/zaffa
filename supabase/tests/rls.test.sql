@@ -128,10 +128,12 @@ select results_eq(
 select throws_ok($$select id from public.rsvps$$, '42501', null,
   'anon can never read rsvps');
 
-select lives_ok(
+-- Week 3: anon no longer inserts directly (see rsvp_insert_lockdown.test.sql);
+-- the server action, using the service role, is the only writer now.
+select throws_ok(
   $$insert into public.rsvps (event_id, name, guest_count, attending, notes)
     values ('10000000-0000-0000-0000-000000000001', 'The Haddad family', 2, true, 'Vegetarian')$$,
-  'anon can RSVP to a published event before its deadline');
+  '42501', null, 'anon cannot insert an RSVP directly, even into an open published event');
 select throws_ok(
   $$insert into public.rsvps (event_id, name, guest_count, attending)
     values ('10000000-0000-0000-0000-000000000002', 'Draft guest', 1, true)$$,

@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useActionState, useEffect, useRef, useState, type FormEvent } from "react";
 import type { Monogram } from "@/lib/events/monogram";
 import type { Languages, LocalizedText } from "@/lib/i18n/bilingual";
+import { message } from "@/lib/i18n/messages";
+import { initialRsvpState, RSVP_HONEYPOT_FIELD, type SubmitRsvpAction } from "@/lib/rsvp/types";
 import { Bi } from "../Bi";
 import type { CalendarLink, RsvpCopy } from "./copy";
 import { RsvpReceived, type ReceivedReply } from "./RsvpReceived";
@@ -15,6 +17,8 @@ type Props = {
   isDemo: boolean;
   calendar: CalendarLink;
   monogram: Monogram | null;
+  /** `submitRsvp` already bound to this invitation's slug (unused in demo mode). */
+  action: SubmitRsvpAction;
 };
 
 const MAX_GUESTS = 20;
@@ -34,14 +38,25 @@ function FieldLabel({ text, languages }: { text: LocalizedText; languages: Langu
 }
 
 /**
- * The RSVP form (UI only until week 3: nothing is saved). Fields and limits
- * match the database: name up to 120 characters, 1-20 guests, notes up to 1000.
+ * The RSVP form. The demo couple ("isDemo") simulates the received screen
+ * entirely client-side and never calls `action`. A real event submits to the
+ * bound server action, which validates, rate-limits and saves with the
+ * service role; fields and limits match the database: name up to 120
+ * characters, 1-20 guests, notes up to 1000.
  */
-export function RsvpForm({ languages, arabicLocale, copy, isDemo, calendar, monogram }: Props) {
-  const [reply, setReply] = useState<ReceivedReply | null>(null);
+export function RsvpForm({ languages, arabicLocale, copy, isDemo, calendar, monogram, action }: Props) {
+  const [demoReply, setDemoReply] = useState<ReceivedReply | null>(null);
+  const [state, formAction, isPending] = useActionState(action, initialRsvpState);
+  const [dismissed, setDismissed] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const returningRef = useRef(false);
+
+  const reply: ReceivedReply | null = isDemo
+    ? demoReply
+    : !dismissed && state.status === "success"
+      ? state.reply
+      : null;
 
   // After "Back to the invitation", put focus back on the form (not <body>).
   useEffect(() => {
@@ -54,14 +69,14 @@ export function RsvpForm({ languages, arabicLocale, copy, isDemo, calendar, mono
   function handleBack() {
     returningRef.current = true;
     rootRef.current?.closest("section")?.scrollIntoView?.({ block: "start" });
-    setReply(null);
+    if (isDemo) setDemoReply(null);
+    else setDismissed(true);
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleDemoSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!isDemo) return;
     const data = new FormData(event.currentTarget);
-    setReply({
+    setDemoReply({
       name: String(data.get("name") ?? "").trim(),
       guestCount: Number(data.get("guestCount") ?? 1),
       attending: data.get("attending") === "yes",
@@ -84,9 +99,12 @@ export function RsvpForm({ languages, arabicLocale, copy, isDemo, calendar, mono
     );
   }
 
+  const errorText = !isDemo && state.status === "error" ? message(`rsvp.error.${state.code}`) : null;
+
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={isDemo ? handleDemoSubmit : () => setDismissed(false)}
+      action={isDemo ? undefined : formAction}
       className="flex flex-col gap-4.5 bg-classic-parchment px-4.5 py-6 text-classic-ink"
     >
       <label className="flex flex-col gap-1.5">
@@ -159,12 +177,40 @@ export function RsvpForm({ languages, arabicLocale, copy, isDemo, calendar, mono
         />
       </label>
 
+      {/* Honeypot: invisible to people and screen readers; bots tend to fill it. */}
+      {!isDemo && (
+        <div aria-hidden="true" className="absolute -start-[9999px] top-0 size-px overflow-hidden">
+          <label htmlFor="rsvp-honeypot">Leave this field blank</label>
+          <input
+            id="rsvp-honeypot"
+            name={RSVP_HONEYPOT_FIELD}
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            defaultValue=""
+          />
+        </div>
+      )}
+
+      {errorText && (
+        <div role="alert" dir="auto" className="m-0 border border-classic-gold px-3.5 py-2.5 text-[0.9375rem]">
+          <Bi text={errorText} languages={languages} as="span" />
+        </div>
+      )}
+
       <button
         type="submit"
-        disabled={!isDemo}
+        disabled={!isDemo && isPending}
+        aria-busy={!isDemo && isPending}
         className="flex min-h-14.5 cursor-pointer flex-col items-center justify-center bg-classic-umber px-1.5 py-1.5 text-classic-white transition-colors hover:bg-classic-ink disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-classic-umber"
       >
-        <Bi text={copy.send} languages={languages} as="span" en="classic-caps text-xs" ar="text-[0.9375rem]" />
+        <Bi
+          text={!isDemo && isPending ? message("rsvp.sending") : copy.send}
+          languages={languages}
+          as="span"
+          en="classic-caps text-xs"
+          ar="text-[0.9375rem]"
+        />
       </button>
 
       <div className="flex flex-col gap-0.5 text-center">

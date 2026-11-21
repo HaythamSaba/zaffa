@@ -10,6 +10,7 @@ import { formatDate } from "@/lib/i18n/format";
 import { logger } from "@/lib/logger";
 import { INVITATION_PREFIX_HEADER, normalizeHost } from "@/lib/routing/resolve-host";
 import { templateFor } from "@/templates";
+import { submitRsvp } from "./actions";
 
 export const instant = false;
 
@@ -102,6 +103,7 @@ export default async function InvitationPage({ params }: PageProps<"/sites/[slug
       isRsvpOpen={isRsvpOpen(result.invitation.rsvpDeadline, now)}
       serverNow={now.getTime()}
       isPreview={result.preview}
+      rsvpAction={submitRsvp.bind(null, slug)}
     />
   );
 }
