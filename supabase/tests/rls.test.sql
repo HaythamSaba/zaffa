@@ -143,6 +143,10 @@ select throws_ok(
     values ('10000000-0000-0000-0000-000000000003', 'Late guest', 1, true)$$,
   '42501', null, 'anon cannot RSVP after the deadline');
 
+-- Week 3: anon has no insert grant at all now, so the rsvps CHECK constraints
+-- (which apply regardless of role) are exercised as postgres instead.
+set local role postgres;
+
 select throws_ok(
   $$insert into public.rsvps (event_id, name, guest_count, attending)
     values ('10000000-0000-0000-0000-000000000001', 'Nobody', 0, true)$$,
@@ -163,10 +167,13 @@ select throws_ok(
   format($$insert into public.rsvps (event_id, name, guest_count, attending, notes)
     values ('10000000-0000-0000-0000-000000000001', 'Long notes', 1, true, %L)$$, repeat('a', 1001)),
   '23514', null, 'notes are at most 1000 characters');
+
+set local role anon;
+
 select throws_ok(
   $$insert into public.rsvps (event_id, name, guest_count, attending, created_at)
     values ('10000000-0000-0000-0000-000000000001', 'Time traveller', 1, true, '2000-01-01')$$,
-  '42501', null, 'anon cannot set created_at');
+  '42501', null, 'anon cannot set created_at (and has no insert grant at all now)');
 
 select throws_ok($$update public.events set venue = 'Hacked'$$, '42501', null,
   'anon cannot update events');
@@ -210,7 +217,8 @@ select results_eq(
   $$select slug from public.events where slug like 'test-%' order by slug$$,
   $$values ('test-closed'::text), ('test-draft'::text), ('test-open'::text)$$,
   'the owner sees their own drafts');
-select is((select count(*)::int from public.rsvps), 2,
+-- 1 (the fixture row), not 2: anon's insert attempt above no longer succeeds.
+select is((select count(*)::int from public.rsvps), 1,
   'the owner reads the rsvps of their events');
 -- No writes through the API, not even for owners, until the admin page
 -- exists: the admin edits with Supabase Studio or the service role.
